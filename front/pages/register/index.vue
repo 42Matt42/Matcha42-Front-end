@@ -75,7 +75,7 @@ export default {
     onRegister () {
       this.$axios
         // .$post('https://api.github.com/users/mapbox', {
-        .$post('https://matcha42saubinbartol.herokuapp.com/register', {
+        .$post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/register', {
           username: this.checkRegister.username,
           name: this.checkRegister.name,
           surname: this.checkRegister.surname,

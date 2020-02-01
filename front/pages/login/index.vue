@@ -47,7 +47,7 @@ export default {
     onLogin () {
       this.$axios
         // .$post('https://api.github.com/users/mapbox', {
-        .$post('https://matcha42saubinbartol.herokuapp.com/login', {
+        .$post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login', {
           data: {
             username: this.login.username,
             password: this.login.password
