@@ -8,18 +8,20 @@ const createStore = () => {
       loadedInfos: []
     },
     mutations: {
-      setUsers (state, users) {
-        state.loadedUsers = users
+      setConnected (state, connected) {
+        state.loadedUsers.stats = connected.data[0]
+        state.loadedUsers.token = connected.meta.token
+        state.loadedUsers.checker = connected.meta.access
       },
-      addUsers (state, user) {
-        state.loadedUsers.push(user)
+      registerUser (state, user) {
+        state.loadedUsers.registered = user
       },
-      editUsers (state, editedUser) {
-        const userIndex = state.loadedUsers.findIndex(
-          user => user.id === editedUser.id
-        )
-        state.loadedUsers[userIndex] = editedUser
-      },
+      // editUsers (state, editedUser) {
+      //   const userIndex = state.loadedUsers.findIndex(
+      //     user => user.id === editedUser.id
+      // )
+      // state.loadedUsers[userIndex] = editedUser
+      // }
       setInfos (state, infos) {
         state.loadedInfos = infos
       }
@@ -27,13 +29,18 @@ const createStore = () => {
     actions: {
       nuxtServerInit (vuexContext, context) {
         // add URL of the DATABASE, return an object with the properties so we need to convert it in array
-        return axios.get()
+        return axios
+          .get('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com')
           .then((res) => {
-            const usersArray = []
-            for (const key in res.data) {
-              usersArray.push({ ...res.data[key], id: key })
+            // eslint-disable-next-line
+            console.log(res.meta.access)
+            if (res.meta.access === 'granted') {
+              // const usersArray = []
+              // for (const key in res.data) {
+              //   usersArray.push({ ...res.data[key], id: key })
+              // }
+              vuexContext.commit('setConnected', res)
             }
-            vuexContext.commit('setUsers', usersArray)
           })
           .catch(e => context.error(e))
         // return new Promise ((resolve, reject) => {
@@ -54,29 +61,31 @@ const createStore = () => {
         //   resolve ()
         // })
       },
-      addUser (vuexContext, user) {
+      setConnected (vuexContext, users) {
+        vuexContext.commit('setConnected', users)
+      },
+      registerUser (vuexContext, user) {
         const createdUser = {
           ...user
         }
         return axios
-          .user('', createdUser)
+          .post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/register', createdUser)
           .then((result) => {
-            vuexContext.commit('addUser', { ...createdUser, id: result.data })
+            // eslint-disable-next-line
+            console.log(vuexContext)
+            vuexContext.commit('registerUser', { ...createdUser, id: result.data.insertId })
           })
         // eslint-disable-next-line
         .catch(e => console.log (e))
       },
-      editUser (vuexContext, editedUser) {
-        return axios.put('URL.json')
-          .then((res) => {
-            vuexContext.commit('editUser', editedUser)
-          })
-        // eslint-disable-next-line
-        .catch(e => console.log (e))
-      },
-      setUsers (vuexContext, users) {
-        vuexContext.commit('setUsers', users)
-      },
+      // editUser (vuexContext, editedUser) {
+      //   return axios.put('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/register')
+      //     .then((res) => {
+      //       vuexContext.commit('editUser', editedUser)
+      //     })
+      //   // eslint-disable-next-line
+      //   .catch(e => console.log (e))
+      // },
       setInfos (vuexContext, infos) {
         vuexContext.commit('setInfos', infos)
       }

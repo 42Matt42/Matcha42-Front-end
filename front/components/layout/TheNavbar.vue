@@ -18,7 +18,7 @@
         Login HTML
       </nuxt-link>
       <br>
-      <nuxt-link to="/login/register">
+      <nuxt-link to="/register">
         Register !
       </nuxt-link>
       <br>

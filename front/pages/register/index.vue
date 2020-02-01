@@ -3,7 +3,7 @@
     <section class="new-post">
       <br>
       <br>
-      <form @submit.prevent="onRegister">
+      <form @submit.prevent="onRegisterbis">
         <AppControlInput
           v-model="checkRegister.username"
         >
@@ -68,28 +68,41 @@ export default {
   },
   // computed: {
   //   loadedRegisters() {
-  //     return this.$store.getters.loadedRegisters
+  //     return this.$store.getters.loadedUsers
   //   }
   // },
   methods: {
-    onRegister () {
-      this.$axios
-        // .$post('https://api.github.com/users/mapbox', {
-        .$post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/register', {
-          username: this.checkRegister.username,
-          name: this.checkRegister.name,
-          surname: this.checkRegister.surname,
-          email: this.checkRegister.email,
-          password: this.checkRegister.password,
-        })
-        .then(function (res) {
-        /* eslint-disable */
-          console.log(res)
-          console.log(res.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    // onRegister () {
+    //   this.$axios
+    //     .$post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/register', {
+    //       username: this.checkRegister.username,
+    //       name: this.checkRegister.name,
+    //       surname: this.checkRegister.surname,
+    //       email: this.checkRegister.email,
+    //       password: this.checkRegister.password,
+    //     })
+    //     .then(function (res) {
+    //     /* eslint-disable */
+    //       console.log(res.meta.msg)
+    //       console.log(res.data.insertId)
+    //       console.log(res)
+    //       console.log(res.data)
+    //       return {
+    //         loadedUser: { ...res.data, id: context.params.postId }
+    //       }
+    //     })
+    //     .catch(function (error) {
+    //       console.log(error)
+    //     })
+    // },
+    onRegisterbis () {
+      this.$store.dispatch("registerUser", this.checkRegister)
+        // this.$router.push("/")
+    },
+    computed: {
+      loadedUsers () {
+        return this.$store.getters.loadedUsers
+      }
     }
   }
 }

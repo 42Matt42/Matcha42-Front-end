@@ -48,27 +48,26 @@ export default {
       this.$axios
         // .$post('https://api.github.com/users/mapbox', {
         .$post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login', {
-          data: {
-            username: this.login.username,
-            password: this.login.password
-          }
-          // headers: {
-          //   'Access-Control-Allow-Origin': '*'
-          // },
-          // proxy: {
-          //   host: '10.51.1.42',
-          //   port: '443'
-          // }
+          username: this.login.username,
+          password: this.login.password
         })
         .then((res) => {
         /* eslint-disable */
-        // console.log(res)
-          console.log(res.data)
-          this.$router.push('~/users/' + this.userId)
+          console.log(res.meta.access)
+          console.log(res.meta.token)
+          console.log(res)
+          console.log(res.data[0].email)
+          this.$store.dispatch("setConnected", res)
+          // this.$router.push('/')
         })
         .catch(function (error) {
           console.log(error)
         })
+    }
+  },
+  computed: {
+    loadedUsers () {
+      return this.$store.getters.loadedUsers
     }
   }
 }

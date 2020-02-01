@@ -26,6 +26,11 @@ import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 export default {
   components: {
     BigHeartLogo
+  },
+  computed: {
+    loadedUsers () {
+      return this.$store.getters.loadedUsers
+    }
   }
 }
 </script>
