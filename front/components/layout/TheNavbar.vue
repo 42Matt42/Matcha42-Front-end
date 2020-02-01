@@ -14,8 +14,12 @@
         Login !
       </nuxt-link>
       <br>
-      <nuxt-link to="/login/auth">
-        Post Login
+      <nuxt-link to="/login/index2">
+        Login HTML
+      </nuxt-link>
+      <br>
+      <nuxt-link to="/login/register">
+        Register !
       </nuxt-link>
       <br>
       <h1>
