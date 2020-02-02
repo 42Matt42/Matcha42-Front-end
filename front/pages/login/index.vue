@@ -29,12 +29,14 @@
 <script>
 import AppControlInput from '@/components/UI/AppControlInput'
 import AppButton from '@/components/UI/AppButton'
+const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   components: {
     AppControlInput,
     AppButton
   },
+  middleware: 'notAuthenticated',
   data () {
     return {
       login: {
@@ -46,7 +48,6 @@ export default {
   methods: {
     onLogin () {
       this.$axios
-        // .$post('https://api.github.com/users/mapbox', {
         .$post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login', {
           username: this.login.username,
           password: this.login.password
@@ -57,17 +58,13 @@ export default {
           console.log(res.meta.token)
           console.log(res)
           console.log(res.data[0].email)
-          this.$store.dispatch("setConnected", res)
-          // this.$router.push('/')
+          this.$store.dispatch("setConnected", res) // mutating to store for client rendering
+          Cookie.set('token', this.$store.getters.token, { expires: 7 }) // saving token for 7 days in cookie for server rendering
+          this.$router.push('/')
         })
         .catch(function (error) {
           console.log(error)
         })
-    }
-  },
-  computed: {
-    loadedUsers () {
-      return this.$store.getters.loadedUsers
     }
   }
 }

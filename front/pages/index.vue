@@ -17,19 +17,39 @@
         >
         </a> -->
       </div>
+      <div v-if="$store.state.token">
+        <p>
+          You are authenticated. You can see the
+          <NuxtLink to="/auth">
+            secret page
+          </NuxtLink>!
+        </p>
+        <button @click="logout">
+          Logout
+        </button>
+      </div>
+      <p v-else>
+        Please
+        <NuxtLink to="/login">
+          login
+        </NuxtLink>.
+      </p>
     </div>
   </section>
 </template>
 
 <script>
 import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
+const Cookie = process.client ? require('js-cookie') : undefined
+
 export default {
   components: {
     BigHeartLogo
   },
-  computed: {
-    loadedUsers () {
-      return this.$store.getters.loadedUsers
+  methods: {
+    logout () {
+      Cookie.remove('token')
+      this.$store.commit('setToken', null)
     }
   }
 }

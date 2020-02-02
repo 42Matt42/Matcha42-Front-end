@@ -20,6 +20,14 @@ export default {
     // AuthList,
     TheFooter
     // TheBackground
+  },
+  computed: {
+    loadedUsers () {
+      return this.$store.getters.loadedUsers
+    },
+    token () {
+      return this.$store.getters.token
+    }
   }
 }
 </script>

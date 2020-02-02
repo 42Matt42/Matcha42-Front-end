@@ -10,18 +10,38 @@
         Users
       </nuxt-link>
       <br>
-      <nuxt-link to="/login">
-        Login !
-      </nuxt-link>
-      <br>
-      <nuxt-link to="/login/index2">
-        Login HTML
-      </nuxt-link>
-      <br>
-      <nuxt-link to="/register">
-        Register !
-      </nuxt-link>
-      <br>
+      <div v-if="$store.state.token">
+        <p>
+          <nuxt-link to="/auth">
+            Authenticated users only /!\
+          </nuxt-link>
+          <br>
+        </p>
+        <br>
+        <button @click="logout">
+          Logout
+        </button>
+        <br>
+        <br>
+      </div>
+      <p v-else>
+        <nuxt-link to="/login">
+          Login !
+        </nuxt-link>
+        <br>
+        <nuxt-link to="/login/index2">
+          Login HTML
+        </nuxt-link>
+        <br>
+        <nuxt-link to="/register">
+          Register !
+        </nuxt-link>
+        <br>
+        <nuxt-link to="/auth">
+          Authenticated users only /!\
+        </nuxt-link>
+        <br>
+      </p>
       <h1>
         Matcha
       </h1>
