@@ -1,12 +1,13 @@
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-const cookieparser = process.server ? require('cookieparser') : undefined
+// const cookieparser = process.server ? require('cookieparser') : undefined
 
 const createStore = () => {
   return new Vuex.Store({
     plugins: [createPersistedState()],
     state: {
+      // madeInitRequest: false,
       loadedUsers: [],
       token: null,
       serverMessage: 'default'
@@ -25,18 +26,20 @@ const createStore = () => {
       }
     },
     actions: {
-      nuxtServerInit (vuexContext, context) {
-        let token = null
-        if (context.headers.cookie) {
-          const parsed = cookieparser.parse(context.headers.cookie)
-          try {
-            token = JSON.parse(parsed.token)
-          } catch (err) {
-            // No valid cookie found
-          }
-        }
-        vuexContext.commit('setToken', token)
-      },
+      // nuxtServerInit (vuexContext, context) {
+      //   let token = null
+      //   if (context.headers.cookie) {
+      //     // eslint-disable-next-line
+      //     console.log('cookie', context.headers.cookie)
+      //     const parsed = cookieparser.parse(context.headers.cookie)
+      //     try {
+      //       token = JSON.parse(parsed.token)
+      //     } catch (err) {
+      //       // No valid cookie found
+      //     }
+      //   }
+      //   vuexContext.commit('setToken', token)
+      // },
       setConnected (vuexContext, users) {
         vuexContext.commit('setConnected', users)
       },
@@ -49,11 +52,32 @@ const createStore = () => {
           .then((result) => {
             // eslint-disable-next-line
             console.log(vuexContext)
-            vuexContext.commit('registerUser', { ...createdUser, id: result.data.insertId })
+            vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
+          })
+        // eslint-disable-next-line
+        .catch(e => console.log (e))
+      },
+      getUserData (vuexContext) {
+        return axios
+          .get('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user', { withCredentials: true })
+          .then((result) => {
+            // eslint-disable-next-line
+            console.log(vuexContext)
           })
         // eslint-disable-next-line
         .catch(e => console.log (e))
       }
+      //   const userdata = await this.$axios.$get('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user',
+      //     { withCredentials: true })
+      //   // eslint-disable-next-line
+      // fetch(
+      //   'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user',
+      //   { credentials: 'include' } // could also try 'same-origin'
+      // )
+      // // eslint-disable-next-line
+      // console.log(vuexContext)
+      // vuexContext.commit('setConnected', userdata)
+      // }
     },
     getters: {
       loadedUsers (state) {

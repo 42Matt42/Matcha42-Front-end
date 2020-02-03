@@ -55,7 +55,6 @@ export default {
         .then((res) => {
         /* eslint-disable */
           console.log(res.meta.access)
-          console.log(res.meta.token)
           console.log(res)
           console.log(res.data[0].email)
           this.$store.dispatch("setConnected", res) // mutating to store for client rendering

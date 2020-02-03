@@ -8,18 +8,14 @@
 </template>
 
 <script>
-
 import TheNavbar from '@/components/layout/TheNavbar'
-// import AuthList from '@/components/users/AuthList'
 import TheFooter from '@/components/layout/TheFooter'
-// import TheBackground from '@/components/TheBackground'
+// const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   components: {
     TheNavbar,
-    // AuthList,
     TheFooter
-    // TheBackground
   },
   computed: {
     loadedUsers () {

@@ -17,20 +17,14 @@
           <p
             v-if="username"
           >
-            Hello, {{ user.username }}
+            Hello,
           </p>
           <p
             v-else
           >
-            The user is not authenticated!
+            The user is
           </p>
         </v-card-text>
-        <button
-          v-on="listeners"
-          @click="OnLoadUser"
-        >
-          BUTTON (prevent empty field )> Go to the user corresponding to this userId
-        </button>
         <v-card-actions>
           <v-spacer />
           <v-btn
@@ -49,26 +43,5 @@
 
 <script>
 export default {
-  data () {
-    return {
-      userId: ''
-    }
-  },
-  computed: {
-    user () {
-      return (this.$store.state.auth || {}).user || null
-    },
-    listeners () {
-      if (this.userId !== '') {
-        return { click: this.OnLoadUser }
-      }
-      return null
-    }
-  },
-  methods: {
-    OnLoadUser () {
-      this.$router.push('/users/' + this.userId)
-    }
-  }
 }
 </script>

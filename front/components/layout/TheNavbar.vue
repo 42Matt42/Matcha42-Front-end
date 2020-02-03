@@ -6,8 +6,8 @@
         Home_Page
       </nuxt-link>
       <br>
-      <nuxt-link to="/users">
-        Users
+      <nuxt-link to="/settings">
+        Settings
       </nuxt-link>
       <br>
       <div v-if="$store.state.token">
@@ -29,16 +29,16 @@
           Login !
         </nuxt-link>
         <br>
-        <nuxt-link to="/login/index2">
-          Login HTML
-        </nuxt-link>
-        <br>
         <nuxt-link to="/register">
           Register !
         </nuxt-link>
         <br>
         <nuxt-link to="/auth">
           Authenticated users only /!\
+        </nuxt-link>
+        <br>
+        <nuxt-link to="/settings">
+          Settings
         </nuxt-link>
         <br>
       </p>
@@ -55,7 +55,16 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
+
 export default {
+  methods: {
+    logout () {
+      Cookies.remove('token')
+      this.$store.commit('setToken', null)
+      this.$router.push('/')
+    }
+  }
 }
 // control doesnt' work?? ==> to review validate (data) {}
 // validate (data) {
