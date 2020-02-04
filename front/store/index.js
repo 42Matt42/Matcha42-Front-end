@@ -48,7 +48,7 @@ const createStore = () => {
           ...user
         }
         return axios
-          .post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/register', createdUser)
+          .post(process.env.serverUrl + '/register', createdUser)
           .then((result) => {
             // eslint-disable-next-line
             console.log(vuexContext)
@@ -59,7 +59,7 @@ const createStore = () => {
       },
       getUserData (vuexContext) {
         return axios
-          .get('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user', { withCredentials: true })
+          .get(process.env.serverUrl + '/user', { withCredentials: true })
           .then((result) => {
             // eslint-disable-next-line
             console.log(vuexContext)

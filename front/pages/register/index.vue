@@ -97,13 +97,13 @@ export default {
     // },
     onRegisterbis () {
       this.$store.dispatch("registerUser", this.checkRegister)
-        // this.$router.push("/")
-    },
-    computed: {
-      loadedUsers () {
-        return this.$store.getters.loadedUsers
-      }
+      this.$router.push("/")
     }
+    // computed: {
+    //   loadedUsers () {
+    //     return this.$store.getters.loadedUsers
+    //   }
+    // }
   }
 }
 </script>

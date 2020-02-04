@@ -50,6 +50,18 @@
       <!-- <br>
       <div class="">Username: {{ loadedAuths.username }}</div>
       <div class="">Profile picture: {{ loadedAuths.picture }}</div> -->
+      <br>
+      username:
+      {{ loadedUsers.username }}
+      <br>
+      email:
+      {{ loadedUsers.email }}
+      <br>
+      Token:
+      {{ token }}
+      <br>
+      serverMessage:
+      {{ serverMessage }}
     </div>
   </nav>
 </template>
@@ -58,6 +70,11 @@
 import Cookies from 'js-cookie'
 
 export default {
+  computed: {
+    loadedUsers () {
+      return this.$store.getters.loadedUsers
+    }
+  },
   methods: {
     logout () {
       Cookies.remove('token')

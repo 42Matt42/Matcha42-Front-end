@@ -3,22 +3,17 @@
     <section class="new-post">
       <br>
       <br>
-      <form @submit.prevent="onLogin">
+      <form @submit.prevent="onReset">
         <AppControlInput
-          v-model="login.username"
+          v-model="reset.email"
         >
-          Username
+          Type your email
+          <br>
         </AppControlInput>
-        <AppControlInput
-          v-model="login.password"
-        >
-          Password
-        </AppControlInput>
-        <br>
         <AppButton
           type="submit"
         >
-          VALID
+          Reset password !
         </AppButton>
         <br>
       </form>
@@ -29,36 +24,29 @@
 <script>
 import AppControlInput from '@/components/UI/AppControlInput'
 import AppButton from '@/components/UI/AppButton'
-const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   components: {
     AppControlInput,
     AppButton
   },
-  middleware: 'notAuthenticated',
+  // middleware: 'notAuthenticated',
   data () {
     return {
-      login: {
-        username: '',
-        password: ''
+      reset: {
+        email: ''
       }
     }
   },
   methods: {
-    onLogin () {
+    onReset () {
       this.$axios
-        .$post(process.env.serverUrl + '/login', {
-          username: this.login.username,
-          password: this.login.password
+        .$post(process.env.serverUrl + '/reset', {
+          username: this.reset.email
         })
         .then((res) => {
         /* eslint-disable */
-          console.log(res.meta.access)
           console.log(res)
-          console.log(res.data[0].email)
-          this.$store.dispatch("setConnected", res) // mutating to store for client rendering
-          Cookie.set('token', this.$store.getters.token, { expires: 7 }) // saving token for 7 days in cookie for server rendering
           this.$router.push('/')
         })
         .catch(function (error) {

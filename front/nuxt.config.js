@@ -1,6 +1,13 @@
 import colors from 'vuetify/es5/util/colors'
+import { Http2ServerRequest } from 'http2';
 
 export default {
+  env: {
+    // process.env.baseUrl
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login'
+    serverUrl: process.env.SERVER_URL || 'http://localhost:8080'
+  },
   mode: 'spa',
   /*
   ** Headers of the page
