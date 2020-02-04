@@ -67,11 +67,11 @@ const createStore = () => {
         // eslint-disable-next-line
         .catch(e => console.log (e))
       }
-      //   const userdata = await this.$axios.$get('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user',
+      //   const userdata = await this.$axios.$get(process.env.serverUrl + '/user',
       //     { withCredentials: true })
       //   // eslint-disable-next-line
       // fetch(
-      //   'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user',
+      //   process.env.serverUrl + '/user',
       //   { credentials: 'include' } // could also try 'same-origin'
       // )
       // // eslint-disable-next-line

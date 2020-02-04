@@ -6,7 +6,7 @@ export default {
     // process.env.baseUrl
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login'
-    serverUrl: process.env.SERVER_URL || 'http://localhost:8080'
+    serverUrl: process.env.SERVER_URL || 'http://10.11.7.13:8080'
   },
   mode: 'spa',
   /*
@@ -15,6 +15,8 @@ export default {
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
+    // headers:
+    //   { 'Access-Control-Request-Method': '*' },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

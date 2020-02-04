@@ -43,12 +43,12 @@ export default {
   },
   methods: {
     successnow (token) {
-      axios.defaults.baseURL = 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user'
+      axios.defaults.baseURL = process.env.serverUrl + '/user'
       if (process.server) {
         return
       }
       axios.interceptors.request.use((request) => {
-        request.baseURL = 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user'
+        request.baseURL = process.env.serverUrl + '/user'
         /* eslint-disable */
         console.log('tok1', token)
         if (this.token) {
@@ -67,7 +67,7 @@ export default {
     letitwork () {
       axios({
         method: 'get',
-        url: 'https://matcha42saubinbartol.herokuapp.com/user', // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user',
+        url: process.env.serverUrl + '/user', // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/user',
         // headers: {'Origin': 'https://matcha42saubinbartol.herokuapp.com/user'}
       })
     }

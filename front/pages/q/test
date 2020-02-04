@@ -1,7 +1,7 @@
 <template>
   <div id="top">
     <label>
-      Url to be fetched (example: <a href="https://matcha42saubinbartol.herokuapp.com/user">slash user</a>)
+      Url to be fetched (example: <a href="localhost:8080/user">slash user</a>)
       <input type="url" id="url" value="">
     </label>
     <label>

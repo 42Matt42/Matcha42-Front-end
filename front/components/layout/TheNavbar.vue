@@ -37,11 +37,11 @@
           Authenticated users only /!\
         </nuxt-link>
         <br>
-        <nuxt-link to="/settings">
-          Settings
-        </nuxt-link>
-        <br>
       </p>
+      <nuxt-link to="/reset">
+        Reset password
+      </nuxt-link>
+      <br>
       <h1>
         Matcha
       </h1>
@@ -73,6 +73,12 @@ export default {
   computed: {
     loadedUsers () {
       return this.$store.getters.loadedUsers
+    },
+    token () {
+      return this.$store.getters.token
+    },
+    serverMessage () {
+      return this.$store.getters.serverMessage
     }
   },
   methods: {

@@ -74,7 +74,7 @@ export default {
   methods: {
     // onRegister () {
     //   this.$axios
-    //     .$post('https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/register', {
+    //     .$post(process.env.serverUrl + '/register', {
     //       username: this.checkRegister.username,
     //       name: this.checkRegister.name,
     //       surname: this.checkRegister.surname,

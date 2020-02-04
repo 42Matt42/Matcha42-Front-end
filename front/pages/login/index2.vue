@@ -7,7 +7,7 @@
     <body>
       <div class="login-form">
         <h1>Login Form</h1>
-        <form action="https://matcha42saubinbartol.herokuapp.com/login" method="POST">
+        <form action="localhost:8080/login" method="POST">
           <input type="text" name="username" placeholder="Username" required>
           <input type="password" name="password" placeholder="Password" required>
           <input type="submit">

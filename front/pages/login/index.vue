@@ -58,7 +58,8 @@ export default {
           console.log(res)
           console.log(res.data[0].email)
           this.$store.dispatch("setConnected", res) // mutating to store for client rendering
-          Cookie.set('token', this.$store.getters.token, { expires: 7 }) // saving token for 7 days in cookie for server rendering
+          Cookie.set('token', this.$store.getters.token, { domain: process.env.serverUrl, expires: 7 })
+          // Cookie.set('token', this.$store.getters.token, { expires: 7 }) // saving token for 7 days in cookie for server rendering
           this.$router.push('/')
         })
         .catch(function (error) {
