@@ -6,7 +6,7 @@ export default {
     // process.env.baseUrl
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login'
-    serverUrl: process.env.SERVER_URL || 'http://10.11.7.13:8080'
+    serverUrl: process.env.SERVER_URL || 'http://10.12.4.2:8080'
   },
   mode: 'spa',
   /*

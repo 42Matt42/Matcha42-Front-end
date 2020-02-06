@@ -1,6 +1,6 @@
 <template>
-  <div class="admin-page">
-    <section class="new-post">
+  <div class="">
+    <section class="">
       <br>
       <br>
       <form @submit.prevent="onLogin">
@@ -29,7 +29,7 @@
 <script>
 import AppControlInput from '@/components/UI/AppControlInput'
 import AppButton from '@/components/UI/AppButton'
-const Cookie = process.client ? require('js-cookie') : undefined
+// const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   components: {
@@ -57,9 +57,8 @@ export default {
           console.log(res.meta.access)
           console.log(res)
           console.log(res.data[0].email)
-          this.$store.dispatch("setConnected", res) // mutating to store for client rendering
-          Cookie.set('token', this.$store.getters.token, { domain: process.env.serverUrl, expires: 7 })
-          // Cookie.set('token', this.$store.getters.token, { expires: 7 }) // saving token for 7 days in cookie for server rendering
+          this.$store.dispatch('setConnected', res)
+          // Cookie.set('token', this.$store.getters.token, { expires: 7 })
           this.$router.push('/')
         })
         .catch(function (error) {
@@ -69,20 +68,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.admin-page {
-  padding: 20px;
-}
-
-.new-post {
-  text-align: center;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 10px;
-}
-
-.existing-posts h1 {
-  text-align: center;
-}
-</style>
-

@@ -23,25 +23,36 @@ const createStore = () => {
       },
       setToken (state, token) {
         state.token = token
+      },
+      setLogout (state) {
+        state.loadedUsers = []
+        state.token = null
+        state.serverMessage = null
       }
     },
     actions: {
-      // nuxtServerInit (vuexContext, context) {
-      //   let token = null
-      //   if (context.headers.cookie) {
-      //     // eslint-disable-next-line
-      //     console.log('cookie', context.headers.cookie)
-      //     const parsed = cookieparser.parse(context.headers.cookie)
-      //     try {
-      //       token = JSON.parse(parsed.token)
-      //     } catch (err) {
-      //       // No valid cookie found
-      //     }
-      //   }
-      //   vuexContext.commit('setToken', token)
-      // },
       setConnected (vuexContext, users) {
         vuexContext.commit('setConnected', users)
+      },
+      setLogout (vuexContext) {
+        vuexContext.commit('setLogout')
+      },
+      getUserData (data) {
+        return axios
+          .get(process.env.serverUrl + '/user', {
+            headers: {
+              Authorization: 'Bearer ' + data.app.store.getters.token,
+              user_id: data.app.store.getters.loadedUsers.id
+            }
+          })
+          .then((result) => {
+            // eslint-disable-next-line
+            console.log(result)
+            // eslint-disable-next-line
+            console.log(data)
+          })
+          // eslint-disable-next-line
+          .catch(e => console.log (data))
       },
       registerUser (vuexContext, user) {
         const createdUser = {
@@ -49,35 +60,14 @@ const createStore = () => {
         }
         return axios
           .post(process.env.serverUrl + '/register', createdUser)
-          .then((result) => {
-            // eslint-disable-next-line
-            console.log(vuexContext)
-            vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
-          })
-        // eslint-disable-next-line
-        .catch(e => console.log (e))
-      },
-      getUserData (vuexContext) {
-        return axios
-          .get(process.env.serverUrl + '/user', { withCredentials: true })
-          .then((result) => {
-            // eslint-disable-next-line
-            console.log(vuexContext)
-          })
+          // .then((result) => {
+          //   // eslint-disable-next-line
+          //   console.log(vuexContext)
+          //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
+          // })
         // eslint-disable-next-line
         .catch(e => console.log (e))
       }
-      //   const userdata = await this.$axios.$get(process.env.serverUrl + '/user',
-      //     { withCredentials: true })
-      //   // eslint-disable-next-line
-      // fetch(
-      //   process.env.serverUrl + '/user',
-      //   { credentials: 'include' } // could also try 'same-origin'
-      // )
-      // // eslint-disable-next-line
-      // console.log(vuexContext)
-      // vuexContext.commit('setConnected', userdata)
-      // }
     },
     getters: {
       loadedUsers (state) {

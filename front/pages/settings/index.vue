@@ -1,6 +1,6 @@
 <template>
-  <div class="admin-page">
-    <section class="new-post">
+  <div id="app">
+    <section>
       <br>
       <button @click="gettest">
         Button_GET_test
@@ -28,6 +28,12 @@
         <input
           v-model="reset.password"
         >
+        <v-app id="inspire">
+          <v-text-field color="success" />
+        </v-app>
+        <v-app id="inspire">
+          <v-text-field :rules="rules" />
+        </v-app>
         <button
           type="submit"
         >
@@ -54,7 +60,15 @@ export default {
         surname: '',
         email: '',
         password: ''
-      }
+      },
+      rules: [
+        value => !!value || 'Email required',
+        value => (value || '').length <= 64 || 'Max 64 characters',
+        (value) => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail'
+        }
+      ]
     }
   },
   methods: {
@@ -64,7 +78,7 @@ export default {
     },
     onSettings () {
       this.$axios
-        .$post(process.env.serverUrl + '/settings', {
+        .$get(process.env.serverUrl + '/settings', {
           username: this.reset.username,
           name: this.reset.name,
           surname: this.reset.surname,
@@ -83,14 +97,17 @@ export default {
         })
     }
   },
-  async asyncData () {
+  async asyncData (context) {
     const user = await axios
-      .get(process.env.serverUrl + '/user',
-        { withCredentials: true })
+      .get(process.env.serverUrl + '/user', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token,
+          user_id: context.app.store.getters.loadedUsers.id
+        }
+      })
       .then((res) => {
         /* eslint-disable */
         console.log(res)
-        console.log(res.meta)
         return res
       })
       .catch(function(error) {
@@ -102,20 +119,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.admin-page {
-  padding: 20px;
-}
-
-.new-post {
-  text-align: center;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 10px;
-}
-
-.existing-posts h1 {
-  text-align: center;
-}
-</style>
-

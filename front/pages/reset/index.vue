@@ -42,7 +42,7 @@ export default {
     onReset () {
       this.$axios
         .$post(process.env.serverUrl + '/reset', {
-          username: this.reset.email
+          email: this.reset.email
         })
         .then((res) => {
         /* eslint-disable */
@@ -56,20 +56,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.admin-page {
-  padding: 20px;
-}
-
-.new-post {
-  text-align: center;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 10px;
-}
-
-.existing-posts h1 {
-  text-align: center;
-}
-</style>
-

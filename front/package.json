@@ -26,6 +26,7 @@
     "cookieparser": "^0.1.0",
     "cors": "^2.8.5",
     "cors-for-dev": "^0.4.2",
+    "dependencies": "0.0.1",
     "fs": "0.0.1-security",
     "js-cookie": "^2.2.1",
     "net": "^1.0.2",

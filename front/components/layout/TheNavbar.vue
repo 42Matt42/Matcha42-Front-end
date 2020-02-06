@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 
 export default {
   computed: {
@@ -83,8 +83,7 @@ export default {
   },
   methods: {
     logout () {
-      Cookies.remove('token')
-      this.$store.commit('setToken', null)
+      this.$store.commit('setLogout', null)
       this.$router.push('/')
     }
   }
