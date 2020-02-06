@@ -18,9 +18,6 @@ const createStore = () => {
         state.token = connected.meta.token
         state.serverMessage = connected.meta.access
       },
-      registerUser (state, user) {
-        state.loadedUsers.registered = user
-      },
       setToken (state, token) {
         state.token = token
       },
@@ -28,6 +25,12 @@ const createStore = () => {
         state.loadedUsers = []
         state.token = null
         state.serverMessage = null
+      },
+      registerUser (state, user) {
+        state.loadedUsers.registered = user
+      },
+      setWarning (state, message) {
+        state.serverMessage = message
       }
     },
     actions: {
@@ -37,22 +40,25 @@ const createStore = () => {
       setLogout (vuexContext) {
         vuexContext.commit('setLogout')
       },
-      getUserData (data) {
+      getUserData (vuexContext) {
         return axios
           .get(process.env.serverUrl + '/user', {
             headers: {
-              Authorization: 'Bearer ' + data.app.store.getters.token,
-              user_id: data.app.store.getters.loadedUsers.id
+              Authorization: 'Bearer ' + vuexContext.app.store.getters.token,
+              user_id: vuexContext.app.store.getters.loadedUsers.id
             }
           })
           .then((result) => {
             // eslint-disable-next-line
             console.log(result)
             // eslint-disable-next-line
-            console.log(data)
+            console.log(vuexContext)
           })
           // eslint-disable-next-line
-          .catch(e => console.log (data))
+          .catch(e => console.log (vuexContext))
+      },
+      setWarning (vuexContext, message) {
+        vuexContext.commit('setWarning', message)
       },
       registerUser (vuexContext, user) {
         const createdUser = {
@@ -61,8 +67,6 @@ const createStore = () => {
         return axios
           .post(process.env.serverUrl + '/register', createdUser)
           // .then((result) => {
-          //   // eslint-disable-next-line
-          //   console.log(vuexContext)
           //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
           // })
         // eslint-disable-next-line

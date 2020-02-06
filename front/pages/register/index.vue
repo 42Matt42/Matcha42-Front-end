@@ -54,6 +54,7 @@ export default {
     AppControlInput,
     AppButton
   },
+  middleware: 'notAuthenticated',
   data () {
     return {
       checkRegister:

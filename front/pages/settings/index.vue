@@ -61,6 +61,7 @@ export default {
         email: '',
         password: ''
       },
+      middleware: 'authenticated',
       rules: [
         value => !!value || 'Email required',
         value => (value || '').length <= 64 || 'Max 64 characters',
