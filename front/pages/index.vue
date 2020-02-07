@@ -17,10 +17,6 @@
         >
         </a> -->
         <br>
-        <nuxt-link to="/reset">
-          Reset password
-        </nuxt-link>
-        <br>
       </div>
     </div>
   </section>

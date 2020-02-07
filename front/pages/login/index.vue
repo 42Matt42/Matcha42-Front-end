@@ -22,6 +22,11 @@
         </AppButton>
         <br>
       </form>
+      <br>
+      Did you forget your pass?
+      <nuxt-link to="/reset">
+        Reset password
+      </nuxt-link>
     </section>
   </div>
 </template>
