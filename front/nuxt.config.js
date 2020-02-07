@@ -6,7 +6,7 @@ export default {
     // process.env.baseUrl
     baseUrl: process.env.BASE_URL || 'http://localhost:3000',
     // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login'
-    serverUrl: process.env.SERVER_URL || 'http://10.12.4.2:8080'
+    serverUrl: process.env.SERVER_URL || 'http://10.11.3.2:8080'
   },
   mode: 'spa',
   /*
@@ -75,18 +75,18 @@ export default {
   ** https://github.com/nuxt-community/vuetify-module
   */
   vuetify: {
+    // treeShake: true,
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
       themes: {
-        dark: {
-          primary: colors.blue.darken2,
+        primary: {
+          primary: colors.indigo.darken1,
           accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
+          secondary: colors.deepPurple.darken1,
+          info: colors.purple.accent2,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3
+          error: colors.deepOrange.lighten4,
+          success: colors.lightGreen.accent3
         }
       }
     }

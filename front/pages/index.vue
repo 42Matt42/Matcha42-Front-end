@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="">
     <div>
       <BigHeartLogo />
       <h1 class="title">
@@ -37,12 +37,6 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
 
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
