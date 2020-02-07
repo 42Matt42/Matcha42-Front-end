@@ -113,7 +113,7 @@
         </v-row>
         <v-row>
           <v-btn
-            @click="onSettings"
+            @click="valid"
             :disabled="!valid"
             color="success"
             class="mr-4"
@@ -146,15 +146,7 @@ export default {
         username: '',
         name: '',
         surname: '',
-        nameRules: [
-          v => !!v || 'Name is required',
-          v => v.length <= 10 || 'Name must be less than 10 characters'
-        ],
         email: '',
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /.+@.+/.test(v) || 'E-mail must be valid'
-        ],
         password: ''
       // reset: {
       //   user: null,
@@ -166,12 +158,22 @@ export default {
       }
     }
   },
+  computed: {
+    nameRules: [
+      v => !!v || 'Name is required',
+      v => v.length <= 10 || 'Name must be less than 10 characters'
+    ],
+    emailRules: [
+      v => !!v || 'E-mail is required',
+      v => /.+@.+/.test(v) || 'E-mail must be valid'
+    ]
+  },
   methods: {
     gettest () {
       this.$store.dispatch('getUserData')
       this.$router.push('/')
     },
-    onSettings () {
+    valid () {
       this.$axios
         .$post(process.env.serverUrl + '/settings', {
           username: this.reset.username,

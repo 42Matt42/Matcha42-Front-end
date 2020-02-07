@@ -1,66 +1,45 @@
 <template>
-  <div class="">
-    <section class="">
-      <br>
-      <br>
-      <form @submit.prevent="onNewPassword">
-        <AppControlInput
-          v-model="newpass.password1"
-        >
-          Choose a new password
-        </AppControlInput>
-        <AppControlInput
-          v-model="newpass.password2"
-        >
-          Type it again to confirm
-        </AppControlInput>
-        <br>
-        <AppButton
-          type="submit"
-        >
-          VALID
-        </AppButton>
-        <br>
-      </form>
-    </section>
+  <div>
+    reset password
   </div>
 </template>
 
 <script>
-import AppControlInput from '@/components/UI/AppControlInput'
-import AppButton from '@/components/UI/AppButton'
+import axios from 'axios'
 
 export default {
-  components: {
-    AppControlInput,
-    AppButton
-  },
   data () {
     return {
-      newpass: {
-        password1: '',
-        password2: ''
+      checker: {
+        id: false,
+        username: ''
       }
     }
   },
-  methods: {
-    onNewPassword () {
-      this.$axios
-        .$post(process.env.serverUrl + '/password', {
-          password1: this.newpass.password1,
-          password2: this.newpass.password2
-        })
-        .then((res) => {
+  async asyncData (context) {
+    const user = await axios
+      .get(process.env.serverUrl + '/password', {
+        params: {
+          id: context.query.id,
+          username: context.query.username
+        }
+      })
+      .then((res) => {
         /* eslint-disable */
-          console.log(res)
-          this.$store.dispatch('setWarning', "New password set ! You can now login with it !")
-          // Cookie.set('token', this.$store.getters.token, { expires: 7 })
-          this.$router.push('/')
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+        // console.log(context)
+        // console.log(this.$route.query)
+        // console.log(res)
+        res
+      })
+      .catch(function(error) {
+        /* eslint-disable */
+        console.log(context.query)
+        // console.log(this.$route.query)
+        console.log(error)
+      })
+      return {
+        user
+      }
     }
-  }
 }
 </script>
