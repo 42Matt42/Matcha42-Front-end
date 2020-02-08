@@ -37,6 +37,7 @@ export default {
   },
   data () {
     return {
+      username: this.$route.params.username,
       newpass: {
         password1: '',
         password2: ''
@@ -48,12 +49,13 @@ export default {
       this.$axios
         .$post(process.env.serverUrl + '/password', {
           password1: this.newpass.password1,
-          password2: this.newpass.password2
+          password2: this.newpass.password2,
+          username: this.username
         })
         .then((res) => {
         /* eslint-disable */
           console.log(res)
-          this.$store.dispatch('setWarning', "New password set ! You can now login with it !")
+          this.$store.dispatch('setMessage', "New password set ! You can now login with it !")
           // Cookie.set('token', this.$store.getters.token, { expires: 7 })
           this.$router.push('/')
         })

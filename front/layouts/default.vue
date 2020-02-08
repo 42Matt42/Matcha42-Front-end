@@ -78,7 +78,6 @@
           >
             <v-list-item-avatar>
               <img
-                :src="`https://randomuser.me/api/portraits/women/${item.picture}.jpg`"
                 alt=""
               >
             </v-list-item-avatar>
@@ -194,6 +193,7 @@
       >
         <nuxt />
         <!-- <v-row
+          :src="`https://randomuser.me/api/portraits/women/${item.picture}.jpg`"
           justify="center"
           align="center"
         >

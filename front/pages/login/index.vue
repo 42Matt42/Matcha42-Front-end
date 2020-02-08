@@ -1,6 +1,9 @@
 <template>
   <div class="">
     <section class="">
+      <!-- <v-if></v-if> -->
+      {{ serverMessage }}
+      <br>
       <br>
       <br>
       <form @submit.prevent="onLogin">
@@ -37,11 +40,11 @@ import AppButton from '@/components/UI/AppButton'
 // const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
+  middleware: 'notAuthenticated',
   components: {
     AppControlInput,
     AppButton
   },
-  middleware: 'notAuthenticated',
   data () {
     return {
       login: {
@@ -50,6 +53,18 @@ export default {
       }
     }
   },
+  computed: {
+    loadedUsers () {
+      return this.$store.getters.loadedUsers
+    },
+    token () {
+      return this.$store.getters.token
+    },
+    serverMessage () {
+      return this.$store.getters.serverMessage
+    }
+  },
+  // middleware: 'notAuthenticated',
   methods: {
     onLogin () {
       this.$axios

@@ -10,7 +10,8 @@ const createStore = () => {
       // madeInitRequest: false,
       loadedUsers: [],
       token: null,
-      serverMessage: 'default'
+      serverMessage: 'default',
+      checker: 'false'
     },
     mutations: {
       setConnected (state, connected) {
@@ -29,8 +30,14 @@ const createStore = () => {
       registerUser (state, user) {
         state.loadedUsers.registered = user
       },
-      setWarning (state, message) {
+      setMessage (state, message) {
         state.serverMessage = message
+      },
+      setChecker (state, value) {
+        state.checker = value
+      },
+      setUsername (state, username) {
+        state.loadedUsers.username = username
       }
     },
     actions: {
@@ -57,8 +64,14 @@ const createStore = () => {
           // eslint-disable-next-line
           .catch(e => console.log (vuexContext))
       },
-      setWarning (vuexContext, message) {
-        vuexContext.commit('setWarning', message)
+      setMessage (vuexContext, message) {
+        vuexContext.commit('setMessage', message)
+      },
+      setChecker (vuexContext, value) {
+        vuexContext.commit('checker', value)
+      },
+      setUsername (vuexContext, username) {
+        vuexContext.commit('setUsername', username)
       },
       registerUser (vuexContext, user) {
         const createdUser = {
@@ -82,6 +95,12 @@ const createStore = () => {
       },
       serverMessage (state) {
         return state.serverMessage
+      },
+      checker (state) {
+        return state.checker
+      },
+      username (state) {
+        return state.loadedUsers.username
       }
     }
   })
