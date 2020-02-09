@@ -62,7 +62,6 @@
               <div
                 @click="togglePasswordVisibility"
                 :arial-label="passwordVisible ? 'Hide password' : 'Show password'"
-                class="visibility"
                 tabindex="-1"
               >
                 <v-icon
@@ -84,6 +83,7 @@
           <v-row>
             <v-btn
               @click="validate"
+              v-if="samePasswords"
               :disabled="!valid"
               color="success"
               class="mr-4"
@@ -110,13 +110,13 @@ export default {
       password1: '',
       password2: '',
       passRules: [
-        v => !!v || 'Pass is required',
+        v => !!v || 'Password is required',
         // v => v.length >= 3 || 'Pass must be more than 3 characters',
-        v => (v && v.length <= 20) || 'Pass must be less than 20 char',
-        v => /[a-z]+/.test(v) || 'One lowercase letter required.',
-        v => /[A-Z]+/.test(v) || 'One uppercase letter required.',
+        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+        v => /[a-z]+/.test(v) || '1 lowercase letter [abc...] required.',
+        v => /[A-Z]+/.test(v) || '1 uppercase letter [ABC...] required.',
         v => /.{8,}/.test(v) || '8 characters minimum.',
-        v => /[0-9]+/.test(v) || 'One number required.'
+        v => /[0-9]+/.test(v) || '1 number [0123...] required.'
       ],
       passwordVisible: false
       // username: ''
@@ -126,11 +126,18 @@ export default {
     checker () {
       return this.$store.getters.checker
     },
-    serverMessage () {
-      return this.$store.getters.serverMessage
-    },
     username () {
       return this.$store.getters.loadedUsers.username
+    },
+    samePasswords () {
+      if (this.password1 === this.password2 && this.password1.length > 0) {
+        return true
+      } else {
+        return false
+      }
+    },
+    serverMessage () {
+      return this.$store.getters.serverMessage
     }
   },
   async asyncData (context) {
@@ -178,10 +185,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-  .visibility {
-    color: $bgColor;
-  }
-</style>

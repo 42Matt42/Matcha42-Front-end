@@ -1,59 +1,140 @@
 <template>
-  <div class="">
-    <section class="">
+  <div>
+    pop-up:<br>
+    {{ serverMessage }}
+    <br><br>
+    <div>
       <br>
       <br>
-      <form @submit.prevent="onRegister">
-        <AppControlInput
-          v-model="checkRegister.username"
-        >
-          Username
-        </AppControlInput>
-        <AppControlInput
-          v-model="checkRegister.surname"
-        >
-          Surname
-        </AppControlInput>
-        <br>
-        <AppControlInput
-          v-model="checkRegister.name"
-        >
-          Name
-        </AppControlInput>
-        <br>
-        <AppControlInput
-          v-model="checkRegister.email"
-        >
-          Email
-        </AppControlInput>
-        <br>
-        <AppControlInput
-          v-model="checkRegister.password"
-        >
-          Password
-        </AppControlInput>
-        <br>
-        <AppButton
-          type="submit"
-        >
-          VALID
-        </AppButton>
-        <br>
-      </form>
-    </section>
+      <v-form
+        ref="form"
+        v-model="valid"
+        lazy-validation
+      >
+        <v-container>
+          <v-row>
+            <v-col
+              cols="12"
+            >
+              <v-text-field
+                v-model="checkRegister.username"
+                :rules="usernameRules"
+                :counter="20"
+                label="Username"
+                required
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              cols="6"
+            >
+              <v-text-field
+                v-model="checkRegister.name"
+                :rules="nameRules"
+                :counter="20"
+                label="First name"
+                required
+              />
+            </v-col>
+            <v-col
+              cols="6"
+            >
+              <v-text-field
+                v-model="checkRegister.surname"
+                :rules="nameRules"
+                :counter="20"
+                label="Last name"
+                required
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              cols="12"
+            >
+              <v-text-field
+                v-model="checkRegister.email"
+                :rules="emailRules"
+                :counter="42"
+                label="Email"
+                required
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              cols="5"
+            >
+              <div>
+                <v-text-field
+                  v-model="checkRegister.password"
+                  :rules="passRules"
+                  :counter="20"
+                  :type="passwordVisible ? 'text' : 'password'"
+                  label="Password"
+                  required
+                />
+              </div>
+            </v-col>
+
+            <v-col
+              cols="5"
+            >
+              <v-text-field
+                v-model="password2"
+                :rules="passRules"
+                :counter="20"
+                :type="passwordVisible ? 'text' : 'password'"
+                label="Confirm your password"
+                required
+              />
+            </v-col>
+
+            <v-col
+              cols="1"
+            >
+              <div
+                @click="togglePasswordVisibility"
+                :arial-label="passwordVisible ? 'Hide password' : 'Show password'"
+                tabindex="-1"
+              >
+                <v-icon
+                  v-if="passwordVisible"
+                  large
+                >
+                  mdi-eye
+                </v-icon>
+                <v-icon
+                  v-else
+                  large
+                >
+                  mdi-eye-off
+                </v-icon>
+              </div>
+            </v-col>
+          </v-row>
+          <br>
+          <v-row>
+            <v-btn
+              @click="validate"
+              v-if="samePasswords"
+              :disabled="!valid"
+              color="success"
+              class="mr-4"
+            >
+              Validate
+            </v-btn>
+          </v-row>
+        </v-container>
+      </v-form>
+    </div>
   </div>
 </template>
 
 <script>
-import AppControlInput from '@/components/UI/AppControlInput'
-import AppButton from '@/components/UI/AppButton'
-/* eslint-disable */
 
 export default {
-  components: {
-    AppControlInput,
-    AppButton
-  },
   middleware: 'notAuthenticated',
   data () {
     return {
@@ -64,13 +145,61 @@ export default {
         surname: '',
         email: '',
         password: ''
+      },
+      valid: true,
+      usernameRules: [
+        v => !!v || 'Username is required',
+        // v => v.length >= 3 || 'Pass must be more than 3 characters',
+        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+        v => /.{3,}/.test(v) || '3 characters minimum.',
+        v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
+      ],
+      nameRules: [
+        v => !!v || 'Field required',
+        v => (v && v.length <= 20) || 'Must be less than 20 characters',
+        v => /^[a-zA-Z_.-]*$/.test(v) || 'Must be letters only'
+      ],
+      emailRules: [
+        v => !!v || 'Email is required',
+        // v => v.length >= 3 || 'Pass must be more than 3 characters',
+        v => (v && v.length <= 42) || 'Email must be less than 42 characters',
+        v => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) || 'Must be a valid email [address@domain.com]'
+      ],
+      password2: '',
+      passRules: [
+        v => !!v || 'Password is required',
+        // v => v.length >= 3 || 'Pass must be more than 3 characters',
+        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+        v => /[a-z]+/.test(v) || '1 lowercase letter [abc...] required.',
+        v => /[A-Z]+/.test(v) || '1 uppercase letter [ABC...] required.',
+        v => /.{8,}/.test(v) || '8 characters minimum.',
+        v => /[0-9]+/.test(v) || '1 number [0123...] required.'
+      ],
+      passwordVisible: false
+    }
+  },
+  computed: {
+    samePasswords () {
+      if (this.checkRegister.password === this.password2 && this.checkRegister.password.length > 0) {
+        return true
+      } else {
+        return false
       }
+    },
+    serverMessage () {
+      return this.$store.getters.serverMessage
     }
   },
   methods: {
-    onRegister () {
-      this.$store.dispatch("registerUser", this.checkRegister)
-      this.$router.push("/")
+    validate () {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('registerUser', this.checkRegister)
+        this.$router.push('/')
+      //   this.snackbar = true
+      }
+    },
+    togglePasswordVisibility () {
+      this.passwordVisible = !this.passwordVisible
     }
   }
 }
