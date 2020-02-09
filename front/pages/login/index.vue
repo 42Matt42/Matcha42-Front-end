@@ -18,7 +18,6 @@
             >
               <v-text-field
                 v-model="login.username"
-                :rules="usernameRules"
                 :counter="20"
                 label="Username"
                 required
@@ -32,7 +31,6 @@
               <div>
                 <v-text-field
                   v-model="login.password"
-                  :rules="passRules"
                   :counter="20"
                   :type="passwordVisible ? 'text' : 'password'"
                   label="Password"
@@ -96,22 +94,22 @@ export default {
         password: ''
       },
       valid: true,
-      usernameRules: [
-        v => !!v || 'Username is required',
-        // v => v.length >= 3 || 'Pass must be more than 3 characters',
-        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
-        v => /.{3,}/.test(v) || '3 characters minimum.',
-        v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
-      ],
-      passRules: [
-        v => !!v || 'Password is required',
-        // v => v.length >= 3 || 'Pass must be more than 3 characters',
-        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
-        v => /[a-z]+/.test(v) || '1 lowercase letter [abc...] required.',
-        v => /[A-Z]+/.test(v) || '1 uppercase letter [ABC...] required.',
-        v => /.{8,}/.test(v) || '8 characters minimum.',
-        v => /[0-9]+/.test(v) || '1 number [0123...] required.'
-      ],
+      // usernameRules: [
+      //   v => !!v || 'Username is required',
+      //   // v => v.length >= 3 || 'Pass must be more than 3 characters',
+      //   v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+      //   v => /.{3,}/.test(v) || '3 characters minimum.',
+      //   v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
+      // ],
+      // passRules: [
+      //   v => !!v || 'Password is required',
+      //   // v => v.length >= 3 || 'Pass must be more than 3 characters',
+      //   v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+      //   v => /[a-z]+/.test(v) || '1 lowercase letter [abc...] required.',
+      //   v => /[A-Z]+/.test(v) || '1 uppercase letter [ABC...] required.',
+      //   v => /.{8,}/.test(v) || '8 characters minimum.',
+      //   v => /[0-9]+/.test(v) || '1 number [0123...] required.'
+      // ],
       passwordVisible: false
     }
   },
@@ -124,7 +122,7 @@ export default {
     validate () {
       if (this.$refs.form.validate()) {
         this.$axios
-          .$post(process.env.serverUrl + '/login', {
+          .$post(process.env.serverUrl + '/users/login', {
             username: this.login.username,
             password: this.login.password
           })

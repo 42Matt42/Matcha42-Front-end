@@ -49,7 +49,7 @@ const createStore = () => {
       },
       getUserData (vuexContext) {
         return axios
-          .get(process.env.serverUrl + '/user', {
+          .get(process.env.serverUrl + '/users/user', {
             headers: {
               Authorization: 'Bearer ' + vuexContext.app.store.getters.token,
               user_id: vuexContext.app.store.getters.loadedUsers.id
@@ -78,7 +78,7 @@ const createStore = () => {
           ...user
         }
         return axios
-          .post(process.env.serverUrl + '/register', createdUser)
+          .post(process.env.serverUrl + '/users/register', createdUser)
           // .then((result) => {
           //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
           // })

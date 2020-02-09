@@ -166,7 +166,10 @@ export default {
     emailRules: [
       v => !!v || 'E-mail is required',
       v => /.+@.+/.test(v) || 'E-mail must be valid'
-    ]
+    ],
+    serverMessage () {
+      return this.$store.getters.serverMessage
+    }
   },
   methods: {
     gettest () {
@@ -175,7 +178,7 @@ export default {
     },
     valid () {
       this.$axios
-        .$post(process.env.serverUrl + '/settings', {
+        .$post(process.env.serverUrl + '/users/settings', {
           username: this.reset.username,
           name: this.reset.name,
           surname: this.reset.surname,
@@ -193,23 +196,24 @@ export default {
     }
   },
   async asyncData (context) {
-    const user = await axios
+    const usersettings = await axios
       .get(process.env.serverUrl + '/user', {
         headers: {
           Authorization: 'Bearer ' + context.app.store.getters.token,
           user_id: context.app.store.getters.loadedUsers.id
         }
       })
-      .then((res) => {
+      .then((response) => {
         /* eslint-disable */
-        console.log(res)
-        return res
+        console.log(response)
+        context.store.commit('setMessage', response.statusText)
       })
       .catch(function(error) {
         console.log(error)
+        context.store.commit('setMessage', error.statusText)
       })
     return {
-      user
+      usersettings
     }
   }
 }

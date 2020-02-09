@@ -68,16 +68,18 @@ export default {
     validate () {
       if (this.$refs.form.validate()) {
         this.$axios
-          .$post(process.env.serverUrl + '/reset', {
+          .$post(process.env.serverUrl + '/users/reset', {
             email: this.reset.email
           })
-          .then((res) => {
+          .then((response) => {
           /* eslint-disable */
-            console.log(res)
+            console.log(response)
             this.$router.push('/')
+            context.store.commit('setMessage', response.statusText)
           })
           .catch(function (error) {
             console.log(error)
+            context.store.commit('setMessage', error.statusText)
           })
       //   this.snackbar = true
       }

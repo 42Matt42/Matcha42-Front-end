@@ -149,9 +149,8 @@ export default {
       valid: true,
       usernameRules: [
         v => !!v || 'Username is required',
-        // v => v.length >= 3 || 'Pass must be more than 3 characters',
         v => (v && v.length <= 20) || 'Password must be less than 20 characters',
-        v => /.{3,}/.test(v) || '3 characters minimum.',
+        v => /.{6,}/.test(v) || '6 characters minimum.',
         v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
       ],
       nameRules: [

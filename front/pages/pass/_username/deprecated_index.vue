@@ -47,7 +47,7 @@ export default {
   methods: {
     onNewPassword () {
       this.$axios
-        .$post(process.env.serverUrl + '/password', {
+        .$post(process.env.serverUrl + '/users/password', {
           password1: this.newpass.password1,
           password2: this.newpass.password2,
           username: this.username

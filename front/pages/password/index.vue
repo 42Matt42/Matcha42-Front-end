@@ -142,7 +142,7 @@ export default {
   },
   async asyncData (context) {
     const user = await axios
-      .get(process.env.serverUrl + '/password', {
+      .get(process.env.serverUrl + '/users/password', {
         params: {
           id: context.query.id,
           username: context.query.username

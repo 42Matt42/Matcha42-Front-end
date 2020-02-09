@@ -4,7 +4,7 @@ export default function (context, redirect) {
 // ({ context, store, redirect }) {
 // async asyncData (context) {
   return axios
-    .get(process.env.serverUrl + '/password', {
+    .get(process.env.serverUrl + '/users/password', {
       params: {
         id: context.query.id,
         username: context.query.username
