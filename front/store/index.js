@@ -15,9 +15,8 @@ const createStore = () => {
     },
     mutations: {
       setConnected (state, connected) {
-        state.loadedUsers = connected.data[0]
-        state.token = connected.meta.token
-        state.serverMessage = connected.meta.access
+        state.loadedUsers = connected.userdata
+        state.token = connected.token
       },
       setToken (state, token) {
         state.token = token
@@ -55,9 +54,9 @@ const createStore = () => {
               user_id: vuexContext.app.store.getters.loadedUsers.id
             }
           })
-          .then((result) => {
+          .then((response) => {
             // eslint-disable-next-line
-            console.log(result)
+            console.log(response)
             // eslint-disable-next-line
             console.log(vuexContext)
           })
@@ -68,7 +67,7 @@ const createStore = () => {
         vuexContext.commit('setMessage', message)
       },
       setChecker (vuexContext, value) {
-        vuexContext.commit('checker', value)
+        vuexContext.commit('setChecker', value)
       },
       setUsername (vuexContext, username) {
         vuexContext.commit('setUsername', username)
@@ -77,13 +76,27 @@ const createStore = () => {
         const createdUser = {
           ...user
         }
-        return axios
+        axios
           .post(process.env.serverUrl + '/users/register', createdUser)
-          // .then((result) => {
+          .then((response) => {
+            /* eslint-disable */
+            console.log('response_register', response)
+            vuexContext.commit('setMessage', response.client)
           //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
-          // })
-        // eslint-disable-next-line
-        .catch(e => console.log (e))
+          })
+          /* eslint-disable */
+          .catch((error) => {
+            console.log ('error_register', error)
+            console.log('error_data_client', error.response.client)
+            vuexContext.commit('setMessage', error.response.client)
+          })
+        return {
+        }
+      },
+      goCompleteProfile (vuexContext, status) {
+        if (status === 300) {
+          vuexContext.router.push('/settings')
+        }
       }
     },
     getters: {
@@ -105,5 +118,4 @@ const createStore = () => {
     }
   })
 }
-
 export default createStore

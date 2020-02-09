@@ -18,6 +18,10 @@
         </a> -->
         <br>
       </div>
+      <br><br>
+      pop-up:<br>
+      {{ serverMessage }}
+      <br><br>
     </div>
   </section>
 </template>
@@ -28,6 +32,11 @@ import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 export default {
   components: {
     BigHeartLogo
+  },
+  computed: {
+    serverMessage () {
+      return this.$store.getters.serverMessage
+    }
   }
 }
 </script>

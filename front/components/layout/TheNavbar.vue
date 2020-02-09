@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     logout () {
-      this.$store.commit('setLogout', null)
+      this.$store.dispatch('setLogout', null)
       this.$router.push('/')
     }
   }

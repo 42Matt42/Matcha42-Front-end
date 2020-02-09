@@ -267,19 +267,9 @@ export default {
       return this.$store.getters.serverMessage
     }
   }
-  // created () {
-  //   this.$vuetify.theme.dark = {
-  //     primary: '#3f51b5',
-  //     secondary: '#03a9f4',
-  //     accent: '#673ab7',
-  //     error: '#e91e63',
-  //     warning: '#ff5722',
-  //     info: '#9c27b0',
-  //     success: '#8bc34a'
-  //   }
   // methods: {
   //   logout () {
-  //     this.$store.commit('setLogout', null)
+  //     this.$store.dispatch('setLogout', null)
   //     this.$router.push('/')
   //   }
   // }

@@ -1,7 +1,7 @@
 export default function ({ store, redirect }) {
   // If the user is not authenticated
   if (store.state) {
-    store.commit('setLogout')
+    store.dispatch('setLogout')
     return redirect('/')
   }
 }

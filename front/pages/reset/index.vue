@@ -73,15 +73,16 @@ export default {
           })
           .then((response) => {
           /* eslint-disable */
-            console.log(response)
+            console.log('response', response)
+            console.log('response_client', response.client)
+            this.$store.dispatch('setMessage', response.client)
             this.$router.push('/')
-            context.store.commit('setMessage', response.statusText)
           })
-          .catch(function (error) {
-            console.log(error)
-            context.store.commit('setMessage', error.statusText)
+          .catch((error) => {
+            console.log('error', error)
+            console.log('error_client', error.response.data.client)
+            this.$store.dispatch('setMessage', error.response.data.client)
           })
-      //   this.snackbar = true
       }
     }
   }

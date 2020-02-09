@@ -34,30 +34,30 @@ export default {
   },
   async asyncData (context) {
     const activated = await axios
-      .get(process.env.serverUrl + '/users/password', {
+      .get(process.env.serverUrl + '/users/activate', {
         params: {
           id: context.query.id
         }
       })
       .then((response) => {
         /* eslint-disable */
-        console.log(response)
-        console.log(context)
+        console.log('response', response)
+        console.log('context', context)
         // const status =
         //   JSON.parse(response.status)
-        context.store.commit('setChecker', false)
+        context.store.dispatch('setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
-          context.store.commit(set)
-          context.store.commit('setChecker', true)
-          context.store.commit('setUsername', context.query.username)
-          context.store.commit('setMessage', response.statusText)
+          context.store.dispatch('setChecker', true)
+          context.store.dispatch('setMessage', response.data.client)
+          // context.store.dispatch('setUsername', context.query.username)
         }
       })
       .catch(function(error) {
         /* eslint-disable */
-        console.log(error)
-        context.store.commit('setMessage', error.statusText)
+        console.log('error', error)
+        console.log('error_response', error.response)
+        context.store.dispatch('setMessage', error.response.data.client)
       })
       return {
         activated

@@ -126,17 +126,23 @@ export default {
             username: this.login.username,
             password: this.login.password
           })
-          .then((res) => {
+          .then((response) => {
           /* eslint-disable */
-            console.log(res.meta.access)
-            console.log(res)
-            console.log(res.data[0].email)
-            this.$store.dispatch('setConnected', res)
-            // Cookie.set('token', this.$store.getters.token, { expires: 7 })
+            console.log('response_login', response)
+            this.$store.dispatch('setConnected', response)
+            console.log('response_client', response.client)
+            this.$store.dispatch('setMessage', response.client)
             this.$router.push('/')
           })
-          .catch(function (error) {
-            console.log(error)
+          .catch((error) => {
+            console.log('error_login', error)
+            console.log('error_client', error.response.data.client)
+            this.$store.dispatch('setMessage', error.response.data.client)
+            console.log('error.response.status_login', error.response.status)
+            this.$store.dispatch('goCompleteProfile', error.response.status)
+            // if (response.status == '300') {
+            // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
+            // context.store.dispatch('setUsername', context.query.username)
           })
       }
     },

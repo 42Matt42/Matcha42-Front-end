@@ -16,19 +16,6 @@
         <v-container>
           <v-row>
             <v-col
-              cols="12"
-              md="4"
-            >
-              <v-text-field
-                v-model="username"
-                label="Username"
-                required
-                readonly
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
               cols="5"
             >
               <div>
@@ -119,7 +106,6 @@ export default {
         v => /[0-9]+/.test(v) || '1 number [0123...] required.'
       ],
       passwordVisible: false
-      // username: ''
     }
   },
   computed: {
@@ -141,7 +127,7 @@ export default {
     }
   },
   async asyncData (context) {
-    const user = await axios
+    const newpass = await axios
       .get(process.env.serverUrl + '/users/password', {
         params: {
           id: context.query.id,
@@ -150,32 +136,52 @@ export default {
       })
       .then((response) => {
         /* eslint-disable */
-        console.log(response)
-        console.log(context)
+        console.log('response_password', response)
+        console.log('context', context)
         // const status =
         //   JSON.parse(response.status)
-        context.store.commit('setChecker', false)
+        context.store.dispatch('setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
-          context.store.commit(set)
-          context.store.commit('setMessage', response.statusText)
-          context.store.commit('setChecker', true)
-          context.store.commit('setUsername', context.query.username)
+          context.store.dispatch('setChecker', true)
+          context.store.dispatch('setUsername', context.query.username)
+          context.store.dispatch('setMessage', response.data.client)
         }
       })
-      .catch(function(error) {
+      .catch((error) => {
+        context.store.dispatch('setChecker', false)
         /* eslint-disable */
-        console.log(error)
-        context.store.commit('setMessage', error.statusText)
+        console.log('error_password', error)
+        console.log('error_client', error.response.data.client)
+        context.store.dispatch('setMessage', error.response.data.client)
       })
       return {
-        user
+        newpass
       }
   },
   methods: {
     validate () {
       console.log(this.$refs.form.validate())
-      // if (this.$refs.form.validate()) {
+      if (this.$refs.form.validate()) {
+        this.$axios
+          .$post(process.env.serverUrl + '/users/password', {
+            password1: this.password1,
+            password2: this.password2,
+            username: this.$store.getters.username
+          })
+          .then((response) => {
+          /* eslint-disable */
+            console.log('response', response)
+            console.log('response_client', response.client)
+            this.$store.dispatch('setMessage', response.client)
+            this.$router.push('/')
+          })
+          .catch(function (error) {
+            console.log ('error_password', error)
+            console.log('error_data_client', error.response.data.client)
+            this.$store.dispatch('setMessage', error.response.data.client)
+          })
+      }
       //   this.snackbar = true
       // }
     },
