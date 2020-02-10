@@ -240,8 +240,8 @@ export default {
     drawer: null,
     iLogin: [
       { icon: 'mdi-home', text: 'Home', url: '/' },
-      { icon: 'mdi-settings', text: 'Settings', url: '/settings' },
-      { icon: 'mdi-power', text: 'Logout', url: '/logout' }
+      { icon: 'mdi-settings', text: 'Settings', url: '/login/settings' },
+      { icon: 'mdi-power', text: 'Logout', url: '/login/logout' }
     ],
     iLogout: [
       { icon: 'mdi-home', text: 'Home', url: '/' },

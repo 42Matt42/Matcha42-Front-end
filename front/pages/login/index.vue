@@ -14,7 +14,7 @@
         <v-container>
           <v-row>
             <v-col
-              cols="12"
+              cols="10"
             >
               <v-text-field
                 v-model="login.username"
@@ -26,7 +26,7 @@
           </v-row>
           <v-row>
             <v-col
-              cols="5"
+              cols="10"
             >
               <div>
                 <v-text-field
@@ -129,20 +129,20 @@ export default {
           .then((response) => {
           /* eslint-disable */
             console.log('response_login', response)
-            this.$store.dispatch('setConnected', response)
+            this.$store.dispatch('setUserData', response.userdata)
+            this.$store.dispatch('setToken', response.token)
             console.log('response_client', response.client)
             this.$store.dispatch('setMessage', response.client)
-            this.$router.push('/')
+            if (response.userdata.profile_complete === 0)
+              this.$router.push('/login/settings')
+            else
+              this.$router.push('/')
           })
           .catch((error) => {
             console.log('error_login', error)
             console.log('error_client', error.response.data.client)
             this.$store.dispatch('setMessage', error.response.data.client)
             console.log('error.response.status_login', error.response.status)
-            this.$store.dispatch('goCompleteProfile', error.response.status)
-            // if (response.status == '300') {
-            // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
-            // context.store.dispatch('setUsername', context.query.username)
           })
       }
     },

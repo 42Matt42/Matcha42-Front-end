@@ -112,9 +112,6 @@ export default {
     checker () {
       return this.$store.getters.checker
     },
-    username () {
-      return this.$store.getters.loadedUsers.username
-    },
     samePasswords () {
       if (this.password1 === this.password2 && this.password1.length > 0) {
         return true
@@ -165,8 +162,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.$axios
           .$post(process.env.serverUrl + '/users/password', {
-            password1: this.password1,
-            password2: this.password2,
+            password1: this.password2,
             username: this.$store.getters.username
           })
           .then((response) => {

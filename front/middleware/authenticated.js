@@ -4,4 +4,8 @@ export default function ({ store, redirect }) {
     store.dispatch('setMessage', 'You are disconnected, please login ; )')
     return redirect('/login')
   }
+  if (!store.state.loadedUsers.profile_complete) {
+    store.dispatch('setMessage', 'Please, complete your profile before to continue')
+    return redirect('/login/settings')
+  }
 }

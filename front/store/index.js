@@ -14,9 +14,8 @@ const createStore = () => {
       checker: 'false'
     },
     mutations: {
-      setConnected (state, connected) {
-        state.loadedUsers = connected.userdata
-        state.token = connected.token
+      setUserData (state, userinfo) {
+        state.loadedUsers = userinfo
       },
       setToken (state, token) {
         state.token = token
@@ -40,8 +39,8 @@ const createStore = () => {
       }
     },
     actions: {
-      setConnected (vuexContext, users) {
-        vuexContext.commit('setConnected', users)
+      setUserData (vuexContext, users) {
+        vuexContext.commit('setUserData', users)
       },
       setLogout (vuexContext) {
         vuexContext.commit('setLogout')
@@ -65,6 +64,9 @@ const createStore = () => {
       },
       setMessage (vuexContext, message) {
         vuexContext.commit('setMessage', message)
+      },
+      setToken (vuexContext, token) {
+        vuexContext.commit('setToken', token)
       },
       setChecker (vuexContext, value) {
         vuexContext.commit('setChecker', value)
@@ -93,9 +95,25 @@ const createStore = () => {
         return {
         }
       },
-      goCompleteProfile (vuexContext, status) {
-        if (status === 300) {
-          vuexContext.router.push('/settings')
+      updateUser (vuexContext, updatedUser) {
+        const upUser = {
+          ...updatedUser
+        }
+        axios
+          .post(process.env.serverUrl + '/users/update', upUser)
+          .then((response) => {
+            /* eslint-disable */
+            console.log('response_update', response)
+            vuexContext.commit('setMessage', response.client)
+          //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
+          })
+          /* eslint-disable */
+          .catch((error) => {
+            console.log ('error_update', error)
+            console.log('error_client', error.response.client)
+            vuexContext.commit('setMessage', error.response.client)
+          })
+        return {
         }
       }
     },

@@ -4,8 +4,6 @@
     {{ serverMessage }}
     <br><br>
     <div>
-      <br>
-      <br>
       <v-form
         ref="form"
         v-model="valid"
@@ -14,52 +12,18 @@
         <v-container>
           <v-row>
             <v-col
-              cols="12"
+              cols="5"
             >
-              <v-text-field
-                v-model="checkRegister.username"
-                :rules="usernameRules"
-                :counter="20"
-                label="Username"
-                required
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="6"
-            >
-              <v-text-field
-                v-model="checkRegister.name"
-                :rules="nameRules"
-                :counter="20"
-                label="First name"
-                required
-              />
-            </v-col>
-            <v-col
-              cols="6"
-            >
-              <v-text-field
-                v-model="checkRegister.surname"
-                :rules="nameRules"
-                :counter="20"
-                label="Last name"
-                required
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="12"
-            >
-              <v-text-field
-                v-model="checkRegister.email"
-                :rules="emailRules"
-                :counter="42"
-                label="Email"
-                required
-              />
+              <div>
+                <v-text-field
+                  v-model="password"
+                  :rules="passRules"
+                  :counter="20"
+                  :type="passwordVisible ? 'text' : 'password'"
+                  label="Current password"
+                  required
+                />
+              </div>
             </v-col>
           </v-row>
           <v-row>
@@ -68,11 +32,11 @@
             >
               <div>
                 <v-text-field
-                  v-model="checkRegister.password"
+                  v-model="password2"
                   :rules="passRules"
                   :counter="20"
                   :type="passwordVisible ? 'text' : 'password'"
-                  label="Password"
+                  label="New Password"
                   required
                 />
               </div>
@@ -82,11 +46,11 @@
               cols="5"
             >
               <v-text-field
-                v-model="password2"
+                v-model="password1"
                 :rules="passRules"
                 :counter="20"
                 :type="passwordVisible ? 'text' : 'password'"
-                label="Confirm your password"
+                label="Confirm your new password"
                 required
               />
             </v-col>
@@ -133,37 +97,14 @@
 </template>
 
 <script>
+// import axios from 'axios'
 
 export default {
-  middleware: 'notAuthenticated',
+  middleware: 'authenticated',
   data () {
     return {
-      checkRegister:
-      {
-        username: '',
-        name: '',
-        surname: '',
-        email: '',
-        password: ''
-      },
       valid: true,
-      usernameRules: [
-        v => !!v || 'Username is required',
-        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
-        v => /.{6,}/.test(v) || '6 characters minimum.',
-        v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
-      ],
-      nameRules: [
-        v => !!v || 'Field required',
-        v => (v && v.length <= 20) || 'Must be less than 20 characters',
-        v => /^[a-zA-Z_.-]*$/.test(v) || 'Must be letters only'
-      ],
-      emailRules: [
-        v => !!v || 'Email is required',
-        // v => v.length >= 3 || 'Pass must be more than 3 characters',
-        v => (v && v.length <= 42) || 'Email must be less than 42 characters',
-        v => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) || 'Must be a valid email [address@domain.com]'
-      ],
+      password1: '',
       password2: '',
       passRules: [
         v => !!v || 'Password is required',
@@ -179,7 +120,7 @@ export default {
   },
   computed: {
     samePasswords () {
-      if (this.checkRegister.password === this.password2 && this.checkRegister.password.length > 0) {
+      if (this.password1 === this.password2 && this.password1.length > 0) {
         return true
       } else {
         return false
@@ -187,18 +128,65 @@ export default {
     },
     serverMessage () {
       return this.$store.getters.serverMessage
+    },
+    loadedUsers () {
+      return this.$store.getters.loadedUsers
+    },
+    token () {
+      return this.$store.getters.token
     }
   },
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('registerUser', this.checkRegister)
-        this.$router.push('/')
-      //   this.snackbar = true
+        this.$axios
+          .$post(process.env.serverUrl + '/edit/password', {
+            headers: {
+              Authorization: 'Bearer ' + this.$store.getters.token,
+              user_id: this.$store.getters.loadedUsers.id
+            },
+            password: this.password,
+            password2: this.password2,
+            username: this.$store.getters.username
+          })
+          .then((response) => {
+          /* eslint-disable */
+            console.log('response', response)
+            console.log('response_client', response.client)
+            this.$store.dispatch('setMessage', response.client)
+            this.$router.push('/')
+          })
+          .catch(function (error) {
+            console.log ('error_password', error)
+            console.log('error_data_client', error.response.data.client)
+            this.$store.dispatch('setMessage', error.response.data.client)
+          })
       }
     },
     togglePasswordVisibility () {
-      this.passwordVisible = !this.passwordVisible
+			this.passwordVisible = !this.passwordVisible
+		}
+  },
+  async asyncData (context) {
+    const newpass = await axios
+      .get(process.env.serverUrl + '/users/user', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token,
+          user_id: context.app.store.getters.loadedUsers.id
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_async_newpass', response)
+        context.store.dispatch('setMessage', response.client)
+      })
+      .catch((error) => {
+        console.log('error_async_newpass', error)
+        console.log('error_client', error.response.data.client)
+        context.store.dispatch('setMessage', error.response.data.client)
+      })
+    return {
+      newpass
     }
   }
 }
