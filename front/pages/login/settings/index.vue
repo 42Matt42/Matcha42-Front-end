@@ -133,25 +133,26 @@ export default {
       if (this.$refs.form.validate()) {
         /* eslint-disable */
         console.log('store', this.$store)
-        this.$axios
-          .$post(process.env.serverUrl + '/users/update',{
-            headers: {
-              // 'Authorization': 'Bearer ' + this.$store.getters.token,
-              'user_id': this.$store.getters.loadedUsers.id
-            },
-            params: {
-              username: this.loadedUsers.username,
-              name: this.loadedUsers.name,
-              surname: this.loadedUsers.surname,
-              email: this.loadedUsers.email,
-              bio: this.loadedUsers.bio,
-              birth_date: this.loadedUsers.birth_date,
-              gender_id: this.loadedUsers.gender_id,
-              location: this.loadedUsers.location,
-              notification: this.loadedUsers.notification,
-              relationship: this.loadedUsers.relationship
-            }
-          })
+        this.$axios ({
+          method: 'post',
+          url: '/users/update',
+          data: {
+            username: this.loadedUsers.username,
+            name: this.loadedUsers.name,
+            surname: this.loadedUsers.surname,
+            email: this.loadedUsers.email,
+            bio: this.loadedUsers.bio,
+            birth_date: this.loadedUsers.birth_date,
+            gender_id: this.loadedUsers.gender_id,
+            location: this.loadedUsers.location,
+            notification: this.loadedUsers.notification,
+            relationship: this.loadedUsers.relationship
+          },
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.getters.token,
+            'user_id': this.$store.getters.loadedUsers.id
+          }
+        })
           .then((response) => {
           /* eslint-disable */
             console.log('response_axios_settings', response)
