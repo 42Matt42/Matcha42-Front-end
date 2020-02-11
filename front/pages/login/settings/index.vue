@@ -65,6 +65,30 @@
                 />
               </v-col>
             </v-row>
+            <v-row>
+              <v-text-field
+                v-model="switchRelationship"
+                label="Control_relationship"
+              />
+              Interested in:
+              <v-radio-group
+                id="relationshipChoice"
+                v-model="switchRelationship"
+                row="row"
+                max="1"
+              >
+                <v-radio value="3" label="Women" />
+                <v-radio value="2" label="Men" />
+                <v-radio value="1" label="Both" />
+              </v-radio-group>
+            </v-row>
+            <v-row>
+              <v-sheet class="pa-5">
+                <v-switch v-model="switchWoman2" label="Women" inset />
+                <v-switch v-model="switchMan2" label="Men" inset />
+                <v-switch v-model="switchBi2" label="Both" inset />
+              </v-sheet>
+            </v-row>
             <br>
             <v-row>
               <v-btn
@@ -91,7 +115,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   middleware: 'profileComplete',
@@ -114,7 +138,11 @@ export default {
         // v => v.length >= 3 || 'Pass must be more than 3 characters',
         v => (v && v.length <= 42) || 'Email must be less than 42 characters',
         v => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) || 'Must be a valid email [address@domain.com]'
-      ]
+      ],
+      switchRelationship: '1',
+      switchWoman2: '0',
+      switchMan2: '0',
+      switchBi2: '0'
     }
   },
   computed: {
@@ -167,29 +195,29 @@ export default {
           })
       }
     }
-  },
-  async asyncData (context) {
-    const usersettings = await axios
-      .get(process.env.serverUrl + '/users/user', {
-        headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token,
-          user_id: context.app.store.getters.loadedUsers.id
-        }
-      })
-      .then((response) => {
-        /* eslint-disable */
-        console.log('response_async_settings', response)
-        context.store.dispatch('setUserData', response.data.userdata)
-        context.store.dispatch('setMessage', response.client)
-      })
-      .catch((error) => {
-        console.log('error_async_settings', error)
-        console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
-      })
-    return {
-      usersettings
-    }
   }
+  // async asyncData (context) {
+  //   const usersettings = await axios
+  //     .get(process.env.serverUrl + '/users/user', {
+  //       headers: {
+  //         Authorization: 'Bearer ' + context.app.store.getters.token,
+  //         user_id: context.app.store.getters.loadedUsers.id
+  //       }
+  //     })
+  //     .then((response) => {
+  //       /* eslint-disable */
+  //       console.log('response_async_settings', response)
+  //       context.store.dispatch('setUserData', response.data.userdata)
+  //       context.store.dispatch('setMessage', response.client)
+  //     })
+  //     .catch((error) => {
+  //       console.log('error_async_settings', error)
+  //       console.log('error_client', error.response.data.client)
+  //       context.store.dispatch('setMessage', error.response.data.client)
+  //     })
+  //   return {
+  //     usersettings
+  //   }
+  // }
 }
 </script>
