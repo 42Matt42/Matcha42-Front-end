@@ -19,7 +19,7 @@
               <v-text-field
                 v-model="reset.email"
                 :rules="emailRules"
-                :counter="42"
+                counter="42"
                 label="Email"
                 required
               />

@@ -3,6 +3,11 @@
     pop-up:<br>
     {{ serverMessage }}
     <br><br>
+    <v-container
+      class="font-weight-black"
+    >
+      Change your password
+    </v-container>
     <div>
       <v-form
         ref="form"
@@ -18,8 +23,8 @@
                 <v-text-field
                   v-model="password"
                   :rules="passRules"
-                  :counter="20"
                   :type="passwordVisible ? 'text' : 'password'"
+                  counter="20"
                   label="Current password"
                   required
                 />
@@ -34,8 +39,8 @@
                 <v-text-field
                   v-model="password2"
                   :rules="passRules"
-                  :counter="20"
                   :type="passwordVisible ? 'text' : 'password'"
+                  counter="20"
                   label="New Password"
                   required
                 />
@@ -48,8 +53,8 @@
               <v-text-field
                 v-model="password1"
                 :rules="passRules"
-                :counter="20"
                 :type="passwordVisible ? 'text' : 'password'"
+                counter="20"
                 label="Confirm your new password"
                 required
               />

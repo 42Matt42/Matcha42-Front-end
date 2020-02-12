@@ -3,8 +3,12 @@
     pop-up:<br>
     {{ serverMessage }}
     <br><br>
+    <v-container
+      class="font-weight-black"
+    >
+      Log in form
+    </v-container>
     <div>
-      <br>
       <br>
       <v-form
         ref="form"
@@ -18,7 +22,7 @@
             >
               <v-text-field
                 v-model="login.username"
-                :counter="20"
+                counter="20"
                 label="Username"
                 required
               />
@@ -31,8 +35,8 @@
               <div>
                 <v-text-field
                   v-model="login.password"
-                  :counter="20"
                   :type="passwordVisible ? 'text' : 'password'"
+                  counter="20"
                   label="Password"
                   required
                 />
@@ -63,14 +67,16 @@
           </v-row>
           <br>
           <v-row>
-            <v-btn
-              @click="validate"
-              :disabled="!valid"
-              color="success"
-              class="mr-4"
-            >
-              Validate
-            </v-btn>
+            <v-col>
+              <v-btn
+                @click="validate"
+                :disabled="!valid"
+                color="success"
+                class="mr-4"
+              >
+                Log in
+              </v-btn>
+            </v-col>
           </v-row>
           <br>
           Did you forget your pass?

@@ -3,12 +3,13 @@
     pop-up:<br>
     {{ serverMessage }}
     <br><br>
+    <v-container
+      class="font-weight-black"
+    >
+      Update your personal information
+    </v-container>
     <div>
-      <br>
-      <br><br>
       <div>
-        <br>
-        <br>
         <v-form
           ref="form"
           v-model="valid"
@@ -16,13 +17,25 @@
         >
           <v-container>
             <v-row>
+              <v-col>
+                <v-btn
+                  @click="validate"
+                  :disabled="!valid"
+                  color="success"
+                  class="mr-4"
+                >
+                  Update
+                </v-btn>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col
                 cols="12"
               >
                 <v-text-field
                   v-model="loadedUsers.username"
                   :rules="usernameRules"
-                  :counter="20"
+                  counter="20"
                   label="Username"
                   required
                 />
@@ -35,7 +48,7 @@
                 <v-text-field
                   v-model="loadedUsers.name"
                   :rules="nameRules"
-                  :counter="20"
+                  counter="20"
                   label="First name"
                   required
                 />
@@ -46,7 +59,7 @@
                 <v-text-field
                   v-model="loadedUsers.surname"
                   :rules="nameRules"
-                  :counter="20"
+                  counter="20"
                   label="Last name"
                   required
                 />
@@ -59,46 +72,87 @@
                 <v-text-field
                   v-model="loadedUsers.email"
                   :rules="emailRules"
-                  :counter="42"
+                  counter="42"
                   label="Email"
                   required
                 />
               </v-col>
             </v-row>
             <v-row>
-              <v-text-field
-                v-model="switchRelationship"
-                label="Control_relationship"
-              />
-              Interested in:
-              <v-radio-group
-                id="relationshipChoice"
-                v-model="switchRelationship"
-                row="row"
-                max="1"
+              <v-col
+                cols="9"
               >
-                <v-radio value="3" label="Women" />
-                <v-radio value="2" label="Men" />
-                <v-radio value="1" label="Both" />
-              </v-radio-group>
+                <v-text-field
+                  v-model="loadedUsers.birth_date"
+                  readonly
+                  label=" Birth date (use the calendar to pick)"
+                />
+                <v-date-picker
+                  v-model="loadedUsers.birth_date"
+                  :landscape="false"
+                  min="1921-01-01"
+                  max="2002-05-05"
+                  color="purple lighten-4"
+                  year-icon="mdi-calendar-blank"
+                />
+              </v-col>
             </v-row>
             <v-row>
-              <v-sheet class="pa-5">
-                <v-switch v-model="switchWoman2" label="Women" inset />
-                <v-switch v-model="switchMan2" label="Men" inset />
-                <v-switch v-model="switchBi2" label="Both" inset />
-              </v-sheet>
+              <v-col>
+                <v-radio-group
+                  v-model="loadedUsers.gender_id"
+                  row="row"
+                  max="1"
+                >
+                  My gender is...&nbsp;&nbsp;
+                  <v-radio value="3" label="Female" />
+                  <v-radio value="2" label="Male" />
+                  <v-radio value="1" label="Non-binary" />
+                </v-radio-group>
+              </v-col>
             </v-row>
-            <br>
             <v-row>
-              <v-btn
-                @click="validate"
-                :disabled="!valid"
-                color="success"
-                class="mr-4"
+              <v-col>
+                <v-radio-group
+                  v-model="loadedUsers.relationship_id"
+                  row="row"
+                  max="1"
+                >
+                  I am interested in...&nbsp;&nbsp;
+                  <v-radio value="3" label="Women" />
+                  <v-radio value="2" label="Men" />
+                  <v-radio value="1" label="Both" />
+                </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="12"
               >
-                Validate
-              </v-btn>
+                <v-textarea
+                  v-model="loadedUsers.bio"
+                  :rules="bioRules"
+                  :auto-grow="true"
+                  :filled="true"
+                  :rounded="true"
+                  counter="252"
+                  placeholder="I love hairy Chewbaccas and I eat a bunch at breakfast"
+                  label="My description"
+                  required
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
+                <v-btn
+                  @click="validate"
+                  :disabled="!valid"
+                  color="success"
+                  class="mr-4"
+                >
+                  Update
+                </v-btn>
+              </v-col>
             </v-row>
           </v-container>
         </v-form>
@@ -135,14 +189,21 @@ export default {
       ],
       emailRules: [
         v => !!v || 'Email is required',
-        // v => v.length >= 3 || 'Pass must be more than 3 characters',
         v => (v && v.length <= 42) || 'Email must be less than 42 characters',
         v => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) || 'Must be a valid email [address@domain.com]'
       ],
-      switchRelationship: '1',
-      switchWoman2: '0',
-      switchMan2: '0',
-      switchBi2: '0'
+      bioRules: [
+        v => !!v || 'Description is required',
+        v => (v && v.length >= 12) || '12 characters minimum',
+        v => (v && v.length <= 252) || 'Description must be less than 252 characters',
+        v => /[^\t\n\r]/.test(v) || 'Only spaces authorized'
+      ]
+      // loadedUsers: {
+      //   relationship_id: '1',
+      //   gender_id: '1',
+      //   birth_date: '2000-01-01',
+      //   bio: ''
+      // }
     }
   },
   computed: {
@@ -195,29 +256,29 @@ export default {
           })
       }
     }
+  },
+  async asyncData (context) {
+    const usersettings = await axios
+      .get(process.env.serverUrl + '/users/user', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token,
+          user_id: context.app.store.getters.loadedUsers.id
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_async_settings', response)
+        context.store.dispatch('setUserData', response.data.userdata)
+        context.store.dispatch('setMessage', response.client)
+      })
+      .catch((error) => {
+        console.log('error_async_settings', error)
+        console.log('error_client', error.response.data.client)
+        context.store.dispatch('setMessage', error.response.data.client)
+      })
+    return {
+      usersettings
+    }
   }
-  // async asyncData (context) {
-  //   const usersettings = await axios
-  //     .get(process.env.serverUrl + '/users/user', {
-  //       headers: {
-  //         Authorization: 'Bearer ' + context.app.store.getters.token,
-  //         user_id: context.app.store.getters.loadedUsers.id
-  //       }
-  //     })
-  //     .then((response) => {
-  //       /* eslint-disable */
-  //       console.log('response_async_settings', response)
-  //       context.store.dispatch('setUserData', response.data.userdata)
-  //       context.store.dispatch('setMessage', response.client)
-  //     })
-  //     .catch((error) => {
-  //       console.log('error_async_settings', error)
-  //       console.log('error_client', error.response.data.client)
-  //       context.store.dispatch('setMessage', error.response.data.client)
-  //     })
-  //   return {
-  //     usersettings
-  //   }
-  // }
 }
 </script>

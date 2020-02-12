@@ -22,8 +22,8 @@
                 <v-text-field
                   v-model="password1"
                   :rules="passRules"
-                  :counter="20"
                   :type="passwordVisible ? 'text' : 'password'"
+                  counter="20"
                   label="Password"
                   required
                 />
@@ -36,8 +36,8 @@
               <v-text-field
                 v-model="password2"
                 :rules="passRules"
-                :counter="20"
                 :type="passwordVisible ? 'text' : 'password'"
+                counter="20"
                 label="Confirm your password"
                 required
               />

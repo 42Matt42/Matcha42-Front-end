@@ -3,9 +3,12 @@
     pop-up:<br>
     {{ serverMessage }}
     <br><br>
+    <v-container
+      class="font-weight-black"
+    >
+      Registration form
+    </v-container>
     <div>
-      <br>
-      <br>
       <v-form
         ref="form"
         v-model="valid"
@@ -18,8 +21,8 @@
             >
               <v-text-field
                 v-model="checkRegister.username"
-                :rules="usernameRules"
-                :counter="20"
+                :rules="rules.usernameRules"
+                counter="20"
                 label="Username"
                 required
               />
@@ -31,8 +34,8 @@
             >
               <v-text-field
                 v-model="checkRegister.name"
-                :rules="nameRules"
-                :counter="20"
+                :rules="rules.nameRules"
+                counter="20"
                 label="First name"
                 required
               />
@@ -42,8 +45,8 @@
             >
               <v-text-field
                 v-model="checkRegister.surname"
-                :rules="nameRules"
-                :counter="20"
+                :rules="rules.nameRules"
+                counter="20"
                 label="Last name"
                 required
               />
@@ -55,8 +58,8 @@
             >
               <v-text-field
                 v-model="checkRegister.email"
-                :rules="emailRules"
-                :counter="42"
+                :rules="rules.emailRules"
+                counter="42"
                 label="Email"
                 required
               />
@@ -69,9 +72,9 @@
               <div>
                 <v-text-field
                   v-model="checkRegister.password"
-                  :rules="passRules"
-                  :counter="20"
+                  :rules="rules.passRules"
                   :type="passwordVisible ? 'text' : 'password'"
+                  counter="20"
                   label="Password"
                   required
                 />
@@ -83,9 +86,9 @@
             >
               <v-text-field
                 v-model="password2"
-                :rules="passRules"
-                :counter="20"
+                :rules="rules.passRules"
                 :type="passwordVisible ? 'text' : 'password'"
+                counter="20"
                 label="Confirm your password"
                 required
               />
@@ -114,17 +117,88 @@
               </div>
             </v-col>
           </v-row>
-          <br>
           <v-row>
-            <v-btn
-              @click="validate"
-              v-if="samePasswords"
-              :disabled="!valid"
-              color="success"
-              class="mr-4"
+            <v-col
+              cols="10"
             >
-              Validate
-            </v-btn>
+              <v-text-field
+                v-if="!samePasswords"
+                class="font-italic"
+                value="Password and Password confirmation are different"
+                disabled
+                readonly
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            justify="start"
+            align="center"
+          >
+            <v-col
+              cols="1"
+            >
+              <v-checkbox
+                v-model="agreement"
+                :rules="rules.requiredRules"
+                color="purple darken-1"
+                align-end
+              />
+            </v-col>
+            <v-col
+              cols="10"
+              align-center
+              justify-center
+            >
+              I agree to the&nbsp;
+              <a @click.stop.prevent="dialog = true" href="#">Terms of Service&nbsp;and&nbsp;Privacy Policy</a>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-btn
+                @click="validate"
+                v-if="samePasswords"
+                :disabled="!valid"
+                color="success"
+                class="mr-4"
+              >
+                Validate
+              </v-btn>
+              <v-dialog
+                v-model="dialog"
+                absolute
+                max-width="400"
+                persistent
+              >
+                <v-card>
+                  <v-card-title
+                    class="headline purple lighten-4 purple--text text--darken-4"
+                  >
+                    Legal
+                  </v-card-title>
+                  <v-card-text>
+                    <br>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.<br>
+                  </v-card-text>
+                  <v-divider />
+                  <v-card-actions>
+                    <v-btn
+                      @click="agreement = false, dialog = false"
+                      text
+                    >
+                      No
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                      @click="agreement = true, dialog = false"
+                      class="white--text"
+                      color="purple darken-1"
+                    >
+                      Yes
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-col>
           </v-row>
         </v-container>
       </v-form>
@@ -146,40 +220,45 @@ export default {
         email: '',
         password: ''
       },
-      valid: true,
-      usernameRules: [
-        v => !!v || 'Username is required',
-        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
-        v => /.{6,}/.test(v) || '6 characters minimum.',
-        v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
-      ],
-      nameRules: [
-        v => !!v || 'Field required',
-        v => (v && v.length <= 20) || 'Must be less than 20 characters',
-        v => /^[a-zA-Z_.-]*$/.test(v) || 'Must be letters only'
-      ],
-      emailRules: [
-        v => !!v || 'Email is required',
-        // v => v.length >= 3 || 'Pass must be more than 3 characters',
-        v => (v && v.length <= 42) || 'Email must be less than 42 characters',
-        v => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) || 'Must be a valid email [address@domain.com]'
-      ],
+      valid: false,
       password2: '',
-      passRules: [
-        v => !!v || 'Password is required',
-        // v => v.length >= 3 || 'Pass must be more than 3 characters',
-        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
-        v => /[a-z]+/.test(v) || '1 lowercase letter [abc...] required.',
-        v => /[A-Z]+/.test(v) || '1 uppercase letter [ABC...] required.',
-        v => /[0-9]+/.test(v) || '1 number [0123...] required.',
-        v => /.{8,}/.test(v) || '8 characters minimum.'
-      ],
-      passwordVisible: false
+      passwordVisible: false,
+      dialog: false,
+      agreement: false,
+      rules: {
+        usernameRules: [
+          v => !!v || 'Username is required',
+          v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+          v => /.{6,}/.test(v) || '6 characters minimum.',
+          v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
+        ],
+        nameRules: [
+          v => !!v || 'Field required',
+          v => (v && v.length <= 20) || 'Must be less than 20 characters',
+          v => /^[a-zA-Z_.-]*$/.test(v) || 'Must be letters only'
+        ],
+        emailRules: [
+          v => !!v || 'Email is required',
+          v => (v && v.length <= 42) || 'Email must be less than 42 characters',
+          v => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) || 'Must be a valid email [address@domain.com]'
+        ],
+        passRules: [
+          v => !!v || 'Password is required',
+          v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+          v => /[a-z]+/.test(v) || '1 lowercase letter [abc...] required.',
+          v => /[A-Z]+/.test(v) || '1 uppercase letter [ABC...] required.',
+          v => /[0-9]+/.test(v) || '1 number [0123...] required.',
+          v => /.{8,}/.test(v) || '8 characters minimum.'
+        ],
+        requiredRules: [
+          v => !!v || ''
+        ]
+      }
     }
   },
   computed: {
     samePasswords () {
-      if (this.checkRegister.password === this.password2 && this.checkRegister.password.length > 0) {
+      if (this.checkRegister.password === this.password2) {
         return true
       } else {
         return false
