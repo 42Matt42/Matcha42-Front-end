@@ -7,7 +7,6 @@ const createStore = () => {
   return new Vuex.Store({
     plugins: [createPersistedState()],
     state: {
-      // madeInitRequest: false,
       loadedUsers: [],
       token: null,
       serverMessage: 'default',
@@ -16,6 +15,9 @@ const createStore = () => {
     mutations: {
       setUserData (state, userinfo) {
         state.loadedUsers = userinfo
+      },
+      setUserBirthDate (state, date) {
+        state.loadedUsers.birth_date = date.substr(0, 10)
       },
       setToken (state, token) {
         state.token = token
@@ -41,6 +43,9 @@ const createStore = () => {
     actions: {
       setUserData (vuexContext, users) {
         vuexContext.commit('setUserData', users)
+        if (users.birth_date) {
+          vuexContext.commit('setUserBirthDate', users.birth_date)
+        }
       },
       setLogout (vuexContext) {
         vuexContext.commit('setLogout')
@@ -49,8 +54,7 @@ const createStore = () => {
         return axios
           .get(process.env.serverUrl + '/users/user', {
             headers: {
-              Authorization: 'Bearer ' + vuexContext.app.store.getters.token,
-              user_id: vuexContext.app.store.getters.loadedUsers.id
+              Authorization: 'Bearer ' + vuexContext.app.store.getters.token
             }
           })
           .then((response) => {

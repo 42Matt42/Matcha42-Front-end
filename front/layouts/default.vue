@@ -175,7 +175,7 @@
           color="purple darken-1"
           label="Find the one you love !"
           outlined
-          append-icon="mdi-account-circle"
+          append-icon="mdi-settings"
           hide-details
           background-color="purple lighten-4"
         />
@@ -184,7 +184,6 @@
 
     <v-content style="background-color: #E1BEE7">
       <v-container
-        class="fill-height"
         style="
           background-image: url('/04_homepage_beachkiss_opacity42.png');
           background-size: cover;
@@ -228,10 +227,6 @@
 
 <script>
 export default {
-  // components: {
-  //   TheNavbar,
-  //   TheFooter
-  // },
   props: {
     // eslint-disable-next-line
     source: String
@@ -240,7 +235,8 @@ export default {
     drawer: null,
     iLogin: [
       { icon: 'mdi-home', text: 'Home', url: '/' },
-      { icon: 'mdi-settings', text: 'Settings', url: '/login/settings' },
+      { icon: 'mdi-camera', text: 'My Pics', url: '/login/mypics' },
+      { icon: 'mdi-account-circle', text: 'Profile', url: '/login/settings' },
       { icon: 'mdi-power', text: 'Logout', url: '/login/logout' }
     ],
     iLogout: [

@@ -4,9 +4,9 @@ import { Http2ServerRequest } from 'http2';
 export default {
   env: {
     // process.env.baseUrl
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    baseUrl: 'http://localhost:3000', // || process.env.BASE_URL ||
     // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login'
-    serverUrl: process.env.SERVER_URL || 'http://10.11.4.22:8080/api'
+    serverUrl: 'http://10.12.3.18:8080/api' // || process.env.SERVER_URL
   },
   mode: 'spa',
   /*
@@ -15,8 +15,6 @@ export default {
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
-    // headers:
-    //   { 'Access-Control-Request-Method': '*' },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

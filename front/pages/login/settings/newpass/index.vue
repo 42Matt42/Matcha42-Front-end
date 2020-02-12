@@ -97,18 +97,26 @@
           </v-row>
         </v-container>
       </v-form>
+      <div>
+        <br>
+        Forgot your password ?
+        <nuxt-link to="/reset">
+          Reset password
+        </nuxt-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
   data () {
     return {
       valid: true,
+      password: '',
       password1: '',
       password2: '',
       passRules: [
@@ -144,16 +152,17 @@ export default {
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
-        this.$axios
-          .$post(process.env.serverUrl + '/edit/password', {
-            headers: {
-              Authorization: 'Bearer ' + this.$store.getters.token,
-              user_id: this.$store.getters.loadedUsers.id
-            },
-            password: this.password,
+        this.$axios({
+          method: 'post',
+          url: process.env.serverUrl + '/edit/password',
+          data: {
             password2: this.password2,
-            username: this.$store.getters.username
-          })
+            password: this.password
+          },
+          headers: {
+            Authorization: 'Bearer ' + this.$store.getters.token
+          }
+        })
           .then((response) => {
           /* eslint-disable */
             console.log('response', response)
@@ -176,8 +185,7 @@ export default {
     const newpass = await axios
       .get(process.env.serverUrl + '/users/user', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token,
-          user_id: context.app.store.getters.loadedUsers.id
+          Authorization: 'Bearer ' + context.app.store.getters.token
         }
       })
       .then((response) => {

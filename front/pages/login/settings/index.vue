@@ -30,7 +30,7 @@
             </v-row>
             <v-row>
               <v-col
-                cols="12"
+                cols="10"
               >
                 <v-text-field
                   v-model="loadedUsers.username"
@@ -43,7 +43,7 @@
             </v-row>
             <v-row>
               <v-col
-                cols="6"
+                cols="5"
               >
                 <v-text-field
                   v-model="loadedUsers.name"
@@ -54,7 +54,7 @@
                 />
               </v-col>
               <v-col
-                cols="6"
+                cols="5"
               >
                 <v-text-field
                   v-model="loadedUsers.surname"
@@ -67,7 +67,7 @@
             </v-row>
             <v-row>
               <v-col
-                cols="12"
+                cols="10"
               >
                 <v-text-field
                   v-model="loadedUsers.email"
@@ -80,7 +80,7 @@
             </v-row>
             <v-row>
               <v-col
-                cols="9"
+                cols="5"
               >
                 <v-text-field
                   v-model="loadedUsers.birth_date"
@@ -102,32 +102,30 @@
                 <v-radio-group
                   v-model="loadedUsers.gender_id"
                   row="row"
-                  max="1"
                 >
                   My gender is...&nbsp;&nbsp;
-                  <v-radio value="3" label="Female" />
-                  <v-radio value="2" label="Male" />
-                  <v-radio value="1" label="Non-binary" />
+                  <v-radio :value="2" label="Female" />
+                  <v-radio :value="1" label="Male" />
                 </v-radio-group>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
                 <v-radio-group
-                  v-model="loadedUsers.relationship_id"
+                  v-model="loadedUsers.interested_in"
                   row="row"
                   max="1"
                 >
                   I am interested in...&nbsp;&nbsp;
-                  <v-radio value="3" label="Women" />
-                  <v-radio value="2" label="Men" />
-                  <v-radio value="1" label="Both" />
+                  <v-radio :value="3" label="Women" />
+                  <v-radio :value="2" label="Men" />
+                  <v-radio :value="1" label="Both" />
                 </v-radio-group>
               </v-col>
             </v-row>
             <v-row>
               <v-col
-                cols="12"
+                cols="10"
               >
                 <v-textarea
                   v-model="loadedUsers.bio"
@@ -138,6 +136,28 @@
                   counter="252"
                   placeholder="I love hairy Chewbaccas and I eat a bunch at breakfast"
                   label="My description"
+                  required
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="3"
+              >
+                <v-text-field
+                  v-model="loadedUsers.location"
+                  label="Location"
+                  required
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col
+                cols="3"
+              >
+                <v-text-field
+                  v-model="loadedUsers.notification"
+                  label="Notification"
                   required
                 />
               </v-col>
@@ -169,7 +189,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   middleware: 'profileComplete',
@@ -198,8 +218,9 @@ export default {
         v => (v && v.length <= 252) || 'Description must be less than 252 characters',
         v => /[^\t\n\r]/.test(v) || 'Only spaces authorized'
       ]
+      // for test purposes when the server is off:
       // loadedUsers: {
-      //   relationship_id: '1',
+      //   interested_in: '1',
       //   gender_id: '1',
       //   birth_date: '2000-01-01',
       //   bio: ''
@@ -224,7 +245,7 @@ export default {
         console.log('store', this.$store)
         this.$axios ({
           method: 'post',
-          url: '/users/update',
+          url: process.env.serverUrl + '/users/user',
           data: {
             username: this.loadedUsers.username,
             name: this.loadedUsers.name,
@@ -235,11 +256,10 @@ export default {
             gender_id: this.loadedUsers.gender_id,
             location: this.loadedUsers.location,
             notification: this.loadedUsers.notification,
-            relationship: this.loadedUsers.relationship
+            interested_in: this.loadedUsers.interested_in
           },
           headers: {
-            'Authorization': 'Bearer ' + this.$store.getters.token,
-            'user_id': this.$store.getters.loadedUsers.id
+            'Authorization': 'Bearer ' + this.$store.getters.token
           }
         })
           .then((response) => {
@@ -254,6 +274,23 @@ export default {
             console.log('error_client', error.response.data.client)
             this.$store.dispatch('setMessage', error.response.data.client)
           })
+        this.$router.push('/settings')
+        // this.$axios ({
+        //   method: 'get',
+        //   url: process.env.serverUrl + '/users/user',
+        //   headers: {
+        //     'Authorization': 'Bearer ' + this.$store.getters.token
+        //   }
+        // })
+        //   .then((response) => {
+        //   /* eslint-disable */
+        //     console.log('response_axios_settings_user2', response)
+        //   })
+        //   .catch((error) => {
+        //     console.log ('error_axios_settings_user2', error)
+        //     console.log('error_client', error.response.data.client)
+        //     this.$store.dispatch('setMessage', error.response.data.client)
+        //   })
       }
     }
   },
@@ -261,8 +298,7 @@ export default {
     const usersettings = await axios
       .get(process.env.serverUrl + '/users/user', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token,
-          user_id: context.app.store.getters.loadedUsers.id
+          Authorization: 'Bearer ' + context.app.store.getters.token
         }
       })
       .then((response) => {

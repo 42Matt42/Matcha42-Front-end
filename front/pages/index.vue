@@ -1,28 +1,24 @@
 <template>
   <section class="">
-    <div>
+    <v-container
+      justify-center
+      align-center
+    >
       <BigHeartLogo />
-      <h1 class="title">
-        Matcha
+      <h1 class="display-3 font-italic font-weight-medium text-center">
+        <br><br>Matcha<br><br>
       </h1>
-      <h2 class="subtitle">
+      <h2 class="display-2 font-italic font-weight-light text-center">
         The lovely dating platform !
       </h2>
-      <div class="links">
-        <a
-          class="button--red"
-        >Let's find The One ~~</a>
-        <!-- <a
-          class="button--grey"
-        >
-        </a> -->
-        <br>
+      <div class="overline display-2 text-center">
+        <br>Let's find The One ~~<br>
       </div>
       <br><br>
       pop-up:<br>
       {{ serverMessage }}
       <br><br>
-    </div>
+    </v-container>
   </section>
 </template>
 
@@ -46,7 +42,6 @@ export default {
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
   'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
   font-weight: 300;
   font-size: 100px;
   letter-spacing: 1px;

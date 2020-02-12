@@ -119,7 +119,7 @@
           </v-row>
           <v-row>
             <v-col
-              cols="10"
+              cols="5"
             >
               <v-text-field
                 v-if="!samePasswords"
@@ -127,11 +127,11 @@
                 value="Password and Password confirmation are different"
                 disabled
                 readonly
+                required
               />
             </v-col>
           </v-row>
           <v-row
-            justify="start"
             align="center"
           >
             <v-col
@@ -141,13 +141,10 @@
                 v-model="agreement"
                 :rules="rules.requiredRules"
                 color="purple darken-1"
-                align-end
               />
             </v-col>
             <v-col
-              cols="10"
-              align-center
-              justify-center
+              cols="9"
             >
               I agree to the&nbsp;
               <a @click.stop.prevent="dialog = true" href="#">Terms of Service&nbsp;and&nbsp;Privacy Policy</a>
