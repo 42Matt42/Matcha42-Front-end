@@ -90,7 +90,6 @@
 </template>
 
 <script>
-
 export default {
   middleware: 'notAuthenticated',
   data () {

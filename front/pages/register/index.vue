@@ -232,7 +232,8 @@ export default {
         nameRules: [
           v => !!v || 'Field required',
           v => (v && v.length <= 20) || 'Must be less than 20 characters',
-          v => /^[a-zA-Z_.-]*$/.test(v) || 'Must be letters only'
+          v => /^[a-zA-Z_.-]*$/.test(v) || 'Must be letters only',
+          v => (v && v.length >= 2) || 'At least 2 characters'
         ],
         emailRules: [
           v => !!v || 'Email is required',

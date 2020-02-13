@@ -11,30 +11,19 @@
     <div>
       <div>
         <v-form
-          ref="form"
+          id="myForm"
+          ref="mypicsform"
           v-model="valid"
           lazy-validation
         >
           <v-container>
-            <v-row>
-              <v-col>
-                <v-btn
-                  @click="validate"
-                  :disabled="!valid"
-                  color="success"
-                  class="mr-4"
-                >
-                  Update
-                </v-btn>
-              </v-col>
-            </v-row>
             <br><br>
             <v-row>
               <v-file-input
-                id="testbro"
+                id="myone"
                 :rules="mypicsRules"
+                v-model="loadedPics.mypics1"
                 accept="image/*"
-                enctype="multipart/form-data"
                 counter
                 show-size
                 filled
@@ -42,6 +31,7 @@
                 placeholder="Picture 1"
                 label="Picture 1"
                 truncate-length="42"
+                enctype="multipart/form-data"
               />
             </v-row>
             <v-row>
@@ -91,28 +81,6 @@
                 placeholder="Picture 5"
                 label="Picture 5"
               />
-            </v-row>
-            <v-row>
-              <v-col
-                cols="3"
-              >
-                <v-text-field
-                  v-model="loadedUsers.location"
-                  label="Location"
-                  required
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="3"
-              >
-                <v-text-field
-                  v-model="loadedUsers.notification"
-                  label="Notification"
-                  required
-                />
-              </v-col>
             </v-row>
             <v-row>
               <v-col>
@@ -233,14 +201,14 @@ export default {
     return {
       valid: true,
       mypicsRules: [
-        value => !value || value.size < 10000000 || 'Picture size should be less than 10 MB!'
+        // value => value.size < 10000000 || 'Picture size should be less than 10 MB!'
       ],
       loadedPics: {
-        mypics1: '',
-        mypics2: '',
-        mypics3: '',
-        mypics4: '',
-        mypics5: ''
+        mypics1: null,
+        mypics2: null,
+        mypics3: null,
+        mypics4: null,
+        mypics5: null
         // to add in the file inpu fields when the server is up:
         // v-model="loadedPics.mypics1" etc.
       },
@@ -260,19 +228,23 @@ export default {
   },
   methods: {
     validate () {
-      if (this.$refs.form.validate()) {
+      if (this.$refs.mypicsform.validate()) {
         /* eslint-disable */
         console.log('store', this.$store)
+        console.log('this.loadedPics.mypics1', this.loadedPics.mypics1)
+        if (this.loadedPics.mypics1) {
+          // let myForm = document.getElementById('myform')
+          // console.log('myForm', myForm)
+          let formData = new FormData()
+          formData.append("this.loadedPics.mypics1", this.loadedPics.mypics1)
+          formData.append("this.loadedPics.mypics1", "foo bar")
+          FormData.entries(formData)
+          console.log('formData', formData)
+        }
         this.$axios ({
           method: 'post',
           url: process.env.serverUrl + '/users/upload',
-          data: {
-            mypics1: this.loadedPics.mypics1,
-            mypics2: this.loadedPics.mypics2,
-            mypics3: this.loadedPics.mypics3,
-            mypics4: this.loadedPics.mypics4,
-            mypics5: this.loadedPics.mypics5,
-          },
+          data: this.formData,
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token,
           }

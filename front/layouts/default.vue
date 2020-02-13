@@ -237,6 +237,7 @@ export default {
       { icon: 'mdi-home', text: 'Home', url: '/' },
       { icon: 'mdi-camera', text: 'My Pics', url: '/login/mypics' },
       { icon: 'mdi-account-circle', text: 'Profile', url: '/login/settings' },
+      { icon: 'mdi-yin-yang', text: 'Test', url: '/login/tests' },
       { icon: 'mdi-power', text: 'Logout', url: '/login/logout' }
     ],
     iLogout: [
