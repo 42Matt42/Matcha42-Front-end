@@ -10,7 +10,7 @@
     </v-container>
     <div>
       <v-content>
-        <v-container fill-height>
+        <v-container>
           <v-row justify="center">
             <v-col cols="auto">
               <v-card width="600" height="300" raised>
@@ -18,39 +18,38 @@
                 <br>
                 <v-card-text>
                   <v-file-input
-                    accept=".txt"
-                    label="Click here to select a .txt file"
-                    outlined
+                    id="myone"
+                    :rules="mypicsRules"
                     v-model="chosenFile"
-                  >
-                  </v-file-input>
+                    accept="image/*"
+                    counter
+                    show-size
+                    filled
+                    prepend-icon="mdi-camera"
+                    placeholder="Picture 1"
+                    label="Picture 1"
+                    truncate-length="42"
+                    type="file"
+                  />
                 </v-card-text>
                 <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn right @click="importTxt">Read File</v-btn>
+                  <v-spacer />
+                  <v-btn
+                    @click="displayImage"
+                    right
+                  >
+                    Read File
+                  </v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
             <v-col cols="auto">
               <v-card width="600" height="300" raised>
                 <v-card-title>File contents:</v-card-title>
-                <v-card-text><p>{{ lastone }}</p></v-card-text>
+                <img :src="lastone" alt="">
               </v-card>
             </v-col>
           </v-row>
-        </v-container>
-        <v-container>
-          <v-file-input
-            v-model="file"
-            label="Select Image File..."
-            accept="image/*"
-          />
-          <v-btn
-            @click="onUpload"
-            color="primary"
-          >
-            testUpload
-          </v-btn>
         </v-container>
       </v-content>
       <div>
@@ -65,6 +64,7 @@
             <v-row>
               <v-file-input
                 id="myone"
+                @change="onFileChange"
                 :rules="mypicsRules"
                 v-model="loadedPics.mypics1"
                 accept="image/*"
@@ -233,6 +233,7 @@
         </v-row>
       </div>
     </div>
+    <img :src="image"></img>
   </div>
 </template>
 
@@ -260,7 +261,8 @@ export default {
       file: null,
       imageUrl: null,
       chosenFile: null, // <- initialize the v-model prop
-      lastone: null
+      lastone: null,
+      image: ''
     }
   },
   computed: {
@@ -284,16 +286,34 @@ export default {
           // let myForm = document.getElementById('myform')
           // console.log('myForm', myForm)
           let yoo = new FormData()
-          yoo.append('yoo', this.loadedPics.mypics1, this.loadedPics.mypics1.name)
-          yoo.append('yoo', 'foo bar')
+          // yoo.append('yoo', this.loadedPics.mypics1, this.loadedPics.mypics1.name)
+          // yoo.append('yoo', 'foo bar')
+          let imageURL = URL.createObjectURL(this.loadedPics.mypics1)
+          yoo.append('image', this.loadedPics.mypics1)
           console.log('yoo', yoo)
+          var files = this.loadedPics.mypics1
+          console.log('onFileChange', files)
+          if (!files.size)
+            return
+          this.createImage(files[0])
+          console.log('imageCreated')
+          var image = new Image()
+          console.log('createImage', image)
+          var reader = new FileReader()
+          var vm = this
+          reader.onload = (e) => {
+            vm.image = this.loadedPics.mypics1.result
+          }
+          reader.readAsDataURL(file)
         }
         this.$axios ({
           method: 'post',
-          url: process.env.serverUrl + '/users/upload',
+          // url: process.env.serverUrl + '/users/upload',
+          url: '/t/bd05h-1581710318/post',
           data: this.yoo,
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token,
+            'Content-Type': 'multipart/form-data'
           }
         })
           .then((response) => {
@@ -310,19 +330,12 @@ export default {
         this.$router.push('/login/mypics')
       }
     },
-    onUpload() {
-      console.log(this.file)
-    },
-    importTxt() {
-
+    displayImage() {
       if (!this.chosenFile) {this.lastone = "No File Chosen"}
-      var reader = new FileReader();
-
-      // Use the javascript reader object to load the contents
-      // of the file in the v-model prop
-      reader.readAsText(this.chosenFile);
+      var reader = new FileReader()
+      reader.readAsDataURL(this.chosenFile)
       reader.onload = () => {
-        this.lastone = reader.result;
+        this.lastone = reader.result
       }
     }
   }
