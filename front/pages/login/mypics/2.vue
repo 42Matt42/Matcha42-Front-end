@@ -10,35 +10,6 @@
     </v-container>
     <div>
       <v-content>
-        <v-container fill-height>
-          <v-row justify="center">
-            <v-col cols="auto">
-              <v-card width="600" height="300" raised>
-                <v-card-title>Vuetify v-file-input Example:</v-card-title>
-                <br>
-                <v-card-text>
-                  <v-file-input
-                    accept=".txt"
-                    label="Click here to select a .txt file"
-                    outlined
-                    v-model="chosenFile"
-                  >
-                  </v-file-input>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn right @click="importTxt">Read File</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-            <v-col cols="auto">
-              <v-card width="600" height="300" raised>
-                <v-card-title>File contents:</v-card-title>
-                <v-card-text><p>{{ lastone }}</p></v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
         <v-container>
           <v-file-input
             v-model="file"
@@ -258,9 +229,7 @@ export default {
       },
       upload: 'false',
       file: null,
-      imageUrl: null,
-      chosenFile: null, // <- initialize the v-model prop
-      lastone: null
+      imageUrl: null
     }
   },
   computed: {
@@ -288,6 +257,20 @@ export default {
           yoo.append('yoo', 'foo bar')
           console.log('yoo', yoo)
         }
+            // const data = new FormData()
+            // ...files].forEach(file => {
+            // data.append('data', file, file.name) // currently only one file at a time
+            // })
+            // return data
+            // }
+            //
+            // getFormData (files) {
+            //   const data = new FormData()
+            //   for (let file of files) {
+            //     data.append('files[]', file, file.name)
+            //   }
+            //   return data
+            // }
         this.$axios ({
           method: 'post',
           url: process.env.serverUrl + '/users/upload',
@@ -312,18 +295,6 @@ export default {
     },
     onUpload() {
       console.log(this.file)
-    },
-    importTxt() {
-
-      if (!this.chosenFile) {this.lastone = "No File Chosen"}
-      var reader = new FileReader();
-
-      // Use the javascript reader object to load the contents
-      // of the file in the v-model prop
-      reader.readAsText(this.chosenFile);
-      reader.onload = () => {
-        this.lastone = reader.result;
-      }
     }
   }
   // async asyncData (context) {
