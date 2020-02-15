@@ -9,49 +9,6 @@
       Update your pictures<br>
     </v-container>
     <div>
-      <v-content>
-        <v-container>
-          <v-row justify="center">
-            <v-col cols="auto">
-              <v-card width="600" height="300" raised>
-                <v-card-title>Vuetify v-file-input Example:</v-card-title>
-                <br>
-                <v-card-text>
-                  <v-file-input
-                    id="myone"
-                    :rules="mypicsRules"
-                    v-model="chosenFile"
-                    accept="image/*"
-                    counter
-                    show-size
-                    filled
-                    prepend-icon="mdi-camera"
-                    placeholder="Picture 1"
-                    label="Picture 1"
-                    truncate-length="42"
-                    type="file"
-                  />
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <v-btn
-                    @click="displayImage"
-                    right
-                  >
-                    Read File
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-col>
-            <v-col cols="auto">
-              <v-card width="600" height="300" raised>
-                <v-card-title>File contents:</v-card-title>
-                <img :src="lastone" alt="">
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-content>
       <div>
         <v-form
           id="myForm"
@@ -63,8 +20,7 @@
             <br><br>
             <v-row>
               <v-file-input
-                id="myone"
-                @change="onFileChange"
+                @change="displayImage(loadedPics.mypics1, 'one')"
                 :rules="mypicsRules"
                 v-model="loadedPics.mypics1"
                 accept="image/*"
@@ -80,7 +36,9 @@
             </v-row>
             <v-row>
               <v-file-input
+                @change="displayImage(loadedPics.mypics2, 'two')"
                 :rules="mypicsRules"
+                v-model="loadedPics.mypics2"
                 accept="image/*"
                 counter
                 show-size
@@ -92,7 +50,9 @@
             </v-row>
             <v-row>
               <v-file-input
+                @change="displayImage(loadedPics.mypics3, 'three')"
                 :rules="mypicsRules"
+                v-model="loadedPics.mypics3"
                 accept="image/*"
                 counter
                 show-size
@@ -104,7 +64,9 @@
             </v-row>
             <v-row>
               <v-file-input
+                @change="displayImage(loadedPics.mypics4, 'four')"
                 :rules="mypicsRules"
+                v-model="loadedPics.mypics4"
                 accept="image/*"
                 counter
                 show-size
@@ -116,7 +78,9 @@
             </v-row>
             <v-row>
               <v-file-input
+                @change="displayImage(loadedPics.mypics5, 'five')"
                 :rules="mypicsRules"
+                v-model="loadedPics.mypics5"
                 accept="image/*"
                 counter
                 show-size
@@ -150,7 +114,7 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`https://picsum.photos/500/300?image=777`"
+                        :src="`${imgone}`"
                         aspect-ratio="1"
                         class="purple darken-4"
                       />
@@ -175,65 +139,64 @@
               <v-container fluid>
                 <v-row>
                   <v-col
-                    v-for="n in 4"
-                    :key="n"
                     class="d-flex child-flex"
-                    cols="3"
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`https://picsum.photos/500/300?image=${n * 5 + 69}`"
-                        :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 69}`"
+                        :src="`${imgtwo}`"
+                        :lazy-src="`${imgtwo}`"
                         aspect-ratio="1"
                         class="purple darken-4"
-                      >
-                        <template v-slot:placeholder>
-                          <v-row
-                            class="fill-height ma-0"
-                            align="center"
-                            justify="center"
-                          >
-                            <v-progress-circular indeterminate color="purple darken-4" />
-                          </v-row>
-                        </template>
-                      </v-img>
+                        alt=""
+                      />
+                    </v-card>
+                  </v-col>
+                  <v-col
+                    class="d-flex child-flex"
+                  >
+                    <v-card flat tile class="d-flex">
+                      <v-img
+                        :src="`${imgthree}`"
+                        :lazy-src="`${imgthree}`"
+                        aspect-ratio="1"
+                        class="purple darken-4"
+                        alt=""
+                      />
+                    </v-card>
+                  </v-col>
+                  <v-col
+                    class="d-flex child-flex"
+                  >
+                    <v-card flat tile class="d-flex">
+                      <v-img
+                        :src="`${imgfour}`"
+                        :lazy-src="`${imgfour}`"
+                        aspect-ratio="1"
+                        class="purple darken-4"
+                        alt=""
+                      />
+                    </v-card>
+                  </v-col>
+                  <v-col
+                    class="d-flex child-flex"
+                  >
+                    <v-card flat tile class="d-flex">
+                      <v-img
+                        :src="`${imgfive}`"
+                        :lazy-src="`${imgfive}`"
+                        aspect-ratio="1"
+                        class="purple darken-4"
+                        alt=""
+                      />
                     </v-card>
                   </v-col>
                 </v-row>
-                <!-- <v-row>
-                  <v-col
-                    v-for="n in 4"
-                    :key="n"
-                    class="d-flex child-flex"
-                    cols="3"
-                  >
-                    <v-card flat tile class="d-flex">
-                      <v-img
-                        :src="`https://picsum.photos/500/300?image=${n * 5 + 69}`"
-                        :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 69}`"
-                        aspect-ratio="1"
-                        class="purple darken-4"
-                      >
-                        <template v-slot:placeholder>
-                          <v-row
-                            class="fill-height ma-0"
-                            align="center"
-                            justify="center"
-                          >
-                            <v-progress-circular indeterminate color="purple darken-4"></v-progress-circular>
-                          </v-row>
-                        </template>
-                      </v-img>
-                    </v-card>
-                  </v-col>
-                </v-row> -->
               </v-container>
             </v-card>
           </v-col>
         </v-row>
       </div>
     </div>
-    <img :src="image"></img>
   </div>
 </template>
 
@@ -254,15 +217,13 @@ export default {
         mypics3: null,
         mypics4: null,
         mypics5: null
-        // to add in the file inpu fields when the server is up:
-        // v-model="loadedPics.mypics1" etc.
       },
       upload: 'false',
-      file: null,
-      imageUrl: null,
-      chosenFile: null, // <- initialize the v-model prop
-      lastone: null,
-      image: ''
+      imgone: '',
+      imgtwo: '',
+      imgthree: '',
+      imgfour: '',
+      imgfive: ''
     }
   },
   computed: {
@@ -280,37 +241,25 @@ export default {
     validate () {
       if (this.$refs.mypicsform.validate()) {
         /* eslint-disable */
-        console.log('store', this.$store)
         console.log('this.loadedPics.mypics1', this.loadedPics.mypics1)
         if (this.loadedPics.mypics1) {
-          // let myForm = document.getElementById('myform')
-          // console.log('myForm', myForm)
-          let yoo = new FormData()
-          // yoo.append('yoo', this.loadedPics.mypics1, this.loadedPics.mypics1.name)
-          // yoo.append('yoo', 'foo bar')
-          let imageURL = URL.createObjectURL(this.loadedPics.mypics1)
-          yoo.append('image', this.loadedPics.mypics1)
-          console.log('yoo', yoo)
-          var files = this.loadedPics.mypics1
-          console.log('onFileChange', files)
-          if (!files.size)
-            return
-          this.createImage(files[0])
-          console.log('imageCreated')
-          var image = new Image()
-          console.log('createImage', image)
-          var reader = new FileReader()
-          var vm = this
-          reader.onload = (e) => {
-            vm.image = this.loadedPics.mypics1.result
+          // let imageURL = URL.createObjectURL(this.loadedPics.mypics1)
+          // this.createImage(files[0])
+          // var image = new Image()
+          // console.log('createImage', image)
           }
-          reader.readAsDataURL(file)
         }
         this.$axios ({
           method: 'post',
           // url: process.env.serverUrl + '/users/upload',
           url: '/t/bd05h-1581710318/post',
-          data: this.yoo,
+          data: {
+            image1: this.imgone,
+            image2: this.imgtwo,
+            image3: this.imgthree,
+            image4: this.imgfour,
+            image5: this.imgfive
+          },
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token,
             'Content-Type': 'multipart/form-data'
@@ -328,14 +277,18 @@ export default {
             this.$store.dispatch('setMessage', error.response.data.client)
           })
         this.$router.push('/login/mypics')
-      }
     },
-    displayImage() {
-      if (!this.chosenFile) {this.lastone = "No File Chosen"}
+    displayImage(File, number) {
+      // console.log('this.refs:', this.$refs)
+      if (!File) {
+        return
+      }// {this.alert = "No File Chosen"}
+      console.log('number:', number)
       var reader = new FileReader()
-      reader.readAsDataURL(this.chosenFile)
+      reader.readAsDataURL(File)
       reader.onload = () => {
-        this.lastone = reader.result
+        this["img"+number] = reader.result
+      console.log('this.img+number:', this["img"+number])
       }
     }
   }
