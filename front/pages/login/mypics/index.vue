@@ -20,7 +20,7 @@
             <br><br>
             <v-row>
               <v-file-input
-                @change="displayImage(uploadPics.mypics1, 0)"
+                @change="displayImage(uploadPics.mypics1, '0')"
                 :rules="mypicsRules"
                 v-model="uploadPics.mypics1"
                 accept="image/*"
@@ -35,7 +35,7 @@
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(uploadPics.mypics2, 1)"
+                @change="displayImage(uploadPics.mypics2, '1')"
                 :rules="mypicsRules"
                 v-model="uploadPics.mypics2"
                 accept="image/*"
@@ -50,7 +50,7 @@
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(uploadPics.mypics3, 2)"
+                @change="displayImage(uploadPics.mypics3, '2')"
                 :rules="mypicsRules"
                 v-model="uploadPics.mypics3"
                 accept="image/*"
@@ -65,7 +65,7 @@
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(uploadPics.mypics4, 3)"
+                @change="displayImage(uploadPics.mypics4, '3')"
                 :rules="mypicsRules"
                 v-model="uploadPics.mypics4"
                 accept="image/*"
@@ -80,7 +80,7 @@
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(uploadPics.mypics5, 4)"
+                @change="displayImage(uploadPics.mypics5, '4')"
                 :rules="mypicsRules"
                 v-model="uploadPics.mypics5"
                 accept="image/*"
@@ -114,7 +114,7 @@
           max-width="434"
         >
           <v-img
-            :src="`${loadedPictures.img1}`"
+            :src="`${loadedPictures[1]}`"
             aspect-ratio="2"
             class="spacer purple lighten-4"
             no-gutters
@@ -133,7 +133,7 @@
                   size="164"
                 >
                   <v-img
-                    :src="`${loadedPictures.img0}`"
+                    :src="`${loadedPictures[0]}`"
                   />
                 </v-avatar>
               </v-col>
@@ -179,7 +179,7 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${loadedPictures.img2}`"
+                        :src="`${loadedPictures[2]}`"
                         aspect-ratio="1"
                         class="purple lighten-4"
                         alt=""
@@ -191,7 +191,7 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${loadedPictures.img3}`"
+                        :src="`${loadedPictures[3]}`"
                         aspect-ratio="1"
                         class="purple lighten-4"
                         alt=""
@@ -203,7 +203,7 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${loadedPictures.img4}`"
+                        :src="`${loadedPictures[4]}`"
                         aspect-ratio="1"
                         class="purple lighten-4"
                         alt=""
@@ -241,11 +241,11 @@ export default {
       upload: 'false',
       imgone: '',
       loadedPictures: {
-        0: null,
-        1: null,
-        2: null,
-        3: null,
-        4: null
+        '0': null,
+        '1': null,
+        '2': null,
+        '3': null,
+        '4': null
       }
     }
   },
@@ -294,9 +294,9 @@ export default {
       const reader = new FileReader()
       reader.readAsDataURL(File)
       reader.onload = () => {
-        this.loadedPictures['img' + number] = reader.result
+        this.loadedPictures[number] = reader.result
         // eslint-disable-next-line
-        console.log('this.loadedPictures.img +  number:', this['loadedPictures.img' + number])
+        console.log('this.loadedPictures. + number:', this.loadedPictures[number])
       }
     },
     validate () {
