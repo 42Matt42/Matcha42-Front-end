@@ -20,9 +20,9 @@
             <br><br>
             <v-row>
               <v-file-input
-                @change="displayImage(loadedPics.mypics1, 'one')"
+                @change="displayImage(uploadPics.mypics1, 0)"
                 :rules="mypicsRules"
-                v-model="loadedPics.mypics1"
+                v-model="uploadPics.mypics1"
                 accept="image/*"
                 counter
                 show-size
@@ -31,14 +31,13 @@
                 placeholder="Picture 1"
                 label="Picture 1"
                 truncate-length="42"
-                enctype="multipart/form-data"
               />
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(loadedPics.mypics2, 'two')"
+                @change="displayImage(uploadPics.mypics2, 1)"
                 :rules="mypicsRules"
-                v-model="loadedPics.mypics2"
+                v-model="uploadPics.mypics2"
                 accept="image/*"
                 counter
                 show-size
@@ -46,13 +45,14 @@
                 prepend-icon="mdi-camera"
                 placeholder="Picture 2"
                 label="Ppicture 2"
+                truncate-length="42"
               />
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(loadedPics.mypics3, 'three')"
+                @change="displayImage(uploadPics.mypics3, 2)"
                 :rules="mypicsRules"
-                v-model="loadedPics.mypics3"
+                v-model="uploadPics.mypics3"
                 accept="image/*"
                 counter
                 show-size
@@ -60,13 +60,14 @@
                 prepend-icon="mdi-camera"
                 placeholder="Picture 3"
                 label="Picture 3"
+                truncate-length="42"
               />
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(loadedPics.mypics4, 'four')"
+                @change="displayImage(uploadPics.mypics4, 3)"
                 :rules="mypicsRules"
-                v-model="loadedPics.mypics4"
+                v-model="uploadPics.mypics4"
                 accept="image/*"
                 counter
                 show-size
@@ -74,13 +75,14 @@
                 prepend-icon="mdi-camera"
                 placeholder="Picture 4"
                 label="Picture 4"
+                truncate-length="42"
               />
             </v-row>
             <v-row>
               <v-file-input
-                @change="displayImage(loadedPics.mypics5, 'five')"
+                @change="displayImage(uploadPics.mypics5, 4)"
                 :rules="mypicsRules"
-                v-model="loadedPics.mypics5"
+                v-model="uploadPics.mypics5"
                 accept="image/*"
                 counter
                 show-size
@@ -88,6 +90,7 @@
                 prepend-icon="mdi-camera"
                 placeholder="Picture 5"
                 label="Picture 5"
+                truncate-length="42"
               />
             </v-row>
             <v-row>
@@ -104,35 +107,68 @@
             </v-row>
           </v-container>
         </v-form>
-        <v-row>
-          <v-col cols="9" sm="6" offset-sm="3">
-            <v-card>
-              <v-container fluid>
-                <v-row>
-                  <v-col
-                    class="d-flex child-flex"
-                  >
-                    <v-card flat tile class="d-flex">
-                      <v-img
-                        :src="`${imgone}`"
-                        aspect-ratio="1"
-                        class="purple darken-4"
-                      />
-                      <v-card-actions>
-                        <v-btn
-                          @click="upload = !upload"
-                          icon
-                        >
-                          <v-icon>{{ upload ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-col>
-        </v-row>
+        <v-card
+          :hover="true"
+          v-ripple="{ class: `purple--text` }"
+          class="mx-auto"
+          max-width="434"
+        >
+          <v-img
+            :src="`${loadedPictures.img1}`"
+            aspect-ratio="2"
+            class="spacer purple lighten-4"
+            no-gutters
+          >
+            <v-row
+              align="end"
+              class="fill-height"
+            >
+              <v-col
+                align-self="start"
+                class="pa-0"
+                cols="12"
+              >
+                <v-avatar
+                  class="profile purple purple darken-1"
+                  size="164"
+                >
+                  <v-img
+                    :src="`${loadedPictures.img0}`"
+                  />
+                </v-avatar>
+              </v-col>
+            </v-row>
+          </v-img>
+          <v-card-subtitle
+            class="headline font-weight-bold purple--text text--accent-4 red lighten-5"
+          >
+            {{ loadedUsers.username }}
+          </v-card-subtitle>
+          <v-card-subtitle
+            class="title font-italic purple--text text--accent-3 red lighten-5"
+          >
+            {{ loadedUsers.gender_id }}, {{ loadedUsers.birth_date }}
+          </v-card-subtitle>
+          <v-card-text class="text--primary">
+            <div>&nbsp;</div>
+            <div>Ville/Arrondissement</div>
+            <div>Autre</div>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              color="pink"
+              text
+            >
+              Like
+            </v-btn>
+            <v-btn
+              color="pink"
+              text
+            >
+              Follow
+            </v-btn>
+          </v-card-actions>
+        </v-card>
         <v-row>
           <v-col cols="12" sm="6" offset-sm="3">
             <v-card>
@@ -143,10 +179,9 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${imgtwo}`"
-                        :lazy-src="`${imgtwo}`"
+                        :src="`${loadedPictures.img2}`"
                         aspect-ratio="1"
-                        class="purple darken-4"
+                        class="purple lighten-4"
                         alt=""
                       />
                     </v-card>
@@ -156,10 +191,9 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${imgthree}`"
-                        :lazy-src="`${imgthree}`"
+                        :src="`${loadedPictures.img3}`"
                         aspect-ratio="1"
-                        class="purple darken-4"
+                        class="purple lighten-4"
                         alt=""
                       />
                     </v-card>
@@ -169,23 +203,9 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${imgfour}`"
-                        :lazy-src="`${imgfour}`"
+                        :src="`${loadedPictures.img4}`"
                         aspect-ratio="1"
-                        class="purple darken-4"
-                        alt=""
-                      />
-                    </v-card>
-                  </v-col>
-                  <v-col
-                    class="d-flex child-flex"
-                  >
-                    <v-card flat tile class="d-flex">
-                      <v-img
-                        :src="`${imgfive}`"
-                        :lazy-src="`${imgfive}`"
-                        aspect-ratio="1"
-                        class="purple darken-4"
+                        class="purple lighten-4"
                         alt=""
                       />
                     </v-card>
@@ -201,7 +221,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
@@ -211,7 +231,7 @@ export default {
       mypicsRules: [
         // value => value.size < 10000000 || 'Picture size should be less than 10 MB!'
       ],
-      loadedPics: {
+      uploadPics: {
         mypics1: null,
         mypics2: null,
         mypics3: null,
@@ -220,10 +240,13 @@ export default {
       },
       upload: 'false',
       imgone: '',
-      imgtwo: '',
-      imgthree: '',
-      imgfour: '',
-      imgfive: ''
+      loadedPictures: {
+        0: null,
+        1: null,
+        2: null,
+        3: null,
+        4: null
+      }
     }
   },
   computed: {
@@ -237,82 +260,83 @@ export default {
       return this.$store.getters.token
     }
   },
-  methods: {
-    validate () {
-      if (this.$refs.mypicsform.validate()) {
-        /* eslint-disable */
-        console.log('this.loadedPics.mypics1', this.loadedPics.mypics1)
-        if (this.loadedPics.mypics1) {
-          // let imageURL = URL.createObjectURL(this.loadedPics.mypics1)
-          // this.createImage(files[0])
-          // var image = new Image()
-          // console.log('createImage', image)
-          }
+  async asyncData (context) {
+    const usermypics = await axios
+      .get(process.env.serverUrl + '/users/photos', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token
         }
-        this.$axios ({
-          method: 'post',
-          // url: process.env.serverUrl + '/users/upload',
-          url: '/t/bd05h-1581710318/post',
-          data: {
-            image1: this.imgone,
-            image2: this.imgtwo,
-            image3: this.imgthree,
-            image4: this.imgfour,
-            image5: this.imgfive
-          },
-          headers: {
-            'Authorization': 'Bearer ' + this.$store.getters.token,
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-          .then((response) => {
-          /* eslint-disable */
-            console.log('response_axios_mypics', response)
-            console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
-          })
-          .catch((error) => {
-            console.log ('error_axios_mypics', error)
-            console.log('error_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
-          })
-        this.$router.push('/login/mypics')
-    },
-    displayImage(File, number) {
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('GET response_async_mypics', response)
+        context.store.dispatch('setPictures', response.data.client)
+        context.store.dispatch('setMessage', response.client)
+      })
+      .catch((error) => {
+        console.log('GET error_async_mypics', error)
+        // TO TEST
+        // console.log('GET error_client', error.response.data.client)
+        // context.store.dispatch('setMessage', error.response.data.client)
+      })
+    return {
+      usermypics
+    }
+  },
+  methods: {
+    displayImage (File, number) {
       // console.log('this.refs:', this.$refs)
       if (!File) {
         return
       }// {this.alert = "No File Chosen"}
+      // eslint-disable-next-line
       console.log('number:', number)
-      var reader = new FileReader()
+      const reader = new FileReader()
       reader.readAsDataURL(File)
       reader.onload = () => {
-        this["img"+number] = reader.result
-      console.log('this.img+number:', this["img"+number])
+        this.loadedPictures['img' + number] = reader.result
+        // eslint-disable-next-line
+        console.log('this.loadedPictures.img +  number:', this['loadedPictures.img' + number])
       }
+    },
+    validate () {
+      if (this.$refs.mypicsform.validate()) {
+        const data = new FormData()
+        data.append('images', this.uploadPics.mypics1)
+        data.append('images', this.uploadPics.mypics2)
+        data.append('images', this.uploadPics.mypics3)
+        data.append('images', this.uploadPics.mypics4)
+        data.append('images', this.uploadPics.mypics5)
+        const xhr = new XMLHttpRequest()
+        xhr.withCredentials = true
+        const self = this
+        // Returns an unsigned short, the state of the request.
+        xhr.addEventListener('readystatechange', function () {
+          // 4 means the request is DONE, operation completed
+          if (this.readyState === 4) {
+            // eslint-disable-next-line
+            console.log('this.status', this.status)
+            // eslint-disable-next-line
+            console.log('this.responseText', this.responseText)
+            // eslint-disable-next-line
+            console.log('self.$store', self.$store)
+            self.$store.dispatch('setMessage', this.responseText)
+          }
+        })
+        xhr.open('POST', process.env.serverUrl + '/users/upload')
+        // xhr.open('POST', '/t/bd05h-1581710318/post')
+        xhr.setRequestHeader('Authorization', 'Bearer ' + this.$store.getters.token)
+        xhr.setRequestHeader('Accept', '*/*')
+        xhr.setRequestHeader('Cache-Control', 'no-cache')
+        xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
+        xhr.setRequestHeader('Connection', 'keep-alive')
+        xhr.send(data)
+        // eslint-disable-next-line
+        console.log('this.responseText2', this.responseText)
+      }
+      // this.$store.dispatch('setMessage', this.responseText)
+      this.$router.push('/login/mypics')
     }
   }
-  // async asyncData (context) {
-  //   const usermypics = await axios
-  //     .get(process.env.serverUrl + '/users/mypics', {
-  //       headers: {
-  //         Authorization: 'Bearer ' + context.app.store.getters.token
-  //       }
-  //     })
-  //     .then((response) => {
-  //       /* eslint-disable */
-  //       console.log('response_async_mypics', response)
-  //       context.store.dispatch('setUserData', response.data.userdata)
-  //       context.store.dispatch('setMessage', response.client)
-  //     })
-  //     .catch((error) => {
-  //       console.log('error_async_mypics', error)
-  //       console.log('error_client', error.response.data.client)
-  //       context.store.dispatch('setMessage', error.response.data.client)
-  //     })
-  //   return {
-  //     usermypics
-  //   }
-  // }
 }
 </script>
