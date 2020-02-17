@@ -10,6 +10,7 @@ const createStore = () => {
       loadedUsers: [],
       token: null,
       serverMessage: 'default',
+      loadedPictures: [],
       checker: 'false'
     },
     mutations: {
@@ -24,8 +25,10 @@ const createStore = () => {
       },
       setLogout (state) {
         state.loadedUsers = []
+        state.loadedPictures = []
         state.token = null
         state.serverMessage = null
+        state.checker = false
       },
       registerUser (state, user) {
         state.loadedUsers.registered = user
@@ -38,6 +41,17 @@ const createStore = () => {
       },
       setUsername (state, username) {
         state.loadedUsers.username = username
+      },
+      setPictures (state, pictures) {
+        for (let i = 0; i < pictures.length; i++) {
+          state.loadedPictures[i] = pictures[i].link
+        }
+      },
+      // setOnePicture (state, picture) {
+      //   state.loadedPictures[0] = picture
+      // },
+      setOnePicture (state, picture, number) {
+        state.loadedPictures[0] = picture
       }
     },
     actions: {
@@ -119,6 +133,12 @@ const createStore = () => {
           })
         return {
         }
+      },
+      setPictures (vuexContext, pictures) {
+        vuexContext.commit('setPictures', pictures)
+      },
+      setOnePicture (vuexContext, picture) { //, number) {
+        vuexContext.commit('setOnePicture', picture) //, number)
       }
     },
     getters: {
@@ -136,6 +156,9 @@ const createStore = () => {
       },
       username (state) {
         return state.loadedUsers.username
+      },
+      loadedPictures (state) {
+        return state.loadedPictures
       }
     }
   })

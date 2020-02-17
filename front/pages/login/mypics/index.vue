@@ -44,7 +44,7 @@
                 filled
                 prepend-icon="mdi-camera"
                 placeholder="Picture 2"
-                label="Ppicture 2"
+                label="Picture 2"
                 truncate-length="42"
               />
             </v-row>
@@ -114,7 +114,7 @@
           max-width="434"
         >
           <v-img
-            :src="`${loadedPictures[1]}`"
+            :src="`data:image/*;base64,${loadedPictures[1]}`"
             aspect-ratio="2"
             class="spacer purple lighten-4"
             no-gutters
@@ -133,7 +133,7 @@
                   size="164"
                 >
                   <v-img
-                    :src="`${loadedPictures[0]}`"
+                    :src="`data:image/*;base64,${loadedPictures[0]}`"
                   />
                 </v-avatar>
               </v-col>
@@ -179,7 +179,7 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${loadedPictures[2]}`"
+                        :src="`data:image/*;base64,${loadedPictures[2]}`"
                         aspect-ratio="1"
                         class="purple lighten-4"
                         alt=""
@@ -191,7 +191,7 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${loadedPictures[3]}`"
+                        :src="`data:image/*;base64,${loadedPictures[3]}`"
                         aspect-ratio="1"
                         class="purple lighten-4"
                         alt=""
@@ -203,7 +203,7 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
-                        :src="`${loadedPictures[4]}`"
+                        :src="`data:image/*;base64,${loadedPictures[4]}`"
                         aspect-ratio="1"
                         class="purple lighten-4"
                         alt=""
@@ -239,14 +239,14 @@ export default {
         mypics5: null
       },
       upload: 'false',
-      imgone: '',
-      loadedPictures: {
-        '0': null,
-        '1': null,
-        '2': null,
-        '3': null,
-        '4': null
-      }
+      imgone: ''
+      // loadedPictures: {
+      //   '0': null,
+      //   '1': null,
+      //   '2': null,
+      //   '3': null,
+      //   '4': null
+      // }
     }
   },
   computed: {
@@ -258,6 +258,9 @@ export default {
     },
     token () {
       return this.$store.getters.token
+    },
+    loadedPictures () {
+      return this.$store.getters.loadedPictures
     }
   },
   async asyncData (context) {
@@ -294,7 +297,10 @@ export default {
       const reader = new FileReader()
       reader.readAsDataURL(File)
       reader.onload = () => {
+        // this.$store.dispatch('setOnePicture', reader.result) //, number)
         this.loadedPictures[number] = reader.result
+        // eslint-disable-next-line
+        // console.log('this.loadedPictures. + number:', this.$store.getters.loadedPictures[number])
         // eslint-disable-next-line
         console.log('this.loadedPictures. + number:', this.loadedPictures[number])
       }
@@ -302,11 +308,24 @@ export default {
     validate () {
       if (this.$refs.mypicsform.validate()) {
         const data = new FormData()
-        data.append('images', this.uploadPics.mypics1)
-        data.append('images', this.uploadPics.mypics2)
-        data.append('images', this.uploadPics.mypics3)
-        data.append('images', this.uploadPics.mypics4)
-        data.append('images', this.uploadPics.mypics5)
+        // this.uploadPics.forEach(mypics => {
+        //   data.append('image', mypics)
+        // })
+        if (this.uploadPics.mypics1) {
+          data.append('images', this.uploadPics.mypics1, 1)
+        }
+        if (this.uploadPics.mypics2) {
+          data.append('images', this.uploadPics.mypics2, 2)
+        }
+        if (this.uploadPics.mypics3) {
+          data.append('images', this.uploadPics.mypics3, 3)
+        }
+        if (this.uploadPics.mypics4) {
+          data.append('images', this.uploadPics.mypics4, 4)
+        }
+        if (this.uploadPics.mypics5) {
+          data.append('images', this.uploadPics.mypics5, 5)
+        }
         const xhr = new XMLHttpRequest()
         xhr.withCredentials = true
         const self = this
@@ -319,8 +338,10 @@ export default {
             // eslint-disable-next-line
             console.log('this.responseText', this.responseText)
             // eslint-disable-next-line
+            console.log('this.responseText', this.responseText.client)
+            // eslint-disable-next-line
             console.log('self.$store', self.$store)
-            self.$store.dispatch('setMessage', this.responseText)
+            self.$store.dispatch('setMessage', this.responseText.client)
           }
         })
         xhr.open('POST', process.env.serverUrl + '/users/upload')
@@ -331,8 +352,6 @@ export default {
         xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
         xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)
-        // eslint-disable-next-line
-        console.log('this.responseText2', this.responseText)
       }
       // this.$store.dispatch('setMessage', this.responseText)
       this.$router.push('/login/mypics')
