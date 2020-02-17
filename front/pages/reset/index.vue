@@ -30,7 +30,7 @@
             <v-btn
               @click="validate"
               :disabled="!valid"
-              color="success"
+              color="blue lighten-4"
               class="mr-4"
             >
               Validate

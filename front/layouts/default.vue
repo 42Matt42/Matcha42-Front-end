@@ -235,10 +235,10 @@ export default {
     drawer: null,
     iLogin: [
       { icon: 'mdi-home', text: 'Home', url: '/' },
-      { icon: 'mdi-camera', text: 'My Pics', url: '/login/mypics' },
+      { icon: 'mdi-duck', text: 'Match me', url: '/login/matchme' },
+      { icon: 'mdi-heart-multiple-outline', text: 'My crush', url: '/login/mymatch' },
       { icon: 'mdi-account-circle', text: 'Profile', url: '/login/settings' },
-      { icon: 'mdi-yin-yang', text: 'Test', url: '/login/tests' },
-      { icon: 'mdi-power', text: 'Logout', url: '/login/logout' }
+      { icon: 'mdi-power', text: '', url: '/login/logout' }
     ],
     iLogout: [
       { icon: 'mdi-home', text: 'Home', url: '/' },

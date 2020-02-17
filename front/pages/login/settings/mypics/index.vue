@@ -98,7 +98,7 @@
                 <v-btn
                   @click="validate"
                   :disabled="!valid"
-                  color="success"
+                  color="blue lighten-4"
                   class="mr-4"
                 >
                   Update
@@ -114,9 +114,10 @@
           max-width="434"
         >
           <v-img
+            v-if="showPictures[1]"
             :src="`data:image/*;base64,${showPictures[1]}`"
             aspect-ratio="2"
-            class="spacer purple lighten-4"
+            class="spacer blue lighten-2"
             no-gutters
           >
             <v-row
@@ -129,11 +130,48 @@
                 cols="12"
               >
                 <v-avatar
-                  class="profile purple purple darken-1"
+                  class="profile indigo accent-4"
                   size="164"
                 >
                   <v-img
+                    v-if="showPictures[0]"
                     :src="`data:image/*;base64,${showPictures[0]}`"
+                  />
+                  <v-img
+                    v-else
+                    :src="`data:image/*;base64,${loadedPictures[0]}`"
+                  />
+                </v-avatar>
+              </v-col>
+            </v-row>
+          </v-img>
+          <v-img
+            v-else
+            :src="`data:image/*;base64,${loadedPictures[1]}`"
+            aspect-ratio="2"
+            class="spacer blue lighten-2"
+            no-gutters
+          >
+            <v-row
+              align="end"
+              class="fill-height"
+            >
+              <v-col
+                align-self="start"
+                class="pa-0"
+                cols="12"
+              >
+                <v-avatar
+                  class="profile indigo accent-4"
+                  size="164"
+                >
+                  <v-img
+                    v-if="showPictures[0]"
+                    :src="`data:image/*;base64,${showPictures[0]}`"
+                  />
+                  <v-img
+                    v-else
+                    :src="`data:image/*;base64,${loadedPictures[0]}`"
                   />
                 </v-avatar>
               </v-col>
@@ -179,9 +217,17 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
+                        v-if="showPictures[2]"
                         :src="`data:image/*;base64,${showPictures[2]}`"
                         aspect-ratio="1"
-                        class="purple lighten-4"
+                        class="green accent-3"
+                        alt=""
+                      />
+                      <v-img
+                        v-else
+                        :src="`data:image/*;base64,${loadedPictures[2]}`"
+                        aspect-ratio="1"
+                        class="green accent-3"
                         alt=""
                       />
                     </v-card>
@@ -191,9 +237,17 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
+                        v-if="showPictures[3]"
                         :src="`data:image/*;base64,${showPictures[3]}`"
                         aspect-ratio="1"
-                        class="purple lighten-4"
+                        class="yellow lighten-1"
+                        alt=""
+                      />
+                      <v-img
+                        v-else
+                        :src="`data:image/*;base64,${loadedPictures[3]}`"
+                        aspect-ratio="1"
+                        class="yellow lighten-1"
                         alt=""
                       />
                     </v-card>
@@ -203,9 +257,17 @@
                   >
                     <v-card flat tile class="d-flex">
                       <v-img
+                        v-if="showPictures[4]"
                         :src="`data:image/*;base64,${showPictures[4]}`"
                         aspect-ratio="1"
-                        class="purple lighten-4"
+                        class="deep-orange darken-1"
+                        alt=""
+                      />
+                      <v-img
+                        v-else
+                        :src="`data:image/*;base64,${loadedPictures[4]}`"
+                        aspect-ratio="1"
+                        class="deep-orange darken-1"
                         alt=""
                       />
                     </v-card>
@@ -241,11 +303,11 @@ export default {
       upload: 'false',
       imgone: '',
       showPictures: {
-        '0': '', // || this.loadedPictures[0],
-        '1': '', // || this.loadedPictures[1],
-        '2': '', // || this.loadedPictures[2],
-        '3': '', // || this.loadedPictures[3],
-        '4': '' // || this.loadedPictures[4]
+        '0': null,
+        '1': null,
+        '2': null,
+        '3': null,
+        '4': null
       }
     }
   },
@@ -337,10 +399,11 @@ export default {
           if (this.readyState === 4) {
             // eslint-disable-next-line
             console.log('this.status', this.status)
+            const testttt = JSON.parse(this.responseText)
             // eslint-disable-next-line
-            console.log('this.responseText', this.responseText)
+            console.log('parsed this.responseText', testttt)
             // eslint-disable-next-line
-            console.log('this.responseText.client', this.responseText.client)
+            // console.log('this.responseText.client', this.responseText.client)
             // eslint-disable-next-line
             console.log('self.$store', self.$store)
             self.$store.dispatch('setMessage', this.responseText.client)

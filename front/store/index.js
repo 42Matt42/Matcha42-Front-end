@@ -50,8 +50,8 @@ const createStore = () => {
       },
       setGeoLoc (state, googleloc) {
         state.geoLoc.accuracy = googleloc.accuracy
-        state.geoLoc.lat = googleloc.location.lat
-        state.geoLoc.lng = googleloc.location.lng
+        state.geoLoc.lat = googleloc.location.lat.toFixed(7)
+        state.geoLoc.lng = googleloc.location.lng.toFixed(7)
       }
     },
     actions: {

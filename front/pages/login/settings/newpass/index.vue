@@ -89,7 +89,7 @@
               @click="validate"
               v-if="samePasswords"
               :disabled="!valid"
-              color="success"
+              color="blue lighten-4"
               class="mr-4"
             >
               Validate

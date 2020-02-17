@@ -3,12 +3,50 @@
     pop-up:<br>
     {{ serverMessage }}
     <br><br>
-    <v-container
-      class="font-weight-black"
-    >
-      Update your personal information
-    </v-container>
     <div>
+      <br><v-divider :inset="inset" /><br>
+      <v-row class="justify-center">
+        <v-col md="4">
+          <nuxt-link to="/login/settings/mypics">
+            <v-btn
+              class="ma-2"
+              color="purple accent-3"
+              dark
+            >
+              My Pics
+              &nbsp;
+              <v-icon
+                class="purple--text text--lighten-5"
+              >
+                mdi-camera
+              </v-icon>
+            </v-btn>
+          </nuxt-link>
+        </v-col>
+        <v-col md="4">
+          <nuxt-link to="/login/settings/mygeoloc">
+            <v-btn
+              class="ma-2"
+              color="blue accent-3"
+              dark
+            >
+              My geoLoc
+              &nbsp;
+              <v-icon
+                class="purple--text text--lighten-5"
+              >
+                mdi-compass
+              </v-icon>
+            </v-btn>
+          </nuxt-link>
+        </v-col>
+      </v-row>
+      <br><v-divider :inset="inset" /><br>
+      <v-container
+        class="font-weight-black"
+      >
+        Update your personal information
+      </v-container>
       <div>
         <v-form
           ref="form"
@@ -21,7 +59,7 @@
                 <v-btn
                   @click="validate"
                   :disabled="!valid"
-                  color="success"
+                  color="blue lighten-4"
                   class="mr-4"
                 >
                   Update
@@ -145,17 +183,6 @@
                 cols="3"
               >
                 <v-text-field
-                  v-model="loadedUsers.location"
-                  label="Location"
-                  required
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="3"
-              >
-                <v-text-field
                   v-model="loadedUsers.notification"
                   label="Notification"
                   required
@@ -167,7 +194,7 @@
                 <v-btn
                   @click="validate"
                   :disabled="!valid"
-                  color="success"
+                  color="blue lighten-4"
                   class="mr-4"
                 >
                   Update
@@ -189,7 +216,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   middleware: 'profileComplete',
@@ -254,7 +281,6 @@ export default {
             bio: this.loadedUsers.bio,
             birth_date: this.loadedUsers.birth_date,
             gender_id: this.loadedUsers.gender_id,
-            location: this.loadedUsers.location,
             notification: this.loadedUsers.notification,
             interested_in: this.loadedUsers.interested_in
           },
@@ -275,46 +301,30 @@ export default {
             this.$store.dispatch('setMessage', error.response.data.client)
           })
         this.$router.push('/settings')
-        // this.$axios ({
-        //   method: 'get',
-        //   url: process.env.serverUrl + '/users/user',
-        //   headers: {
-        //     'Authorization': 'Bearer ' + this.$store.getters.token
-        //   }
-        // })
-        //   .then((response) => {
-        //   /* eslint-disable */
-        //     console.log('response_axios_settings_user2', response)
-        //   })
-        //   .catch((error) => {
-        //     console.log ('error_axios_settings_user2', error)
-        //     console.log('error_client', error.response.data.client)
-        //     this.$store.dispatch('setMessage', error.response.data.client)
-        //   })
       }
     }
-  },
-  async asyncData (context) {
-    const usersettings = await axios
-      .get(process.env.serverUrl + '/users/user', {
-        headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
-        }
-      })
-      .then((response) => {
-        /* eslint-disable */
-        console.log('response_async_settings', response)
-        context.store.dispatch('setUserData', response.data.userdata)
-        context.store.dispatch('setMessage', response.client)
-      })
-      .catch((error) => {
-        console.log('error_async_settings', error)
-        console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
-      })
-    return {
-      usersettings
-    }
+  // },
+  // async asyncData (context) {
+  //   const usersettings = await axios
+  //     .get(process.env.serverUrl + '/users/user', {
+  //       headers: {
+  //         Authorization: 'Bearer ' + context.app.store.getters.token
+  //       }
+  //     })
+  //     .then((response) => {
+  //       /* eslint-disable */
+  //       console.log('response_async_settings', response)
+  //       context.store.dispatch('setUserData', response.data.userdata)
+  //       context.store.dispatch('setMessage', response.client)
+  //     })
+  //     .catch((error) => {
+  //       console.log('error_async_settings', error)
+  //       console.log('error_client', error.response.data.client)
+  //       context.store.dispatch('setMessage', error.response.data.client)
+  //     })
+  //   return {
+  //     usersettings
+  //   }
   }
 }
 </script>
