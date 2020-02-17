@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 
 export default {
@@ -32,6 +33,45 @@ export default {
   computed: {
     serverMessage () {
       return this.$store.getters.serverMessage
+    }
+  },
+  async asyncData (context) {
+    if (context.store.getters.geoLoc) {
+      /* eslint-disable */
+      console.log('context', context)
+      // if (context.store.getters.token) {
+      const geoloc = await axios({
+        method: 'post',
+        url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
+        data: {
+          homeMobileCountryCode: 310,
+          homeMobileNetworkCode: 410,
+          radioType: 'gsm',
+          carrier: 'Vodafone',
+          considerIp: 'true',
+          cellTowers: [
+            // See the Cell Tower Objects section below.
+          ],
+          wifiAccessPoints: [
+            // See the WiFi Access Point Objects section below.
+          ]
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_axios_googleAPI', response)
+          console.log('response_statusText', response.statusText)
+          context.store.dispatch('setMessage', response.statusText)
+          context.store.dispatch('setGeoLoc', response.data)
+        })
+        .catch((error) => {
+          console.log ('error_axios_googleAPIwelcomePage', error)
+          console.log('error_client', error.response.data)
+          context.store.dispatch('setMessage', error.response.data.client)
+        })
+      return {
+        geoloc
+      }
     }
   }
 }

@@ -109,13 +109,14 @@ export default {
           .then((response) => {
           /* eslint-disable */
             console.log('response_axios_googleAPI', response)
-            console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
+            console.log('response_statusText', response.statusText)
+            this.$store.dispatch('setMessage', response.statusText)
+            this.$store.dispatch('setGeoLoc', response.data)
             this.$router.push('/')
           })
           .catch((error) => {
-            console.log ('error_axios_settings', error)
-            console.log('error_client', error.response.data.client)
+            console.log ('error_axios_googleAPIwelcomePage', error)
+            console.log('error_client', error.response.data)
             this.$store.dispatch('setMessage', error.response.data.client)
           })
         this.$router.push('/settings')

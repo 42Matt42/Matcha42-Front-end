@@ -11,6 +11,7 @@ const createStore = () => {
       token: null,
       serverMessage: 'default',
       loadedPictures: [],
+      geoLoc: [],
       checker: 'false'
     },
     mutations: {
@@ -47,11 +48,10 @@ const createStore = () => {
           state.loadedPictures[i] = pictures[i].link
         }
       },
-      // setOnePicture (state, picture) {
-      //   state.loadedPictures[0] = picture
-      // },
-      setOnePicture (state, picture, number) {
-        state.loadedPictures[0] = picture
+      setGeoLoc (state, googleloc) {
+        state.geoLoc.accuracy = googleloc.accuracy
+        state.geoLoc.lat = googleloc.location.lat
+        state.geoLoc.lng = googleloc.location.lng
       }
     },
     actions: {
@@ -86,11 +86,11 @@ const createStore = () => {
       setToken (vuexContext, token) {
         vuexContext.commit('setToken', token)
       },
-      setChecker (vuexContext, value) {
-        vuexContext.commit('setChecker', value)
-      },
       setUsername (vuexContext, username) {
         vuexContext.commit('setUsername', username)
+      },
+      setGeoLoc (vuexContext, googleloc) {
+        vuexContext.commit('setGeoLoc', googleloc)
       },
       registerUser (vuexContext, user) {
         const createdUser = {
@@ -137,9 +137,9 @@ const createStore = () => {
       setPictures (vuexContext, pictures) {
         vuexContext.commit('setPictures', pictures)
       },
-      setOnePicture (vuexContext, picture) { //, number) {
-        vuexContext.commit('setOnePicture', picture) //, number)
-      }
+      setChecker (vuexContext, value) {
+        vuexContext.commit('setChecker', value)
+      },
     },
     getters: {
       loadedUsers (state) {
@@ -151,15 +151,18 @@ const createStore = () => {
       serverMessage (state) {
         return state.serverMessage
       },
-      checker (state) {
-        return state.checker
-      },
       username (state) {
         return state.loadedUsers.username
       },
+      geoLoc (state) {
+        return state.geoLoc
+      },
       loadedPictures (state) {
         return state.loadedPictures
-      }
+      },
+      checker (state) {
+        return state.checker
+      },
     }
   })
 }
