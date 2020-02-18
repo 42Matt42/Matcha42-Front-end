@@ -139,7 +139,7 @@ export default {
             console.log('response_client', response.client)
             this.$store.dispatch('setMessage', response.client)
             if (response.userdata.profile_complete === 0)
-              this.$router.push('/login/settings')
+              this.$router.push('/login/profile/settings')
             else
               this.$router.push('/')
           })

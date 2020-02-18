@@ -203,7 +203,7 @@
               color="pink"
               text
             >
-              Follow
+              Report
             </v-btn>
           </v-card-actions>
         </v-card>

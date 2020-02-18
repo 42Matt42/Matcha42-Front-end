@@ -236,8 +236,8 @@ export default {
     iLogin: [
       { icon: 'mdi-home', text: 'Home', url: '/' },
       { icon: 'mdi-duck', text: 'Match me', url: '/login/matchme' },
-      { icon: 'mdi-heart-multiple-outline', text: 'My crush', url: '/login/mymatch' },
-      { icon: 'mdi-account-circle', text: 'Profile', url: '/login/settings' },
+      { icon: 'mdi-heart-multiple-outline', text: 'My crush', url: '/login/mycrush' },
+      { icon: 'mdi-account-circle', text: 'Profile', url: '/login/profile' },
       { icon: 'mdi-power', text: '', url: '/login/logout' }
     ],
     iLogout: [

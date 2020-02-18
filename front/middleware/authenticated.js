@@ -6,6 +6,6 @@ export default function ({ store, redirect }) {
   }
   // if (!store.state.loadedUsers.profile_complete) {
   //   store.dispatch('setMessage', 'Please, complete your profile before to continue')
-  //   return redirect('/login/settings')
+  //   return redirect('/login/profile/settings')
   // }
 }

@@ -14,7 +14,7 @@
         <v-container>
           <v-row>
             <v-col
-              cols="12"
+              cols="8"
             >
               <v-text-field
                 v-model="reset.email"
@@ -51,7 +51,7 @@ export default {
       },
       valid: true,
       emailRules: [
-        v => !!v || 'Email is required',
+        v => !!v || 'Email required',
         // v => v.length >= 3 || 'Pass must be more than 3 characters',
         v => (v && v.length <= 42) || 'Email must be less than 42 characters',
         v => /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(v) || 'Must be a valid email [address@domain.com]'

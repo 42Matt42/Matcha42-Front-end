@@ -4,80 +4,7 @@
     {{ serverMessage }}
     <br><br>
     <div>
-      <br><v-divider /><br>
-      <v-container fluid>
-        <v-row
-          align="end"
-          align-content="end"
-          justify="end"
-          justify-lg="end"
-          justify-md="end"
-          justify-sm="end"
-          justify-x1="end"
-        >
-          <v-col>
-            <v-row
-              justify="center"
-            >
-              <nuxt-link to="/login/settings/mypics">
-                <v-btn
-                  color="purple accent-3"
-                  dark
-                >
-                  My Pics
-                  &nbsp;
-                  <v-icon
-                    class="purple--text text--lighten-5"
-                  >
-                    mdi-camera
-                  </v-icon>
-                </v-btn>
-              </nuxt-link>
-            </v-row>
-          </v-col>
-          <v-col>
-            <v-row
-              justify="center"
-            >
-              <nuxt-link to="/login/settings/mygeoloc">
-                <v-btn
-                  color="cyan lighten-2"
-                  dark
-                >
-                  My geoLoc
-                  &nbsp;
-                  <v-icon
-                    class="purple--text text--lighten-5"
-                  >
-                    mdi-compass
-                  </v-icon>
-                </v-btn>
-              </nuxt-link>
-            </v-row>
-          </v-col>
-          <v-col>
-            <v-row
-              justify="center"
-            >
-              <nuxt-link to="/login/profile/settings">
-                <v-btn
-                  color="indigo lighten-2"
-                  dark
-                >
-                  Settings
-                  &nbsp;
-                  <v-icon
-                    class="purple--text text--lighten-5"
-                  >
-                    mdi-settings
-                  </v-icon>
-                </v-btn>
-              </nuxt-link>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-container>
-      <br><v-divider /><br>
+      <br>
       <v-container
         class="font-weight-black"
       >
@@ -174,6 +101,7 @@
             <v-row>
               <v-col>
                 <v-radio-group
+                  :rules="genderRules"
                   v-model="loadedUsers.gender_id"
                   row="row"
                   label="My gender is..."
@@ -186,6 +114,7 @@
             <v-row>
               <v-col>
                 <v-radio-group
+                  :rules="interestedinRules"
                   v-model="loadedUsers.interested_in"
                   row="row"
                   max="1"
@@ -256,7 +185,7 @@
         <div>
           <br>
           Do you want to change your password ?
-          <nuxt-link to="/login/settings/newpass">
+          <nuxt-link to="/login/profile/settings/newpass">
             Change password
           </nuxt-link>
         </div>
@@ -294,6 +223,16 @@ export default {
         v => (v && v.length >= 12) || '12 characters minimum',
         v => (v && v.length <= 252) || 'Description must be less than 252 characters',
         v => /[^\t\n\r]/.test(v) || 'Only spaces authorized'
+      ],
+      interestedinRules: [
+        v => !!v || 'Preference required',
+        v => (v > 0 && v < 4) || 'Pick one of the 3 choices',
+        v => /[0-9]+/.test(v) || 'Use the form to pick a value'
+      ],
+      genderRules: [
+        v => !!v || 'Gender required',
+        v => (v > 0 && v < 3) || 'Pick one of the 2 choices',
+        v => /[0-9]+/.test(v) || 'Use the form to pick a value'
       ],
       hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron']
       // for test purposes when the server is off:

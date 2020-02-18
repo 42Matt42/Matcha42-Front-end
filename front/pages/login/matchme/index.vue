@@ -25,6 +25,8 @@
                   row="row"
                   max="1"
                   label="I am interested in..."
+                  disabled
+                  readonly
                 >
                   <v-radio :value="3" label="Women" />
                   <v-radio :value="2" label="Men" />
@@ -34,9 +36,25 @@
             </v-row>
             <v-row>
               <v-col cols="6">
+                <v-range-slider
+                  :value="ageValue"
+                  :rules="ageRules"
+                  :thumb-size="34"
+                  track-fill-color="purple accent-4"
+                  thumb-label="always"
+                  thumb-color="indigo accent-2"
+                  track-color="purple lighten-3"
+                  min="18"
+                  max="100"
+                  label="Target age"
+                />
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
                 <v-slider
                   v-model="proximity"
-                  :thumb-size="38"
+                  :thumb-size="34"
                   :rules="distanceRules"
                   thumb-label="always"
                   thumb-color="deep-purple accent-3"
@@ -51,7 +69,7 @@
                 <v-range-slider
                   :value="scoreValue"
                   :rules="scoreRules"
-                  :thumb-size="38"
+                  :thumb-size="34"
                   track-fill-color="purple accent-4"
                   thumb-label="always"
                   thumb-color="indigo accent-2"
@@ -105,29 +123,32 @@ export default {
     return {
       valid: true,
       proximity: 10,
+      ageValue: [0, 100],
       scoreValue: [0, 100],
-      scoreName: [
-        'New',
-        'Acknowledged',
-        'Famous',
-        'VIP'
-      ],
-      scoreIcons: 'mdi-snowflake',
       tags: [],
       hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron'],
+      ageRules: [
+        v => !!v || 'Target age required',
+        v => (v[1] < 101) || 'Target age too high',
+        v => (v[0] > 17) || 'Target age minimum is 18',
+        v => (/[0-9]+/.test(v[0]) && /[0-9]+/.test(v[1])) || 'Use the slider to pick a value'
+      ],
       scoreRules: [
         v => !!v || 'Target popularity required',
         v => (v[1] < 201) || 'Target popularity max too high',
-        v => (v[0] >= 0) || 'Target popularity minimum is 0'
+        v => (v[0] >= 0) || 'Target popularity minimum is 0',
+        v => (/[0-9]+/.test(v[0]) && /[0-9]+/.test(v[1])) || 'Use the slider to pick a value'
       ],
       distanceRules: [
         v => !!v || 'Target distance required',
         v => (v < 101) || 'Distance max is 100 km',
-        v => (v >= 0) || 'Distance minimum is 0 km'
+        v => (v >= 0) || 'Distance minimum is 0 km',
+        v => /[0-9]+/.test(v) || 'Use the slider to pick a value'
       ],
       interestedinRules: [
         v => !!v || 'Target gender required',
-        v => (v > 0 && v < 4) || 'Pick one of the 3 target gender choices'
+        v => (v > 0 && v < 4) || 'Pick one of the 3 target gender choices',
+        v => /[0-9]+/.test(v) || 'Use the slider to pick a value'
       ]
     }
   },
@@ -154,7 +175,8 @@ export default {
             interested_in: this.interested_in,
             proximity: this.proximity,
             tags: this.hobbies,
-            popularity: this.popularity,
+            popularity: this.scoreValue,
+            age: this.ageValue
           },
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token
@@ -172,7 +194,7 @@ export default {
             console.log('error_client', error.response.data.client)
             this.$store.dispatch('setMessage', error.response.data.client)
           })
-        this.$router.push('/settings')
+        // this.$router.push('/users')
       }
     },
     scoreIcon (value) {
