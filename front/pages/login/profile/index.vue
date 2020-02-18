@@ -160,7 +160,7 @@
         </v-card-text>
         <v-card-text class="text--primary">
           <div>&nbsp;</div>
-          <div>Location {{ gender }}</div>
+          <div>Location {{ geoLoc }}</div>
         </v-card-text>
       </v-card>
     </div>
@@ -190,6 +190,9 @@ export default {
     },
     token () {
       return this.$store.getters.token
+    },
+    geoLoc () {
+      return this.$store.getters.geoLoc
     }
   },
   async asyncData (context) {
