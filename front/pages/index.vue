@@ -12,7 +12,7 @@
         The lovely dating platform !
       </h2>
       <div class="overline display-2 text-center">
-        <br>Let's find The One ~~<br>
+        <br><br><br><br>Let's find The One ~~<br>
       </div>
       <br><br>
       pop-up:<br>

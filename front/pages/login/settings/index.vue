@@ -4,44 +4,80 @@
     {{ serverMessage }}
     <br><br>
     <div>
-      <br><v-divider :inset="inset" /><br>
-      <v-row class="justify-center">
-        <v-col md="4">
-          <nuxt-link to="/login/settings/mypics">
-            <v-btn
-              class="ma-2"
-              color="purple accent-3"
-              dark
+      <br><v-divider /><br>
+      <v-container fluid>
+        <v-row
+          align="end"
+          align-content="end"
+          justify="end"
+          justify-lg="end"
+          justify-md="end"
+          justify-sm="end"
+          justify-x1="end"
+        >
+          <v-col>
+            <v-row
+              justify="center"
             >
-              My Pics
-              &nbsp;
-              <v-icon
-                class="purple--text text--lighten-5"
-              >
-                mdi-camera
-              </v-icon>
-            </v-btn>
-          </nuxt-link>
-        </v-col>
-        <v-col md="4">
-          <nuxt-link to="/login/settings/mygeoloc">
-            <v-btn
-              class="ma-2"
-              color="blue accent-3"
-              dark
+              <nuxt-link to="/login/settings/mypics">
+                <v-btn
+                  color="purple accent-3"
+                  dark
+                >
+                  My Pics
+                  &nbsp;
+                  <v-icon
+                    class="purple--text text--lighten-5"
+                  >
+                    mdi-camera
+                  </v-icon>
+                </v-btn>
+              </nuxt-link>
+            </v-row>
+          </v-col>
+          <v-col>
+            <v-row
+              justify="center"
             >
-              My geoLoc
-              &nbsp;
-              <v-icon
-                class="purple--text text--lighten-5"
-              >
-                mdi-compass
-              </v-icon>
-            </v-btn>
-          </nuxt-link>
-        </v-col>
-      </v-row>
-      <br><v-divider :inset="inset" /><br>
+              <nuxt-link to="/login/settings/mygeoloc">
+                <v-btn
+                  color="cyan lighten-2"
+                  dark
+                >
+                  My geoLoc
+                  &nbsp;
+                  <v-icon
+                    class="purple--text text--lighten-5"
+                  >
+                    mdi-compass
+                  </v-icon>
+                </v-btn>
+              </nuxt-link>
+            </v-row>
+          </v-col>
+          <v-col>
+            <v-row
+              justify="center"
+            >
+              <nuxt-link to="/login/profile/settings">
+                <v-btn
+                  color="indigo lighten-2"
+                  dark
+                >
+                  Settings
+                  &nbsp;
+                  <v-icon
+                    class="purple--text text--lighten-5"
+                  >
+                    mdi-settings
+                  </v-icon>
+                </v-btn>
+              </nuxt-link>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-container>
+      <br><v-divider /><br>
       <v-container
         class="font-weight-black"
       >
@@ -140,8 +176,8 @@
                 <v-radio-group
                   v-model="loadedUsers.gender_id"
                   row="row"
+                  label="My gender is..."
                 >
-                  My gender is...&nbsp;&nbsp;
                   <v-radio :value="2" label="Female" />
                   <v-radio :value="1" label="Male" />
                 </v-radio-group>
@@ -153,12 +189,26 @@
                   v-model="loadedUsers.interested_in"
                   row="row"
                   max="1"
+                  label="I am interested in..."
                 >
-                  I am interested in...&nbsp;&nbsp;
                   <v-radio :value="3" label="Women" />
                   <v-radio :value="2" label="Men" />
                   <v-radio :value="1" label="Both" />
                 </v-radio-group>
+              </v-col>
+            </v-row>
+            <v-row
+              style="background-color: rgba(0, 0, 0, 0)"
+            >
+              <v-col cols="10">
+                <v-select
+                  v-model="loadedUsers.tags"
+                  :items="hobbies"
+                  attach
+                  chips
+                  label="Tags"
+                  multiple
+                />
               </v-col>
             </v-row>
             <v-row>
@@ -244,7 +294,8 @@ export default {
         v => (v && v.length >= 12) || '12 characters minimum',
         v => (v && v.length <= 252) || 'Description must be less than 252 characters',
         v => /[^\t\n\r]/.test(v) || 'Only spaces authorized'
-      ]
+      ],
+      hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron']
       // for test purposes when the server is off:
       // loadedUsers: {
       //   interested_in: '1',
@@ -282,7 +333,8 @@ export default {
             birth_date: this.loadedUsers.birth_date,
             gender_id: this.loadedUsers.gender_id,
             notification: this.loadedUsers.notification,
-            interested_in: this.loadedUsers.interested_in
+            interested_in: this.loadedUsers.interested_in,
+            tags: this.loadedUsers.tags
           },
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token
