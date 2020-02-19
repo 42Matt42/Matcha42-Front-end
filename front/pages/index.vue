@@ -33,10 +33,16 @@ export default {
   computed: {
     serverMessage () {
       return this.$store.getters.serverMessage
+    },
+    geoLoc () {
+      return this.$store.getters.geoLoc
+    },
+    loadedLocation () {
+      return this.$store.getters.loadedLocation
     }
   },
   async asyncData (context) {
-    if (!context.store.getters.geoLoc) {
+    if (context.store.getters.geoLoc) {
       /* eslint-disable */
       console.log('context', context)
       // if (context.store.getters.token) {
@@ -63,11 +69,49 @@ export default {
           console.log('response_statusText', response.statusText)
           context.store.dispatch('setMessage', response.statusText)
           context.store.dispatch('setGeoLoc', response.data)
+          axios
+            .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + response.data.location.lng + '&lat=' + response.data.location.lat, {
+              headers: {
+                Authorization: 'Bearer ' + context.store.getters.token
+              }
+            })
+            .then((response) => {
+              /* eslint-disable */
+              console.log('response_GET_cityfinder', response)
+              context.store.dispatch('setLocation', response.data)
+              axios.post({
+                method: 'post',
+                // url: process.env.serverUrl + '/edit/location',
+                url: '/t/bd05h-1581710318/post',
+                data: {
+                  location: {
+                    accuracy: context.store.getters.geoLoc.accuracy,
+                    lat: context.store.getters.geoLoc.lat,
+                    lng: context.store.getters.geoLoc.lng,
+                    country: context.store.getters.loadedLocation.country,
+                    city: context.store.getters.loadedLocation.city,
+                    district: context.store.getters.loadedLocation.district
+                  }
+                // },
+                // headers: {
+                //   'Authorization': 'Bearer ' + context.store.getters.token
+                }
+              })
+                .then((response) => {
+                /* eslint-disable */
+                  console.log('response_POST_edit/location', response)
+                })
+                .catch((error) => {
+                  console.log ('error_POST_edit/location', error)
+                })
+            })
+            .catch((error) => {
+              console.log('error_GET_cityfinder', error)
+            })
+          // this.$router.push('/')
         })
         .catch((error) => {
           console.log ('error_axios_googleAPIwelcomePage', error)
-          console.log('error_client', error.response.data)
-          context.store.dispatch('setMessage', error.response.data.client)
         })
       return {
         geoloc

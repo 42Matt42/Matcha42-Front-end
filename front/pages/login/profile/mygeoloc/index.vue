@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
@@ -96,6 +97,9 @@ export default {
     },
     geoLoc () {
       return this.$store.getters.geoLoc
+    },
+    loadedLocation () {
+      return this.$store.getters.loadedLocation
     }
   },
   methods: {
@@ -125,12 +129,24 @@ export default {
           console.log('response_statusText', response.statusText)
           this.$store.dispatch('setMessage', response.statusText)
           this.$store.dispatch('setGeoLoc', response.data)
-          this.$router.push('/')
+          axios
+            .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + response.data.location.lng + '&lat=' + response.data.location.lat, {
+              headers: {
+                Authorization: 'Bearer ' + this.$store.getters.token
+              }
+            })
+            .then((response) => {
+              /* eslint-disable */
+              console.log('response_GET_cityfinder', response)
+              this.$store.dispatch('setLocation', response.data)
+            })
+            .catch((error) => {
+              console.log('error_GET_cityfinder', error)
+            })
+          // this.$router.push('/')
         })
         .catch((error) => {
           console.log ('error_axios_googleAPIwelcomePage', error)
-          console.log('error_client', error.response.data)
-          this.$store.dispatch('setMessage', error.response.data.client)
         })
     },
     sendGeoLoc () {
@@ -142,6 +158,9 @@ export default {
             accuracy: this.geoLoc.accuracy,
             lat: this.geoLoc.lat,
             lng: this.geoLoc.lng,
+            country: this.loadedLocation.country,
+            city:this.loadedLocation.city,
+            district:this.loadedLocation.district
           },
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token
@@ -150,14 +169,10 @@ export default {
           .then((response) => {
           /* eslint-disable */
             console.log('response_axios_geoLoc', response)
-            console.log('response.data.client', response.data.client)
-            this.$store.dispatch('setMessage', response.data.client)
             this.$router.push('/')
           })
           .catch((error) => {
             console.log ('error_axios_geoLoc', error)
-            console.log('error_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
           })
         // this.$router.push('/')
       }

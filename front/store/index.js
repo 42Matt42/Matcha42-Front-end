@@ -9,10 +9,12 @@ const createStore = () => {
     state: {
       serverMessage: 'default',
       token: null,
-      geoLoc: [],
+      geoLoc: {},
+      loadedLocation: {},
       loadedUsers: [],
       loadedLikes: [],
       loadedViews: [],
+      loadedSearchProfile: [],
       loadedPictures: [],
       checker: 'false'
     },
@@ -32,6 +34,11 @@ const createStore = () => {
         state.token = null
         state.serverMessage = null
         state.checker = false
+        state.geoLoc = {}
+        state.loadedLocation = {}
+        state.loadedLikes = []
+        state.loadedViews = []
+        state.loadedSearchProfile = []
       },
       registerUser (state, user) {
         state.loadedUsers.registered = user
@@ -51,10 +58,18 @@ const createStore = () => {
       setViews (state, views) {
         state.loadedViews = views
       },
+      setSearchProfile (state, profile) {
+        state.loadedSearchProfile = profile
+      },
       setGeoLoc (state, googleloc) {
         state.geoLoc.accuracy = googleloc.accuracy
         state.geoLoc.lat = googleloc.location.lat.toFixed(7)
         state.geoLoc.lng = googleloc.location.lng.toFixed(7)
+      },
+      setLocation (state, openstreetmap) {
+        state.loadedLocation.country = openstreetmap.address.country
+        state.loadedLocation.city = openstreetmap.address.city
+        state.loadedLocation.district = openstreetmap.address.city_district
       },
       setPictures (state, pictures) {
         for (let i = 0; i < pictures.length; i++) {
@@ -99,6 +114,9 @@ const createStore = () => {
       },
       setGeoLoc (vuexContext, googleloc) {
         vuexContext.commit('setGeoLoc', googleloc)
+      },
+      setLocation (vuexContext, location) {
+        vuexContext.commit('setLocation', location)
       },
       registerUser (vuexContext, user) {
         const createdUser = {
@@ -151,6 +169,9 @@ const createStore = () => {
       setViews (vuexContext, views) {
         vuexContext.commit('setViews', views)
       },
+      setSearchProfile (vuexContext, profile) {
+        vuexContext.commit('setSearchProfile', profile)
+      },
       setPictures (vuexContext, pictures) {
         vuexContext.commit('setPictures', pictures)
       }
@@ -171,14 +192,20 @@ const createStore = () => {
       geoLoc (state) {
         return state.geoLoc
       },
+      loadedLocation(state) {
+        return state.loadedLocation
+      },
       checker (state) {
         return state.checker
       },
       loadedLikes (state) {
-        return state.likes
+        return state.loadedLikes
       },
       loadedViews (state) {
-        return state.views
+        return state.loadedViews
+      },
+      loadedSearchProfile (state) {
+        return state.loadedSearchProfile
       },
       loadedPictures (state) {
         return state.loadedPictures

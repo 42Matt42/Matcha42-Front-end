@@ -97,13 +97,15 @@
           </v-row>
         </v-container>
       </v-form>
-      <div>
-        <br>
-        Forgot your password ?
-        <nuxt-link to="/reset">
-          Reset password
-        </nuxt-link>
-      </div>
+      <v-row class="font-italic">
+        <v-col>
+          <br>
+          Forgot your password ?
+          <nuxt-link to="/reset">
+            Reset password
+          </nuxt-link>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>

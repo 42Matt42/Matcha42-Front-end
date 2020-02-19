@@ -182,13 +182,17 @@
             </v-row>
           </v-container>
         </v-form>
-        <div>
-          <br>
-          Do you want to change your password ?
-          <nuxt-link to="/login/profile/settings/newpass">
-            Change password
-          </nuxt-link>
-        </div>
+        <br>
+        <v-row class="font-italic">
+          <v-col>
+            <br>
+            Do you want to change your password ?
+            <nuxt-link to="/login/profile/settings/newpass">
+              Change password
+            </nuxt-link>
+          </v-col>
+        </v-row>
+        <br>
       </div>
     </div>
   </div>

@@ -199,7 +199,7 @@
             justify="end"
           >
             <div
-              v-if="`${loadedUsers.token}`"
+              v-if="loadedUsers.token"
             >
               Connected:&nbsp;&nbsp;
             </div>
@@ -302,8 +302,8 @@ export default {
   methods: {
     keySearchUser (event) {
       /* eslint-disable */
-      console.log('event', event)
-      console.log('this', this)
+      // console.log('event', event)
+      // console.log('this', this)
       this.$router.push('/login/user/' + `${this.searchUsername}`)
     }
   //   logout () {
