@@ -7,11 +7,13 @@ const createStore = () => {
   return new Vuex.Store({
     plugins: [createPersistedState()],
     state: {
-      loadedUsers: [],
-      token: null,
       serverMessage: 'default',
-      loadedPictures: [],
+      token: null,
       geoLoc: [],
+      loadedUsers: [],
+      loadedLikes: [],
+      loadedViews: [],
+      loadedPictures: [],
       checker: 'false'
     },
     mutations: {
@@ -43,15 +45,21 @@ const createStore = () => {
       setUsername (state, username) {
         state.loadedUsers.username = username
       },
-      setPictures (state, pictures) {
-        for (let i = 0; i < pictures.length; i++) {
-          state.loadedPictures[i] = pictures[i].link
-        }
+      setLikes (state, likes) {
+        state.loadedLikes = likes
+      },
+      setViews (state, views) {
+        state.loadedViews = views
       },
       setGeoLoc (state, googleloc) {
         state.geoLoc.accuracy = googleloc.accuracy
         state.geoLoc.lat = googleloc.location.lat.toFixed(7)
         state.geoLoc.lng = googleloc.location.lng.toFixed(7)
+      },
+      setPictures (state, pictures) {
+        for (let i = 0; i < pictures.length; i++) {
+          state.loadedPictures[i] = pictures[i].link
+        }
       }
     },
     actions: {
@@ -134,12 +142,18 @@ const createStore = () => {
         return {
         }
       },
-      setPictures (vuexContext, pictures) {
-        vuexContext.commit('setPictures', pictures)
-      },
       setChecker (vuexContext, value) {
         vuexContext.commit('setChecker', value)
       },
+      setLikes (vuexContext, likes) {
+        vuexContext.commit('setLikes', likes)
+      },
+      setViews (vuexContext, views) {
+        vuexContext.commit('setViews', views)
+      },
+      setPictures (vuexContext, pictures) {
+        vuexContext.commit('setPictures', pictures)
+      }
     },
     getters: {
       loadedUsers (state) {
@@ -157,12 +171,18 @@ const createStore = () => {
       geoLoc (state) {
         return state.geoLoc
       },
-      loadedPictures (state) {
-        return state.loadedPictures
-      },
       checker (state) {
         return state.checker
       },
+      loadedLikes (state) {
+        return state.likes
+      },
+      loadedViews (state) {
+        return state.views
+      },
+      loadedPictures (state) {
+        return state.loadedPictures
+      }
     }
   })
 }

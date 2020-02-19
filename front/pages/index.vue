@@ -36,7 +36,7 @@ export default {
     }
   },
   async asyncData (context) {
-    if (context.store.getters.geoLoc) {
+    if (!context.store.getters.geoLoc) {
       /* eslint-disable */
       console.log('context', context)
       // if (context.store.getters.token) {

@@ -78,13 +78,22 @@
               </v-btn>
             </v-col>
           </v-row>
-          <br>
-          Did you forget your pass?
-          <nuxt-link to="/reset">
-            Reset password
-          </nuxt-link>
         </v-container>
       </v-form>
+      <v-row>
+        <br>
+        Did you forget your pass?
+        <nuxt-link to="/reset">
+          Reset password
+        </nuxt-link>
+      </v-row>
+      <v-row>
+        <br>
+        No account?
+        <nuxt-link to="/register">
+          Create a new profile !
+        </nuxt-link>
+      </v-row>
     </div>
   </div>
 </template>

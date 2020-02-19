@@ -260,7 +260,7 @@ export default {
       if (this.$refs.form.validate()) {
         /* eslint-disable */
         console.log('store', this.$store)
-        this.$axios ({
+        this.$axios({
           method: 'post',
           url: process.env.serverUrl + '/users/user',
           data: {

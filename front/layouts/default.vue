@@ -162,23 +162,55 @@
       height=""
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="purple--text text--lighten-5" />
-      <v-toolbar-title class="mr-12 align-center">
-        <span class="title purple--text text--lighten-5">Matcha</span>
-      </v-toolbar-title>
-      <v-spacer />
       <v-row
         align="center"
-        style="max-width: 650px"
+        justify="space-between"
       >
-        <v-text-field
-          :append-icon-cb="() => {}"
-          color="purple darken-1"
-          label="Find the one you love !"
-          outlined
-          append-icon="mdi-settings"
-          hide-details
-          background-color="purple lighten-4"
-        />
+        <v-col cols="2">
+          <v-row>
+            <v-toolbar-title class="mr-12 align-center">
+              <span class="title purple--text text--lighten-5">&nbsp;&nbsp;Matcha</span>
+            </v-toolbar-title>
+          </v-row>
+        </v-col>
+        <!-- <v-spacer /> -->
+        <v-col cols="9">
+          <v-row
+            justify="end"
+          >
+            <v-form @submit.prevent="keySearchUser">
+              <v-text-field
+                v-model="searchUsername"
+                :append-icon-cb="() => {}"
+                append-icon="mdi-account-search"
+                color="purple darken-1"
+                label="Find the one you love !"
+                outlined
+                hide-details
+                background-color="purple lighten-4"
+                clearable
+              />
+            </v-form>
+          </v-row>
+        </v-col>
+        <v-col cols="1">
+          <v-row
+            class="purple--text text--lighten-4"
+            justify="end"
+          >
+            <div
+              v-if="`${loadedUsers.token}`"
+            >
+              Connected:&nbsp;&nbsp;
+            </div>
+          </v-row>
+          <v-row
+            class="purple--text text--lighten-4"
+            justify="end"
+          >
+            <b>{{ loadedUsers.username }}</b>&nbsp;&nbsp;
+          </v-row>
+        </v-col>
       </v-row>
     </v-app-bar>
 
@@ -188,6 +220,8 @@
           background-image: url('/04_homepage_beachkiss_opacity42.png');
           background-size: cover;
           height: 100%;
+          background-attachment: fixed;
+          background-repeat: no-repeat;
         "
       >
         <nuxt />
@@ -233,6 +267,7 @@ export default {
   },
   data: () => ({
     drawer: null,
+    searchUsername: '',
     iLogin: [
       { icon: 'mdi-home', text: 'Home', url: '/' },
       { icon: 'mdi-duck', text: 'Match me', url: '/login/matchme' },
@@ -263,13 +298,19 @@ export default {
     serverMessage () {
       return this.$store.getters.serverMessage
     }
-  }
-  // methods: {
+  },
+  methods: {
+    keySearchUser (event) {
+      /* eslint-disable */
+      console.log('event', event)
+      console.log('this', this)
+      this.$router.push('/login/user/' + `${this.searchUsername}`)
+    }
   //   logout () {
   //     this.$store.dispatch('setLogout', null)
   //     this.$router.push('/')
   //   }
-  // }
+  }
 }
 </script>
 
