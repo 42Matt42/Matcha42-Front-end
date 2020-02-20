@@ -82,7 +82,8 @@ export default {
               axios.post({
                 method: 'post',
                 // url: process.env.serverUrl + '/edit/location',
-                url: '/t/bd05h-1581710318/post',
+                url: 'http://10.12.5.2:8080/api/edit/location',
+                // url: '/t/bd05h-1581710318/post',
                 data: {
                   location: {
                     accuracy: context.store.getters.geoLoc.accuracy,

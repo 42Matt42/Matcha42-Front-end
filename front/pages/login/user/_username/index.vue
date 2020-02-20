@@ -73,7 +73,7 @@
                 Interested in Women
               </div>
               <div
-                v-else
+                v-if="loadedUsers.interested_in === 1"
               >
                 Bi
               </div>
@@ -164,63 +164,25 @@ export default {
   //     birthday
   //   }
   // },
-  // async asyncData (context) {
-  //   if (context.params.username !== context.store.getters.loadedUsers.username) {
-  //     /* eslint-disable */
-  //     console.log('context', context)
-  //     // if (context.store.getters.token) {
-  //     const iView = await axios({
-  //       method: 'post',
-  //       // url: '/t/bd05h-1581710318/post',
-  //       // url: process.env.serverUrl + '/social/view',
-  //       url: '/t/bd05h-1581710318/post',
-  //       data: {
-  //         username: this.$route.params.username
-  //       }
-  //     })
-  //       .then((response) => {
-  //       /* eslint-disable */
-  //         console.log('response_POST_view', response)
-  //         console.log('response_statusText', response.client)
-  //         context.store.dispatch('setMessage', response.client)
-  //         context.store.dispatch('setGeoLoc', response.data)
-  //       })
-  //       .catch((error) => {
-  //         console.log ('error_POST_view', error)
-  //         console.log('error_client', error.response.data.client)
-  //         context.store.dispatch('setMessage', error.response.data.client)
-  //       })
-  //     return {
-  //       iView
-  //     }
-  //   }
-  // },
-  // async asyncData ({params, app, error}) {
   async asyncData (context) {
-    const [iView, searchProfile] = await Promise.all([
-      // axios.get(process.env.serverUrl + '/social/view'),
-      // axios.get(process.env.serverUrl + '/user/profile'),
+    if (context.params.username !== context.store.getters.loadedUsers.username) {
       /* eslint-disable */
-      console.log('context', context),
-      console.log('axios', axios),
-      // axios.post(process.env.serverUrl + '/social/view'),
-      // if (context.params.username !== context.store.getters.loadedUsers.username) {
-      axios.post({
+      console.log('context', context)
+      // if (context.store.getters.token) {
+      const iView = await axios({
         method: 'post',
         // url: '/t/bd05h-1581710318/post',
-        // url: process.env.serverUrl + '/social/view',
-        url: '/t/bd05h-1581710318/post',
+        url: process.env.serverUrl + '/social/view',
         data: {
-          username: context.params.username
+          username: context.route.params.username
         },
         headers: {
-          'Authorization': 'Bearer ' + context.store.getters.token
+          Authorization: 'Bearer ' + context.store.getters.token
         }
       })
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_view', response)
-          iView = response
           console.log('response_statusText', response.client)
           context.store.dispatch('setMessage', response.client)
         })
@@ -228,32 +190,75 @@ export default {
           console.log ('error_POST_view', error)
           console.log('error_client', error.response.data.client)
           context.store.dispatch('setMessage', error.response.data.client)
-        }),
-      // axios.get(process.env.serverUrl + '/user/profile', {
-      axios.get('/t/bd05h-1581710318/post', {
-      // axios.get('/t/bd05h-1581710318/post', {
-        headers: {
-          Authorization: 'Bearer ' + context.store.getters.token
-        }
-      })
-        .then((response) => {
-          /* eslint-disable */
-          console.log('GET response_GET_searchProfile', response)
-          searchProfile = response
-          context.store.dispatch('setSearchProfile', response.data.client)
-          context.store.dispatch('setMessage', response.statusText)
         })
-        .catch((error) => {
-          console.log('GET error_GET_searchProfile', error)
-        }),
-      /* eslint-disable */
-      console.log('iView', iView),
-      console.log('searchProfile', searchProfile)
-    ])
-    return {
-      iView: iView,
-      searchProfile: searchProfile
+      return {
+        iView
+      }
     }
+  },
+
+    // START TEST DOUBLE REQUETE
+
+  // // async asyncData ({params, app, error}) {
+  // async asyncData (context) {
+  //   const [iView, searchProfile] = await Promise.all([
+  //     // axios.get(process.env.serverUrl + '/social/view'),
+  //     // axios.get(process.env.serverUrl + '/user/profile'),
+  //     /* eslint-disable */
+  //     console.log('context', context),
+  //     console.log('axios', axios),
+  //     // axios.post(process.env.serverUrl + '/social/view'),
+  //     // if (context.params.username !== context.store.getters.loadedUsers.username) {
+  //     axios.post({
+  //       method: 'post',
+  //       // url: '/t/bd05h-1581710318/post',
+  //       url: process.env.serverUrl + '/social/view',
+  //       data: {
+  //         username: context.params.username
+  //       },
+  //       headers: {
+  //         'Authorization': 'Bearer ' + context.store.getters.token
+  //       }
+  //     })
+  //       .then((response) => {
+  //       /* eslint-disable */
+  //         console.log('response_POST_view', response)
+  //         iView = response
+  //         console.log('response_statusText', response.client)
+  //         context.store.dispatch('setMessage', response.client)
+  //       })
+  //       .catch((error) => {
+  //         console.log ('error_POST_view', error)
+  //         console.log('error_client', error.response.data.client)
+  //         context.store.dispatch('setMessage', error.response.data.client)
+  //       }),
+  //     axios.get(process.env.serverUrl + '/user/profile', {
+  //     // axios.get('/t/bd05h-1581710318/post', {
+  //       headers: {
+  //         Authorization: 'Bearer ' + context.store.getters.token
+  //       }
+  //     })
+  //       .then((response) => {
+  //         /* eslint-disable */
+  //         console.log('GET response_GET_searchProfile', response)
+  //         searchProfile = response
+  //         context.store.dispatch('setSearchProfile', response.data.client)
+  //         context.store.dispatch('setMessage', response.statusText)
+  //       })
+  //       .catch((error) => {
+  //         console.log('GET error_GET_searchProfile', error)
+  //       }),
+  //     /* eslint-disable */
+  //     console.log('iView', iView),
+  //     console.log('searchProfile', searchProfile)
+  //   ])
+  //   return {
+  //     iView: iView,
+  //     searchProfile: searchProfile
+  //   }
+
+    // END TEST DOUBLE REQUETE
+
     // if (context.params.username !== context.store.getters.loadedUsers.username) {
     //   /* eslint-disable */
     //   console.log('context', context)
@@ -261,8 +266,7 @@ export default {
     //   const iView = await axios({
     //     method: 'post',
     //     // url: '/t/bd05h-1581710318/post',
-    //     // url: process.env.serverUrl + '/social/view',
-    //     url: '/t/bd05h-1581710318/post',
+        // url: process.env.serverUrl + '/social/view',
     //     data: {
     //       username: this.$route.params.username
     //     },
@@ -285,7 +289,7 @@ export default {
     //     iView
     //   }
     // }
-  },
+  // },
   // async asyncData (context) {
   //   let [birthday, gender] = await Promise.all([
   //     birthday = moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM'),
@@ -311,8 +315,8 @@ export default {
     love () {
       this.$axios({
         method: 'post',
-        // url: process.env.serverUrl + '/social/like',
-        url: '/t/bd05h-1581710318/post',
+        url: process.env.serverUrl + '/social/like',
+        // url: '/t/bd05h-1581710318/post',
         data: {
           username: this.target
         },

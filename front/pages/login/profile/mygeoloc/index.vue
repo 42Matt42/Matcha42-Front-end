@@ -155,12 +155,14 @@ export default {
           method: 'post',
           url: process.env.serverUrl + '/edit/location',
           data: {
-            accuracy: this.geoLoc.accuracy,
-            lat: this.geoLoc.lat,
-            lng: this.geoLoc.lng,
-            country: this.loadedLocation.country,
-            city:this.loadedLocation.city,
-            district:this.loadedLocation.district
+            location: {
+              accuracy: this.geoLoc.accuracy,
+              lat: this.geoLoc.lat,
+              lng: this.geoLoc.lng,
+              country: this.loadedLocation.country,
+              city:this.loadedLocation.city,
+              district:this.loadedLocation.district
+            }
           },
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token
