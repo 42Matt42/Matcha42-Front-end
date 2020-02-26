@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
@@ -207,11 +207,7 @@ export default {
     googleAPI () {
       /* eslint-disable */
       const self = this
-      console.log('store', this.$store)
       if ("geolocation" in navigator) {
-        console.log('navigator', navigator)
-        console.log('.geolocation', navigator.geolocation)
-        console.log('NetworkInformation_window.navigator.connection', window.navigator.connection)
         const options = {
           enableHighAccuracy: true,
           // amount of time before the error callback is invoked
@@ -224,23 +220,13 @@ export default {
           let location = {}
           console.log('Position: ', position)
           console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
-          location.lat = userAcceptsGeoloc.latitude
           console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
-          location.lng = userAcceptsGeoloc.longitude
           console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
+          location.lat = userAcceptsGeoloc.latitude
+          location.lng = userAcceptsGeoloc.longitude
           const accuracy = userAcceptsGeoloc.accuracy
           self.$store.dispatch('setMapPosition', {accuracy, location})
-          axios
-            .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + location.lng + '&lat=' + location.lat + '&accept-language=en', {})
-            .then((response) => {
-              /* eslint-disable */
-              console.log('response_GET_cityfinder', response)
-              console.log('self', self)
-              self.$store.dispatch('setLocation', response.data)
-            })
-            .catch((error) => {
-              console.log('error_GET_cityfinder', error)
-            })
+          self.reverseLocalisation(location.lat, location.lng)
         }
         function error(error) {
           console.log(`ERROR(${error.code}): ${error.message}`)
@@ -253,7 +239,7 @@ export default {
       }
     },
     geolocIP () {
-      this.$axios ({
+      this.$axios({
         method: 'post',
         url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
         data: {
@@ -266,20 +252,22 @@ export default {
           console.log('response_statusText', response.statusText)
           this.$store.dispatch('setMessage', response.statusText)
           this.$store.dispatch('setMapPosition', response.data)
-          axios
-            .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + response.data.location.lng + '&lat=' + response.data.location.lat + '&accept-language=en', {})
-            .then((response) => {
-              /* eslint-disable */
-              console.log('response_GET_cityfinder', response)
-              this.$store.dispatch('setLocation', response.data)
-            })
-            .catch((error) => {
-              console.log('error_GET_cityfinder', error)
-            })
-          // this.$router.push('/')
+          this.reverseLocalisation (response.data.location.lat, response.data.location.lng)
         })
         .catch((error) => {
           console.log ('error_axios_googleAPIwelcomePage', error)
+        })
+    },
+    reverseLocalisation (lat, lng) {
+      this.$axios
+        .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + lng + '&lat=' + lat + '&accept-language=en', {})
+        .then((response) => {
+          /* eslint-disable */
+          console.log('response_GET_cityfinder', response)
+          this.$store.dispatch('setLocation', response.data)
+        })
+        .catch((error) => {
+          console.log('error_GET_cityfinder', error)
         })
     },
     sendGeoLoc () {
@@ -293,8 +281,8 @@ export default {
               lat: this.loadedMapPosition.lat,
               lng: this.loadedMapPosition.lng,
               country: this.loadedLocation.country,
-              city:this.loadedLocation.city,
-              district:this.loadedLocation.district
+              city: this.loadedLocation.city,
+              district: this.loadedLocation.district
             }
           },
           headers: {

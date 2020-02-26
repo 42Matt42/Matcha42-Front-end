@@ -41,80 +41,147 @@ export default {
     if (context.store.getters.loadedMapPosition) {
       /* eslint-disable */
       console.log('context', context)
-      // if (context.store.getters.token) {
-      const geoloc = await axios({
-        method: 'post',
-        url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
-        data: {
-          homeMobileCountryCode: 310,
-          homeMobileNetworkCode: 410,
-          radioType: 'gsm',
-          carrier: 'Vodafone',
-          considerIp: 'true',
-          cellTowers: [
-            // See the Cell Tower Objects section below.
-          ],
-          wifiAccessPoints: [
-            // See the WiFi Access Point Objects section below.
-          ]
+      // let promise = new Promise((resolve, reject) => {
+      if ("geolocation" in navigator) {
+        const options = {
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 100000
         }
+        function success(position) {
+          const userAcceptsGeoloc = position.coords
+          let location = {}
+          console.log('context: ', context)
+          console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
+          console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
+          console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
+          location.lat = userAcceptsGeoloc.latitude
+          location.lng = userAcceptsGeoloc.longitude
+          const accuracy = userAcceptsGeoloc.accuracy
+          context.store.dispatch('setMapPosition', {accuracy, location})
+        }
+        function error(error) {
+          console.log(`ERROR(${error.code}): ${error.message}`)
+        }
+        const promise = Promise.resolve(navigator.geolocation.getCurrentPosition(success, error, options))
+        }
+      }
+      else {
+        axios({
+          method: 'post',
+          url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
+          data: {
+            considerIp: 'true'
+          }
+        })
+          .then((response) => {
+          /* eslint-disable */
+            console.log('response_axios_googleAPI', response)
+            console.log('response_statusText', response.statusText)
+            context.store.dispatch('setMessage', response.statusText)
+            context.store.dispatch('setMapPosition', response.data)
+          })
+          .catch((error) => {
+            console.log ('error_axios_googleAPIwelcomePage', error)
+          })
+      }
+      await axios
+        .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + context.store.getters.loadedMapPosition.lng + '&lat=' + context.store.getters.loadedMapPosition.lat + '&accept-language=en', {})
+        .then((response) => {
+          /* eslint-disable */
+          console.log('response_GET_cityfinder', response)
+          context.store.dispatch('setLocation', response.data)
+        })
+        .catch((error) => {
+          console.log('error_GET_cityfinder', error)
+        })
+        axios ({
+          method: 'post',
+          url: process.env.serverUrl + '/edit/location',
+          data: {
+            location: {
+              accuracy: context.store.getters.loadedMapPosition.accuracy,
+              lat: context.store.getters.loadedMapPosition.lat,
+              lng: context.store.getters.loadedMapPosition.lng,
+              country: context.store.getters.loadedLocation.country,
+              city: context.store.getters.loadedLocation.city,
+              district: context.store.getters.loadedLocation.district
+            }
+          },
+          headers: {
+            'Authorization': 'Bearer ' + context.store.getters.token
+          }
       })
         .then((response) => {
         /* eslint-disable */
-          console.log('response_axios_googleAPI', response)
-          console.log('response_statusText', response.statusText)
-          context.store.dispatch('setMessage', response.statusText)
-          context.store.dispatch('setMapPosition', response.data)
-          axios
-            .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + response.data.location.lng + '&lat=' + response.data.location.lat, {
-              headers: {
-                Authorization: 'Bearer ' + context.store.getters.token
-              }
-            })
-            .then((response) => {
-              /* eslint-disable */
-              console.log('response_GET_cityfinder', response)
-              context.store.dispatch('setLocation', response.data)
-              axios.post({
-                method: 'post',
-                // url: process.env.serverUrl + '/edit/location',
-                url: 'http://10.12.5.2:8080/api/edit/location',
-                // url: '/t/bd05h-1581710318/post',
-                data: {
-                  location: {
-                    accuracy: context.store.getters.loadedMapPosition.accuracy,
-                    lat: context.store.getters.loadedMapPosition.lat,
-                    lng: context.store.getters.loadedMapPosition.lng,
-                    country: context.store.getters.loadedLocation.country,
-                    city: context.store.getters.loadedLocation.city,
-                    district: context.store.getters.loadedLocation.district
-                  }
-                // },
-                // headers: {
-                //   'Authorization': 'Bearer ' + context.store.getters.token
-                }
-              })
-                .then((response) => {
-                /* eslint-disable */
-                  console.log('response_POST_edit/location', response)
-                })
-                .catch((error) => {
-                  console.log ('error_POST_edit/location', error)
-                })
-            })
-            .catch((error) => {
-              console.log('error_GET_cityfinder', error)
-            })
-          // this.$router.push('/')
+          console.log('response_axios_loadedMapPosition', response)
         })
         .catch((error) => {
-          console.log ('error_axios_googleAPIwelcomePage', error)
+          console.log ('error_axios_loadedMapPosition', error)
         })
-      return {
-        geoloc
-      }
-    }
   }
+    //   const geoloc = await axios({
+    //     method: 'post',
+    //     url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
+    //     data: {
+    //       considerIp: 'true'
+    //     }
+    //   })
+    //     .then((response) => {
+    //     /* eslint-disable */
+    //       console.log('response_axios_googleAPI', response)
+    //       console.log('response_statusText', response.statusText)
+    //       context.store.dispatch('setMessage', response.statusText)
+    //       context.store.dispatch('setMapPosition', response.data)
+    //       axios
+    //         .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + response.data.location.lng + '&lat=' + response.data.location.lat, {
+    //           headers: {
+    //             Authorization: 'Bearer ' + context.store.getters.token
+    //           }
+    //         })
+    //         .then((response) => {
+    //           /* eslint-disable */
+    //           console.log('response_GET_cityfinder', response)
+    //           context.store.dispatch('setLocation', response.data)
+    //           axios.post({
+    //             method: 'post',
+    //             // url: process.env.serverUrl + '/edit/location',
+    //             url: 'http://10.12.5.2:8080/api/edit/location',
+    //             // url: '/t/bd05h-1581710318/post',
+    //             data: {
+    //               location: {
+    //                 accuracy: context.store.getters.loadedMapPosition.accuracy,
+    //                 lat: context.store.getters.loadedMapPosition.lat,
+    //                 lng: context.store.getters.loadedMapPosition.lng,
+    //                 country: context.store.getters.loadedLocation.country,
+    //                 city: context.store.getters.loadedLocation.city,
+    //                 district: context.store.getters.loadedLocation.district
+    //               }
+    //             // },
+    //             // headers: {
+    //             //   'Authorization': 'Bearer ' + context.store.getters.token
+    //             }
+    //           })
+    //             .then((response) => {
+    //             /* eslint-disable */
+    //               console.log('response_POST_edit/location', response)
+    //             })
+    //             .catch((error) => {
+    //               console.log ('error_POST_edit/location', error)
+    //             })
+    //         })
+    //         .catch((error) => {
+    //           console.log('error_GET_cityfinder', error)
+    //         })
+    //       // this.$router.push('/')
+    //     })
+    //     .catch((error) => {
+    //       console.log ('error_axios_googleAPIwelcomePage', error)
+    //     })
+    //   return {
+    //     geoloc
+    //   }
+    // }
 }
 </script>
 
