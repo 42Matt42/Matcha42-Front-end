@@ -1,8 +1,5 @@
 <template>
   <div>
-    pop-up:<br>
-    {{ serverMessage }}
-    <br><br>
     checker:<br>
     {{ checker }}
     <div v-if="checker === true">

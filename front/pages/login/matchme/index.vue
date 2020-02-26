@@ -1,8 +1,5 @@
 <template>
   <div>
-    pop-up:<br>
-    {{ serverMessage }}
-    <br><br>
     <div>
       <br>
       <v-container

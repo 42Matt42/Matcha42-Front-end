@@ -1,8 +1,5 @@
 <template>
   <div>
-    pop-up:<br>
-    {{ serverMessage }}
-    <br><br>
     <div>
       <br><v-divider /><br>
       <v-container fluid>
@@ -160,7 +157,7 @@
         </v-card-text>
         <v-card-text class="text--primary">
           <div>&nbsp;</div>
-          <div>Location {{ geoLoc }}</div>
+          <div>Location {{ loadedLocation }}</div>
         </v-card-text>
       </v-card>
     </div>
@@ -191,8 +188,8 @@ export default {
     token () {
       return this.$store.getters.token
     },
-    geoLoc () {
-      return this.$store.getters.geoLoc
+    loadedLocation () {
+      return this.$store.getters.loadedLocation
     }
   },
   async asyncData (context) {

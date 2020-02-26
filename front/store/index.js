@@ -9,7 +9,7 @@ const createStore = () => {
     state: {
       serverMessage: 'default',
       token: null,
-      geoLoc: {},
+      loadedMapPosition: {},
       loadedLocation: {},
       loadedUsers: [],
       loadedLikes: [],
@@ -34,7 +34,7 @@ const createStore = () => {
         state.token = null
         state.serverMessage = null
         state.checker = false
-        state.geoLoc = {}
+        state.loadedMapPosition = {}
         state.loadedLocation = {}
         state.loadedLikes = []
         state.loadedViews = []
@@ -61,10 +61,10 @@ const createStore = () => {
       setSearchProfile (state, profile) {
         state.loadedSearchProfile = profile
       },
-      setGeoLoc (state, googleloc) {
-        state.geoLoc.accuracy = googleloc.accuracy
-        state.geoLoc.lat = googleloc.location.lat.toFixed(7)
-        state.geoLoc.lng = googleloc.location.lng.toFixed(7)
+      setMapPosition (state, geoloc) {
+        state.loadedMapPosition.accuracy = geoloc.accuracy
+        state.loadedMapPosition.lat = geoloc.location.lat.toFixed(7)
+        state.loadedMapPosition.lng = geoloc.location.lng.toFixed(7)
       },
       setLocation (state, openstreetmap) {
         state.loadedLocation.country = openstreetmap.address.country
@@ -112,8 +112,8 @@ const createStore = () => {
       setUsername (vuexContext, username) {
         vuexContext.commit('setUsername', username)
       },
-      setGeoLoc (vuexContext, googleloc) {
-        vuexContext.commit('setGeoLoc', googleloc)
+      setMapPosition (vuexContext, geoloc) {
+        vuexContext.commit('setMapPosition', geoloc)
       },
       setLocation (vuexContext, location) {
         vuexContext.commit('setLocation', location)
@@ -189,8 +189,8 @@ const createStore = () => {
       username (state) {
         return state.loadedUsers.username
       },
-      geoLoc (state) {
-        return state.geoLoc
+      loadedMapPosition (state) {
+        return state.loadedMapPosition
       },
       loadedLocation(state) {
         return state.loadedLocation

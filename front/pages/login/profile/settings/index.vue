@@ -1,8 +1,5 @@
 <template>
   <div>
-    pop-up:<br>
-    {{ serverMessage }}
-    <br><br>
     <div>
       <br>
       <v-container
@@ -199,7 +196,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   middleware: 'profileComplete',
@@ -299,27 +296,27 @@ export default {
       }
     }
     },
-    async asyncData (context) {
-      const usersettings = await axios
-        .get(process.env.serverUrl + '/users/user', {
-          headers: {
-            Authorization: 'Bearer ' + context.app.store.getters.token
-          }
-        })
-        .then((response) => {
-          /* eslint-disable */
-          console.log('response_async_settings', response)
-          context.store.dispatch('setUserData', response.data.userdata)
-          context.store.dispatch('setMessage', response.client)
-        })
-        .catch((error) => {
-          console.log('error_async_settings', error)
-          console.log('error_client', error.response.data.client)
-          context.store.dispatch('setMessage', error.response.data.client)
-        })
-      return {
-        usersettings
-      }
-  }
+    // async asyncData (context) {
+    //   const usersettings = await axios
+    //     .get(process.env.serverUrl + '/users/user', {
+    //       headers: {
+    //         Authorization: 'Bearer ' + context.app.store.getters.token
+    //       }
+    //     })
+    //     .then((response) => {
+    //       /* eslint-disable */
+    //       console.log('response_async_settings', response)
+    //       context.store.dispatch('setUserData', response.data.userdata)
+    //       context.store.dispatch('setMessage', response.client)
+    //     })
+    //     .catch((error) => {
+    //       console.log('error_async_settings', error)
+    //       console.log('error_client', error.response.data.client)
+    //       context.store.dispatch('setMessage', error.response.data.client)
+    //     })
+    //   return {
+    //     usersettings
+    //   }
+  // }
 }
 </script>

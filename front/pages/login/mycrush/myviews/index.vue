@@ -1,8 +1,5 @@
 <template>
   <div>
-    pop-up:<br>
-    {{ serverMessage }}
-    <br>
     loadedViews:
     {{ loadedViews }}
     <br><br>
@@ -10,7 +7,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 // import moment from 'moment'
 
 export default {
@@ -30,28 +27,28 @@ export default {
     token () {
       return this.$store.getters.token
     }
-  },
-  async asyncData (context) {
-    const myViews = await axios
-      .get(process.env.serverUrl + '/social/view', {
-        headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
-        }
-      })
-      .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_view', response)
-        context.store.dispatch('setViews', response.data.views)
-        context.store.dispatch('setMessage', response.client)
-      })
-      .catch((error) => {
-        console.log('error_GET_view', error)
-        console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
-      })
-    return {
-      myViews
-    }
+  // },
+  // async asyncData (context) {
+  //   const myViews = await axios
+  //     .get(process.env.serverUrl + '/social/view', {
+  //       headers: {
+  //         Authorization: 'Bearer ' + context.app.store.getters.token
+  //       }
+  //     })
+  //     .then((response) => {
+  //       /* eslint-disable */
+  //       console.log('response_GET_view', response)
+  //       context.store.dispatch('setViews', response.data.views)
+  //       context.store.dispatch('setMessage', response.client)
+  //     })
+  //     .catch((error) => {
+  //       console.log('error_GET_view', error)
+  //       console.log('error_client', error.response.data.client)
+  //       context.store.dispatch('setMessage', error.response.data.client)
+  //     })
+  //   return {
+  //     myViews
+  //   }
   }
 }
 </script>

@@ -224,6 +224,26 @@
           background-repeat: no-repeat;
         "
       >
+        <div class="text-center ma-2">
+          <v-snackbar
+            v-model="snackbar"
+            :timeout="timeoutDuration"
+            top
+            right
+            color="purple accent-3"
+          >
+            <div class="font-italic font-weight-medium">
+              Notification:&nbsp;{{ serverMessage }}
+            </div>
+            <v-btn
+              @click="snackbar = false"
+              color="purple lighten-5"
+              text
+            >
+              Close
+            </v-btn>
+          </v-snackbar>
+        </div>
         <nuxt />
         <!-- <v-row
           :src="`https://randomuser.me/api/portraits/women/${item.picture}.jpg`"
@@ -267,7 +287,9 @@ export default {
   },
   data: () => ({
     drawer: null,
+    snackbar: true,
     searchUsername: '',
+    timeoutDuration: 4242,
     iLogin: [
       { icon: 'mdi-home', text: 'Home', url: '/' },
       { icon: 'mdi-duck', text: 'Match me', url: '/login/matchme' },

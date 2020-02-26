@@ -14,10 +14,6 @@
       <div class="overline display-2 text-center">
         <br><br><br><br>Let's find The One ~~<br>
       </div>
-      <br><br>
-      pop-up:<br>
-      {{ serverMessage }}
-      <br><br>
     </v-container>
   </section>
 </template>
@@ -34,15 +30,15 @@ export default {
     serverMessage () {
       return this.$store.getters.serverMessage
     },
-    geoLoc () {
-      return this.$store.getters.geoLoc
+    loadedMapPosition () {
+      return this.$store.getters.loadedMapPosition
     },
     loadedLocation () {
       return this.$store.getters.loadedLocation
     }
   },
   async asyncData (context) {
-    if (context.store.getters.geoLoc) {
+    if (context.store.getters.loadedMapPosition) {
       /* eslint-disable */
       console.log('context', context)
       // if (context.store.getters.token) {
@@ -68,7 +64,7 @@ export default {
           console.log('response_axios_googleAPI', response)
           console.log('response_statusText', response.statusText)
           context.store.dispatch('setMessage', response.statusText)
-          context.store.dispatch('setGeoLoc', response.data)
+          context.store.dispatch('setMapPosition', response.data)
           axios
             .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + response.data.location.lng + '&lat=' + response.data.location.lat, {
               headers: {
@@ -86,9 +82,9 @@ export default {
                 // url: '/t/bd05h-1581710318/post',
                 data: {
                   location: {
-                    accuracy: context.store.getters.geoLoc.accuracy,
-                    lat: context.store.getters.geoLoc.lat,
-                    lng: context.store.getters.geoLoc.lng,
+                    accuracy: context.store.getters.loadedMapPosition.accuracy,
+                    lat: context.store.getters.loadedMapPosition.lat,
+                    lng: context.store.getters.loadedMapPosition.lng,
                     country: context.store.getters.loadedLocation.country,
                     city: context.store.getters.loadedLocation.city,
                     district: context.store.getters.loadedLocation.district
