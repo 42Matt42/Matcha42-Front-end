@@ -42,13 +42,12 @@ export default {
       /* eslint-disable */
       console.log('context', context)
       // let promise = new Promise((resolve, reject) => {
-      if ("geolocation" in navigator) {
         const options = {
           enableHighAccuracy: true,
           timeout: 20000,
           maximumAge: 100000
         }
-        function success(position) {
+        await function success(position) {
           const userAcceptsGeoloc = position.coords
           let location = {}
           console.log('context: ', context)
@@ -63,28 +62,25 @@ export default {
         function error(error) {
           console.log(`ERROR(${error.code}): ${error.message}`)
         }
-        const promise = Promise.resolve(navigator.geolocation.getCurrentPosition(success, error, options))
+        await navigator.geolocation.getCurrentPosition(success, error, options)
+      }
+      await axios({
+        method: 'post',
+        url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
+        data: {
+          considerIp: 'true'
         }
-      }
-      else {
-        axios({
-          method: 'post',
-          url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
-          data: {
-            considerIp: 'true'
-          }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_axios_googleAPI', response)
+          console.log('response_statusText', response.statusText)
+          context.store.dispatch('setMessage', response.statusText)
+          context.store.dispatch('setMapPosition', response.data)
         })
-          .then((response) => {
-          /* eslint-disable */
-            console.log('response_axios_googleAPI', response)
-            console.log('response_statusText', response.statusText)
-            context.store.dispatch('setMessage', response.statusText)
-            context.store.dispatch('setMapPosition', response.data)
-          })
-          .catch((error) => {
-            console.log ('error_axios_googleAPIwelcomePage', error)
-          })
-      }
+        .catch((error) => {
+          console.log ('error_axios_googleAPIwelcomePage', error)
+        })
       await axios
         .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + context.store.getters.loadedMapPosition.lng + '&lat=' + context.store.getters.loadedMapPosition.lat + '&accept-language=en', {})
         .then((response) => {
