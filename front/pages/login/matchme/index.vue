@@ -32,7 +32,12 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="6">
+              <v-col cols="1">
+                <v-icon class="hidden-xs-only" right large>
+                  mdi-flower
+                </v-icon>
+              </v-col>
+              <v-col cols="10">
                 <v-range-slider
                   :value="ageValue"
                   :rules="ageRules"
@@ -43,26 +48,36 @@
                   track-color="purple lighten-3"
                   min="18"
                   max="100"
-                  label="Target age"
+                  label="Age"
                 />
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="6">
+              <v-col cols="1">
+                <v-icon class="hidden-xs-only" right large>
+                  mdi-map-marker-radius
+                </v-icon>
+              </v-col>
+              <v-col cols="10">
                 <v-slider
                   v-model="proximity"
                   :thumb-size="34"
                   :rules="distanceRules"
                   thumb-label="always"
                   thumb-color="deep-purple accent-3"
-                  label="Distance (in km)"
+                  label="Distance (km)"
                   track-color="purple lighten-3"
                   track-fill-color="purple accent-4"
                 />
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="6">
+              <v-col cols="1">
+                <v-icon class="hidden-xs-only" right large>
+                  mdi-star-circle
+                </v-icon>
+              </v-col>
+              <v-col cols="10">
                 <v-range-slider
                   :value="scoreValue"
                   :rules="scoreRules"
@@ -73,13 +88,19 @@
                   track-color="purple lighten-3"
                   min="0"
                   max="100"
-                  label="Target popularity"
+                  label="Popularity"
                 />
               </v-col>
             </v-row>
             <v-row
               style="background-color: rgba(0, 0, 0, 0)"
+              align="bottom"
             >
+              <v-col cols="1">
+                <v-icon class="hidden-xs-only" right large>
+                  mdi-pound-box
+                </v-icon>
+              </v-col>
               <v-col cols="10">
                 <v-select
                   v-model="tags"
@@ -100,7 +121,10 @@
                   color="blue lighten-4"
                   class="mr-4"
                 >
-                  FIND the one !
+                  FIND the one &nbsp;
+                  <v-icon>
+                    mdi-book-open-page-variant
+                  </v-icon>
                 </v-btn>
               </v-col>
             </v-row>
@@ -171,7 +195,7 @@ export default {
           data: {
             interested_in: this.interested_in,
             proximity: this.proximity,
-            tags: this.hobbies,
+            tags: this.tags,
             popularity: this.scoreValue,
             age: this.ageValue
           },

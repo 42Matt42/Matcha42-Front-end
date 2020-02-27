@@ -268,7 +268,6 @@ export default {
       if (this.$refs.form.validate()) {
         this.$store.dispatch('registerUser', this.checkRegister)
         this.$router.push('/')
-      //   this.snackbar = true
       }
     },
     togglePasswordVisibility () {

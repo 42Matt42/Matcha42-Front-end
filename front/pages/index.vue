@@ -38,32 +38,31 @@ export default {
     }
   },
   async asyncData (context) {
-    if (context.store.getters.loadedMapPosition) {
+    if (!context.store.getters.loadedMapPosition) {
       /* eslint-disable */
       console.log('context', context)
       // let promise = new Promise((resolve, reject) => {
-        const options = {
-          enableHighAccuracy: true,
-          timeout: 20000,
-          maximumAge: 100000
-        }
-        await function success(position) {
-          const userAcceptsGeoloc = position.coords
-          let location = {}
-          console.log('context: ', context)
-          console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
-          console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
-          console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
-          location.lat = userAcceptsGeoloc.latitude
-          location.lng = userAcceptsGeoloc.longitude
-          const accuracy = userAcceptsGeoloc.accuracy
-          context.store.dispatch('setMapPosition', {accuracy, location})
-        }
-        function error(error) {
-          console.log(`ERROR(${error.code}): ${error.message}`)
-        }
-        await navigator.geolocation.getCurrentPosition(success, error, options)
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 100000
       }
+      function success(position) {
+        const userAcceptsGeoloc = position.coords
+        let location = {}
+        console.log('context: ', context)
+        console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
+        console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
+        console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
+        location.lat = userAcceptsGeoloc.latitude
+        location.lng = userAcceptsGeoloc.longitude
+        const accuracy = userAcceptsGeoloc.accuracy
+        context.store.dispatch('setMapPosition', {accuracy, location})
+      }
+      function error(error) {
+        console.log(`ERROR(${error.code}): ${error.message}`)
+      }
+      await navigator.geolocation.getCurrentPosition(success, error, options)
       await axios({
         method: 'post',
         url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
@@ -115,6 +114,7 @@ export default {
         .catch((error) => {
           console.log ('error_axios_loadedMapPosition', error)
         })
+    }
   }
     //   const geoloc = await axios({
     //     method: 'post',

@@ -415,7 +415,8 @@ export default {
         xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)
       }
-      this.$router.push('/login/mypics')
+      this.$store.dispatch('getPictures')
+      // setTimeout(this.$router.push('/login/profile/mypics'), 1200)
     }
   }
 }

@@ -106,7 +106,7 @@
           <v-list-item-title
             class="purple--text text--lighten-5"
           >
-            &nbsp; Love indicator
+            &nbsp; {{ loadedUsers.score }}
           </v-list-item-title>
         </v-list-item>
         <v-list-item link>
@@ -120,37 +120,23 @@
           <v-list-item-title
             class="purple--text text--lighten-5"
           >
-            &nbsp; Location
+            &nbsp; {{ loadedLocation.city }}
           </v-list-item-title>
         </v-list-item>
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon
-              color="purple lighten-5"
-            >
-              mdi-map-marker-radius
-            </v-icon>
-          </v-list-item-action>
+        <v-list-item
+          v-for="item in filterInterestedIn(itemsInterestedIn, loadedUsers.interested_in)"
+          :key="item.id"
+          color="purple--text text--lighten-5"
+        >
+          <v-icon
+            class="purple--text text--lighten-5"
+          >
+            {{ item.icon }}
+          </v-icon>
           <v-list-item-title
             class="purple--text text--lighten-5"
           >
-            &nbsp; Distance (km)
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon
-              color="purple lighten-5"
-            >
-              mdi-human-male-female
-              mdi-human-male
-              mdi-human-female
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title
-            class="purple--text text--lighten-5"
-          >
-            &nbsp; LF W/M
+            &nbsp;LF {{ item.name }}
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -163,18 +149,19 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="purple--text text--lighten-5" />
       <v-row
+        class="hidden-xs-only"
         align="center"
         justify="space-between"
       >
         <v-col cols="2">
           <v-row>
             <v-toolbar-title class="mr-12 align-center">
-              <span class="title purple--text text--lighten-5">&nbsp;&nbsp;Matcha</span>
+              <span class="title purple--text text--lighten-5 hidden-sm-only">&nbsp;&nbsp;Matcha</span>
             </v-toolbar-title>
           </v-row>
         </v-col>
         <!-- <v-spacer /> -->
-        <v-col cols="9">
+        <v-col cols="6">
           <v-row
             justify="end"
           >
@@ -193,16 +180,35 @@
             </v-form>
           </v-row>
         </v-col>
-        <v-col cols="1">
+        <v-col
+          v-if="loadedPictures[0]"
+          cols="2"
+        >
+          <v-row
+            justify="center"
+            align="end"
+            class="fill-height"
+          >
+            <v-avatar
+              tile
+              class="profile indigo accent-4"
+              size="50"
+            >
+              <v-img
+                :src="`data:image/*;base64,${loadedPictures[0]}`"
+              />
+            </v-avatar>
+          </v-row>
+        </v-col>
+        <v-col
+          v-if="token"
+          cols="2"
+        >
           <v-row
             class="purple--text text--lighten-4"
             justify="end"
           >
-            <div
-              v-if="loadedUsers.token"
-            >
-              Connected:&nbsp;&nbsp;
-            </div>
+            Connected:&nbsp;&nbsp;
           </v-row>
           <v-row
             class="purple--text text--lighten-4"
@@ -308,6 +314,11 @@ export default {
       { picture: 48, text: 'Girafe', sex: 'W', age: 28 },
       { picture: 58, text: 'Tortue', sex: 'W', age: 18 },
       { picture: 78, text: 'Colombe', sex: 'W', age: 40 }
+    ],
+    itemsInterestedIn: [
+      { id: 1, name: 'Men & Women', icon: 'mdi-human-male-female' },
+      { id: 2, name: 'Men', icon: 'mdi-human-male' },
+      { id: 3, name: 'Women', icon: 'mdi-human-female' }
     ]
   }),
   computed: {
@@ -319,6 +330,12 @@ export default {
     },
     serverMessage () {
       return this.$store.getters.serverMessage
+    },
+    loadedLocation () {
+      return this.$store.getters.loadedLocation
+    },
+    loadedPictures () {
+      return this.$store.getters.loadedPictures
     }
   },
   methods: {
@@ -327,12 +344,18 @@ export default {
       // console.log('event', event)
       // console.log('this', this)
       this.$router.push('/login/user/' + `${this.searchUsername}`)
+    },
+    filterInterestedIn (item, interested_in) {
+      return item.filter(function (item) {
+        return item.id === interested_in
+      })
     }
+  }
   //   logout () {
   //     this.$store.dispatch('setLogout', null)
   //     this.$router.push('/')
   //   }
-  }
+  // }
 }
 </script>
 

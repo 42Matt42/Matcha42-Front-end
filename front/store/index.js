@@ -147,13 +147,13 @@ const createStore = () => {
           .post(process.env.serverUrl + '/users/update', upUser)
           .then((response) => {
             /* eslint-disable */
-            console.log('response_update', response)
+            console.log('response_updateUser', response)
             vuexContext.commit('setMessage', response.client)
           //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
           })
           /* eslint-disable */
           .catch((error) => {
-            console.log ('error_update', error)
+            console.log ('error_updateUser', error)
             console.log('error_client', error.response.client)
             vuexContext.commit('setMessage', error.response.client)
           })
@@ -174,6 +174,26 @@ const createStore = () => {
       },
       setPictures (vuexContext, pictures) {
         vuexContext.commit('setPictures', pictures)
+      },
+      getPictures (vuexContext) {
+        console.log('vuex', vuexContext)
+        axios
+          .get(process.env.serverUrl + '/users/photos', {
+            headers: {
+              Authorization: 'Bearer ' + vuexContext.getters.token
+            }
+          })
+          .then((response) => {
+            /* eslint-disable */
+            console.log('GET response_store_mypics', response)
+            vuexContext.dispatch('setPictures', response.data.client)
+            vuexContext.dispatch('setMessage', response.statusText)
+          })
+          .catch((error) => {
+            console.log('GET error_store_mypics', error)
+          })
+        return {
+        }
       }
     },
     getters: {
