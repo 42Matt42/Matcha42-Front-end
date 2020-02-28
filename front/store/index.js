@@ -60,6 +60,8 @@ const createStore = () => {
       },
       setSearchProfile (state, profile) {
         state.loadedSearchProfile = profile
+        state.loadedSearchProfile.photos = profile.photos
+        // state.loadedSearchProfile.photos = profile.photos.split(';')
       },
       setMapPosition (state, geoloc) {
         state.loadedMapPosition.accuracy = geoloc.accuracy

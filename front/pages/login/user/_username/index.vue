@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="checker === true">
       <v-container
         class="font-weight-black"
       >
@@ -13,7 +13,7 @@
         max-width="434"
       >
         <v-img
-          :src="`data:image/*;base64,${loadedPictures[1]}`"
+          :src="`data:image/*;base64,${loadedSearchProfile.photos[1]}`"
           aspect-ratio="2"
           class="spacer blue lighten-2"
           no-gutters
@@ -32,7 +32,7 @@
                 size="164"
               >
                 <v-img
-                  :src="`data:image/*;base64,${loadedPictures[0]}`"
+                  :src="`data:image/*;base64,${loadedSearchProfile.photos[0]}`"
                 />
               </v-avatar>
             </v-col>
@@ -44,60 +44,63 @@
               Online
             </v-row>
             <div class="headline font-weight-bold purple--text text--accent-4">
-              {{ loadedUsers.username }}
+              {{ loadedSearchProfile.username }}
             </div>
             <div class="title font-italic purple--text text--accent-3">
               <div
-                v-if="loadedUsers.gender_id === 1"
+                v-if="loadedSearchProfile.gender_id === 1"
               >
-                Male, {{ loadedUsers.age }} y/o
+                Male, {{ loadedSearchProfile.age }} y/o
               </div>
               <div
                 v-else
               >
-                Female, {{ loadedUsers.age }} y/o
+                Female, {{ loadedSearchProfile.age }} y/o
               </div>
             </div>
             <div class="title font-italic purple--text text--accent-3">
               <div
-                v-if="loadedUsers.interested_in === 2"
+                v-if="loadedSearchProfile.interested_in === 2"
               >
                 Interested in Men
               </div>
               <div
-                v-if="loadedUsers.interested_in === 3"
+                v-if="loadedSearchProfile.interested_in === 3"
               >
                 Interested in Women
               </div>
               <div
-                v-if="loadedUsers.interested_in === 1"
+                v-if="loadedSearchProfile.interested_in === 1"
               >
                 Bi
               </div>
             </div>
             <v-row justify="end">
-              Score: {{ loadedUsers.score }}
+              Score: {{ loadedSearchProfile.score }}
             </v-row>
           </div>
         </v-card-subtitle>
 
         <v-card-text class="text--primary">
           <div>&nbsp;</div>
-          <div>{{ loadedUsers.name }} {{ loadedUsers.surname }}</div>
+          <div>{{ loadedSearchProfile.name }} {{ loadedSearchProfile.surname }}</div>
           <div>Anniversary: {{ birthday }}</div>
           <div>&nbsp;</div>
-          <div>Tags: {{ loadedUsers.tags }}</div>
+          <div>Tags: {{ loadedSearchProfile.tags }}</div>
           <div>&nbsp;</div>
-          <div>Description: {{ loadedUsers.bio }}</div>
+          <div>Description: {{ loadedSearchProfile.bio }}</div>
         </v-card-text>
-
         <v-card-text class="text--primary">
-          <div>Country: {{ loadedLocation.country }}</div>
-          <div>City: {{ loadedLocation.city }}</div>
           <div
-            v-if="loadedLocation.district"
+            v-if="loadedSearchProfile.location.country"
           >
-            District: {{ loadedLocation.district }}
+            Country: {{ loadedSearchProfile.location.country }}
+          </div>
+          <div>City: {{ loadedSearchProfile.location.city }}</div>
+          <div
+            v-if="loadedSearchProfile.location.district"
+          >
+            District: {{ loadedLocation.location.district }}
           </div>
         </v-card-text>
 
@@ -144,6 +147,9 @@ export default {
     }
   },
   computed: {
+    checker () {
+      return this.$store.getters.checker
+    },
     serverMessage () {
       return this.$store.getters.serverMessage
     },
@@ -151,7 +157,7 @@ export default {
       return this.$store.getters.loadedUsers
     },
     loadedSearchProfile () {
-      return this.$store.getters.loadedOtherUserProfile
+      return this.$store.getters.loadedSearchProfile
     },
     loadedPictures () {
       return this.$store.getters.loadedPictures
@@ -199,29 +205,32 @@ export default {
           console.log('error_client', error.response.data.client)
           context.store.dispatch('setMessage', error.response.data.client)
         })
+      context.store.dispatch('setChecker', false)
+      const getXuserInfo = await axios
+        .get(process.env.serverUrl + '/users/profile', {
+          params: {
+            username: context.route.params.username
+          },
+          headers: {
+            Authorization: 'Bearer ' + context.app.store.getters.token
+          }
+        })
+        .then((response) => {
+          /* eslint-disable */
+          console.log('response_async_XuserInfo', response)
+          context.store.dispatch('setSearchProfile', response.data.userdata)
+          context.store.dispatch('setMessage', response.statusText)
+          context.store.dispatch('setChecker', true)
+        })
+        .catch((error) => {
+          console.log('error_async_XuserInfo', error)
+          console.log('error_client', error.response.statusText)
+          context.store.dispatch('setMessage', error.response.statusText)
+        })
       return {
-        iView
+        iView,
+        getXuserInfo
       }
-      // const getXuserInfo = await axios
-      //   .get(process.env.serverUrl + '/users/user', {
-      //     headers: {
-      //       Authorization: 'Bearer ' + context.app.store.getters.token
-      //     }
-      //   })
-      //   .then((response) => {
-      //     /* eslint-disable */
-      //     console.log('response_async_XuserInfo', response)
-      //     context.store.dispatch('setSearchProfile', response.data.client)
-      //     context.store.dispatch('setMessage', response.client)
-      //   })
-      //   .catch((error) => {
-      //     console.log('error_async_XuserInfo', error)
-      //     console.log('error_client', error.response.data.client)
-      //     context.store.dispatch('setMessage', error.response.data.client)
-      //   })
-      // return {
-      //   getXuserInfo
-      // }
     }
   },
 

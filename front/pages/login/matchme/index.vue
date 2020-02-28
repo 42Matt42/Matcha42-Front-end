@@ -87,7 +87,7 @@
                   thumb-color="indigo accent-2"
                   track-color="purple lighten-3"
                   min="0"
-                  max="100"
+                  max="1000"
                   label="Popularity"
                 />
               </v-col>
@@ -145,7 +145,7 @@ export default {
       valid: true,
       proximity: 10,
       ageValue: [0, 100],
-      scoreValue: [0, 100],
+      scoreValue: [0, 1000],
       tags: [],
       hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron'],
       ageRules: [
@@ -156,7 +156,7 @@ export default {
       ],
       scoreRules: [
         v => !!v || 'Target popularity required',
-        v => (v[1] < 201) || 'Target popularity max too high',
+        v => (v[1] < 1001) || 'Target popularity max too high',
         v => (v[0] >= 0) || 'Target popularity minimum is 0',
         v => (/[0-9]+/.test(v[0]) && /[0-9]+/.test(v[1])) || 'Use the slider to pick a value'
       ],

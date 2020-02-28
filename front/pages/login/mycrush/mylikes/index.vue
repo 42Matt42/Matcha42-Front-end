@@ -11,16 +11,22 @@
           v-for="(item, i) in filterLikes(loadedLikes)"
           :key="i"
         >
-          <v-icon
-            class="purple--text text--lighten-5"
-          >
-            mdi-heart
-          </v-icon>
-          <v-list-item-title
-            class="purple--text text--lighten-5"
-          >
-            &nbsp;msaubin&nbsp;liked your profile {{ item.loveAge }} ({{ item.date }})
-          </v-list-item-title>
+          <div>
+            <p
+              class="text-xs-right"
+            >
+              <v-icon
+                class="purple--text text--lighten-5"
+              >
+                mdi-heart
+              </v-icon>
+              <v-list-item-title
+                class="purple--text text--lighten-5 text-xs-left"
+              >
+                &nbsp;msaubin&nbsp;liked your profile {{ item.loveAge }} ({{ item.date }})
+              </v-list-item-title>
+            </p>
+          </div>
         </v-list-item>
       </v-list>
     </v-container>

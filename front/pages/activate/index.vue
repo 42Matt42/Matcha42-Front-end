@@ -28,6 +28,7 @@ export default {
     }
   },
   async asyncData (context) {
+    context.store.dispatch('setChecker', false)
     const activated = await axios
       .get(process.env.serverUrl + '/users/activate', {
         params: {
@@ -38,7 +39,7 @@ export default {
         /* eslint-disable */
         console.log('response', response)
         console.log('context', context)
-        context.store.dispatch('setChecker', false)
+        // context.store.dispatch('setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
           context.store.dispatch('setChecker', true)

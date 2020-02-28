@@ -148,7 +148,11 @@
         <div>Description: {{ loadedUsers.bio }}</div>
       </v-card-text>
       <v-card-text class="text--primary">
-        <div>Country: {{ loadedLocation.country }}</div>
+        <div
+          v-if="loadedLocation.country"
+        >
+          Country: {{ loadedLocation.country }}
+        </div>
         <div>City: {{ loadedLocation.city }}</div>
         <div
           v-if="loadedLocation.district"
