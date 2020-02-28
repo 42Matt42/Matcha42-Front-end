@@ -15,6 +15,7 @@ const createStore = () => {
       loadedLikes: [],
       loadedViews: [],
       loadedSearchProfile: [],
+      loadedSuggestions: [],
       loadedPictures: [],
       checker: 'false'
     },
@@ -60,8 +61,8 @@ const createStore = () => {
       },
       setSearchProfile (state, profile) {
         state.loadedSearchProfile = profile
-        state.loadedSearchProfile.photos = profile.photos
-        // state.loadedSearchProfile.photos = profile.photos.split(';')
+        // state.loadedSearchProfile.photos = profile.photos
+        state.loadedSearchProfile.location = JSON.parse(profile.location)
       },
       setMapPosition (state, geoloc) {
         state.loadedMapPosition.accuracy = geoloc.accuracy
@@ -72,6 +73,12 @@ const createStore = () => {
         state.loadedLocation.country = openstreetmap.address.country
         state.loadedLocation.city = openstreetmap.address.city
         state.loadedLocation.district = openstreetmap.address.city_district
+      },
+      setSuggestions (state, suggestions) {
+        state.loadedSuggestions = suggestions.data
+        for (let i = 0; i < parseInt(suggestions.lenght); i++) {
+          state.loadedSuggestions[i].location = JSON.parse(suggestions.data[i].location)
+        }
       },
       setPictures (state, pictures) {
         for (let i = 0; i < pictures.length; i++) {
@@ -174,6 +181,9 @@ const createStore = () => {
       setSearchProfile (vuexContext, profile) {
         vuexContext.commit('setSearchProfile', profile)
       },
+      setSuggestions (vuexContext, suggestions) {
+        vuexContext.commit('setSuggestions', suggestions)
+      },
       setPictures (vuexContext, pictures) {
         vuexContext.commit('setPictures', pictures)
       },
@@ -228,6 +238,9 @@ const createStore = () => {
       },
       loadedSearchProfile (state) {
         return state.loadedSearchProfile
+      },
+      loadedSuggestions (state) {
+        return state.loadedSuggestions
       },
       loadedPictures (state) {
         return state.loadedPictures

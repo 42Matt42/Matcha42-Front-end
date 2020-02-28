@@ -103,8 +103,8 @@
                   row="row"
                   label="My gender is..."
                 >
-                  <v-radio :value="2" label="Female" />
-                  <v-radio :value="1" label="Male" />
+                  <v-radio :value="3" label="Female" />
+                  <v-radio :value="2" label="Male" />
                 </v-radio-group>
               </v-col>
             </v-row>

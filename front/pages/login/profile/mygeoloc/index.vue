@@ -277,14 +277,14 @@ export default {
           method: 'post',
           url: process.env.serverUrl + '/edit/location',
           data: {
-            location: {
+            location: JSON.stringify({
               accuracy: this.loadedMapPosition.accuracy,
               lat: this.loadedMapPosition.lat,
               lng: this.loadedMapPosition.lng,
               country: this.loadedLocation.country,
               city: this.loadedLocation.city,
               district: this.loadedLocation.district
-            }
+            })
           },
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token
