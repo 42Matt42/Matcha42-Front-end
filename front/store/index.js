@@ -127,39 +127,39 @@ const createStore = () => {
           .then((response) => {
             /* eslint-disable */
             console.log('response_register', response)
-            vuexContext.commit('setMessage', response.client)
+            vuexContext.commit('setMessage', response.data.client)
           //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
           })
           /* eslint-disable */
           .catch((error) => {
-            console.log ('error_register', error)
-            console.log('error_data_client', error.response.client)
-            vuexContext.commit('setMessage', error.response.client)
+            console.log ('error_register', error.response)
+            console.log('error_data_client', error.response.data.client)
+            vuexContext.commit('setMessage', error.response.data.client)
           })
         return {
         }
       },
-      updateUser (vuexContext, updatedUser) {
-        const upUser = {
-          ...updatedUser
-        }
-        axios
-          .post(process.env.serverUrl + '/users/update', upUser)
-          .then((response) => {
-            /* eslint-disable */
-            console.log('response_updateUser', response)
-            vuexContext.commit('setMessage', response.client)
-          //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
-          })
-          /* eslint-disable */
-          .catch((error) => {
-            console.log ('error_updateUser', error)
-            console.log('error_client', error.response.client)
-            vuexContext.commit('setMessage', error.response.client)
-          })
-        return {
-        }
-      },
+      // updateUser (vuexContext, updatedUser) {
+      //   const upUser = {
+      //     ...updatedUser
+      //   }
+      //   axios
+      //     .post(process.env.serverUrl + '/users/update', upUser)
+      //     .then((response) => {
+      //       /* eslint-disable */
+      //       console.log('response_updateUser', response)
+      //       vuexContext.commit('setMessage', response.client)
+      //     //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
+      //     })
+      //     /* eslint-disable */
+      //     .catch((error) => {
+      //       console.log ('error_updateUser', error)
+      //       console.log('error_client', error.response.client)
+      //       vuexContext.commit('setMessage', error.response.client)
+      //     })
+      //   return {
+      //   }
+      // },
       setChecker (vuexContext, value) {
         vuexContext.commit('setChecker', value)
       },
@@ -186,11 +186,11 @@ const createStore = () => {
           .then((response) => {
             /* eslint-disable */
             console.log('GET response_store_mypics', response)
-            vuexContext.dispatch('setPictures', response.data.client)
-            vuexContext.dispatch('setMessage', response.statusText)
+            vuexContext.commit('setPictures', response.data.client)
+            vuexContext.commit('setMessage', response.statusText)
           })
           .catch((error) => {
-            console.log('GET error_store_mypics', error)
+            console.log('GET error_store_mypics', error.response)
           })
         return {
         }

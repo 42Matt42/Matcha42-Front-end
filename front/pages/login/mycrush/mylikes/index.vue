@@ -1,51 +1,28 @@
 <template>
   <div>
-    <br><v-divider /><br>
-    <v-container fluid>
-      <v-row>
-        <v-col>
-          <v-row
-            justify="center"
-          >
-            <nuxt-link to="/login/mycrush/mylikes">
-              <v-btn
-                color="deep-purple accent-3"
-                dark
-              >
-                My Likes
-                &nbsp;
-                <v-icon>
-                  mdi-heart
-                </v-icon>
-              </v-btn>
-            </nuxt-link>
-          </v-row>
-        </v-col>
-        <v-col>
-          <v-row
-            justify="center"
-          >
-            <nuxt-link to="/login/mycrush/myviews">
-              <v-btn
-                color="indigo accent-2"
-                dark
-              >
-                My Views
-                &nbsp;
-                <v-icon>
-                  mdi-bullseye-arrow
-                </v-icon>
-              </v-btn>
-            </nuxt-link>
-          </v-row>
-        </v-col>
-      </v-row>
-    </v-container>
-    <br><v-divider /><br>
     <v-container
       class="font-weight-black purple--text text--lighten-5"
     >
-      My crushes
+      Likes
+    </v-container>
+    <v-container style="background-color: transparent">
+      <v-list style="background-color: transparent">
+        <v-list-item
+          v-for="(item, i) in filterLikes(loadedLikes)"
+          :key="i"
+        >
+          <v-icon
+            class="purple--text text--lighten-5"
+          >
+            mdi-heart
+          </v-icon>
+          <v-list-item-title
+            class="purple--text text--lighten-5"
+          >
+            &nbsp;msaubin&nbsp;liked your profile {{ item.loveAge }} ({{ item.date }})
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
     </v-container>
   </div>
 </template>

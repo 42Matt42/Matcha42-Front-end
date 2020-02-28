@@ -145,6 +145,7 @@
           >
             <v-img
               :src="`https://maps.googleapis.com/maps/api/staticmap?center=${loadedMapPosition.lat},${loadedMapPosition.lng}&zoom=14&size=1920x1080&key=AIzaSyBu0mWRiUcEUYjd2YWcrMctTPNynrlGGi4`"
+              v-if="loadedMapPosition.lat && loadedMapPosition.lng"
               max-height="50%"
               max-width="90%"
               aspect-ratio="1.7778"

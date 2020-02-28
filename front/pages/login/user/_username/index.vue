@@ -92,8 +92,13 @@
         </v-card-text>
 
         <v-card-text class="text--primary">
-          <div>&nbsp;</div>
-          <div>Location {{ Location }}</div>
+          <div>Country: {{ loadedLocation.country }}</div>
+          <div>City: {{ loadedLocation.city }}</div>
+          <div
+            v-if="loadedLocation.district"
+          >
+            District: {{ loadedLocation.district }}
+          </div>
         </v-card-text>
 
         <v-card-actions>
@@ -145,6 +150,9 @@ export default {
     loadedUsers () {
       return this.$store.getters.loadedUsers
     },
+    loadedSearchProfile () {
+      return this.$store.getters.loadedOtherUserProfile
+    },
     loadedPictures () {
       return this.$store.getters.loadedPictures
     },
@@ -183,8 +191,8 @@ export default {
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_view', response)
-          console.log('response_statusText', response.client)
-          context.store.dispatch('setMessage', response.client)
+          console.log('response_statusText', response.data.client)
+          context.store.dispatch('setMessage', response.data.client)
         })
         .catch((error) => {
           console.log ('error_POST_view', error)
@@ -194,6 +202,26 @@ export default {
       return {
         iView
       }
+      // const getXuserInfo = await axios
+      //   .get(process.env.serverUrl + '/users/user', {
+      //     headers: {
+      //       Authorization: 'Bearer ' + context.app.store.getters.token
+      //     }
+      //   })
+      //   .then((response) => {
+      //     /* eslint-disable */
+      //     console.log('response_async_XuserInfo', response)
+      //     context.store.dispatch('setSearchProfile', response.data.client)
+      //     context.store.dispatch('setMessage', response.client)
+      //   })
+      //   .catch((error) => {
+      //     console.log('error_async_XuserInfo', error)
+      //     console.log('error_client', error.response.data.client)
+      //     context.store.dispatch('setMessage', error.response.data.client)
+      //   })
+      // return {
+      //   getXuserInfo
+      // }
     }
   },
 

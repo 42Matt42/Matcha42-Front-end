@@ -132,8 +132,6 @@ export default {
         /* eslint-disable */
         console.log('response_password', response)
         console.log('context', context)
-        // const status =
-        //   JSON.parse(response.status)
         context.store.dispatch('setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)

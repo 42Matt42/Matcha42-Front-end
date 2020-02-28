@@ -1,7 +1,5 @@
 <template>
   <div>
-    checker:<br>
-    {{ checker }}
     <div v-if="checker === true">
       <br>
       <br>
@@ -40,19 +38,15 @@ export default {
         /* eslint-disable */
         console.log('response', response)
         console.log('context', context)
-        // const status =
-        //   JSON.parse(response.status)
         context.store.dispatch('setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
           context.store.dispatch('setChecker', true)
           context.store.dispatch('setMessage', response.data.client)
-          // context.store.dispatch('setUsername', context.query.username)
         }
       })
       .catch(function(error) {
         /* eslint-disable */
-        console.log('error', error)
         console.log('error_response', error.response)
         context.store.dispatch('setMessage', error.response.data.client)
       })

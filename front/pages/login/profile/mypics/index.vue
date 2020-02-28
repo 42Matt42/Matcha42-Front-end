@@ -396,14 +396,12 @@ export default {
           if (this.readyState === 4) {
             // eslint-disable-next-line
             console.log('this.status', this.status)
-            const testttt = JSON.parse(this.responseText)
-            // eslint-disable-next-line
-            console.log('parsed this.responseText', testttt)
-            // eslint-disable-next-line
-            // console.log('this.responseText.client', this.responseText.client)
-            // eslint-disable-next-line
-            console.log('self.$store', self.$store)
-            self.$store.dispatch('setMessage', this.responseText.client)
+            if (this.status == '200') {
+              const feedback = JSON.parse(this.responseText)
+              // eslint-disable-next-line
+              console.log('parsed this.responseText', feedback)
+              self.$store.dispatch('setMessage', feedback)
+            }
           }
         })
         xhr.open('POST', process.env.serverUrl + '/users/upload')
@@ -415,8 +413,7 @@ export default {
         xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)
       }
-      this.$store.dispatch('getPictures')
-      // setTimeout(this.$router.push('/login/profile/mypics'), 1200)
+      // setTimeout(() => this.$router.push('/login/profile/mypics', 2800)
     }
   }
 }

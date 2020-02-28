@@ -14,9 +14,7 @@
               >
                 My Pics
                 &nbsp;
-                <v-icon
-                  class="purple--text text--lighten-5"
-                >
+                <v-icon>
                   mdi-camera
                 </v-icon>
               </v-btn>
@@ -34,9 +32,7 @@
               >
                 My geoLoc
                 &nbsp;
-                <v-icon
-                  class="purple--text text--lighten-5"
-                >
+                <v-icon>
                   mdi-compass
                 </v-icon>
               </v-btn>
@@ -54,9 +50,7 @@
               >
                 Settings
                 &nbsp;
-                <v-icon
-                  class="purple--text text--lighten-5"
-                >
+                <v-icon>
                   mdi-settings
                 </v-icon>
               </v-btn>
@@ -163,7 +157,6 @@
         </div>
       </v-card-text>
       <v-carousel
-        touch
         continuous
         height="20vh"
       >
@@ -171,8 +164,8 @@
           v-for="(item,i) in loadedPictures"
           :key="i"
           :src="`data:image/*;base64,${item}`"
-          reverse-transition="fade-transition"
           v-ripple="{ class: `purple--text` }"
+          reverse-transition="fade-transition"
         />
       </v-carousel>
     </v-card>

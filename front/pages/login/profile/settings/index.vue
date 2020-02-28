@@ -196,7 +196,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   middleware: 'profileComplete',
@@ -274,7 +274,7 @@ export default {
             gender_id: this.loadedUsers.gender_id,
             notification: this.loadedUsers.notification,
             interested_in: this.loadedUsers.interested_in,
-            tags: this.loadedUsers.tags
+            tags: this.loadedUsers.tags.toString()
           },
           headers: {
             'Authorization': 'Bearer ' + this.$store.getters.token
@@ -295,28 +295,28 @@ export default {
         this.$router.push('/settings')
       }
     }
-    },
-    // async asyncData (context) {
-    //   const usersettings = await axios
-    //     .get(process.env.serverUrl + '/users/user', {
-    //       headers: {
-    //         Authorization: 'Bearer ' + context.app.store.getters.token
-    //       }
-    //     })
-    //     .then((response) => {
-    //       /* eslint-disable */
-    //       console.log('response_async_settings', response)
-    //       context.store.dispatch('setUserData', response.data.userdata)
-    //       context.store.dispatch('setMessage', response.client)
-    //     })
-    //     .catch((error) => {
-    //       console.log('error_async_settings', error)
-    //       console.log('error_client', error.response.data.client)
-    //       context.store.dispatch('setMessage', error.response.data.client)
-    //     })
-    //   return {
-    //     usersettings
-    //   }
-  // }
+  },
+  async asyncData (context) {
+    const usersettings = await axios
+      .get(process.env.serverUrl + '/users/user', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_async_settings', response)
+        context.store.dispatch('setUserData', response.data.userdata)
+        context.store.dispatch('setMessage', response.client)
+      })
+      .catch((error) => {
+        console.log('error_async_settings', error)
+        console.log('error_client', error.response.data.client)
+        context.store.dispatch('setMessage', error.response.data.client)
+      })
+    return {
+      usersettings
+    }
+  }
 }
 </script>
