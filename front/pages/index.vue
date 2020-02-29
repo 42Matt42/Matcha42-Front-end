@@ -175,18 +175,15 @@ export default {
       location.lng = userAcceptsGeoloc.longitude
       const accuracy = userAcceptsGeoloc.accuracy
       context.store.dispatch('setMapPosition', {accuracy, location})
-      setTimeout(() => context.store.dispatch('setReverseGeoloc'), 500)
-      setTimeout(() => context.store.dispatch('sendGeoloc'), 1000)
+      setTimeout(() => context.store.dispatch('setReverseGeoloc'), 200)
     }
     function error(error) {
       console.log(`ERROR(${error.code}): ${error.message}`)
       context.store.dispatch('setIpGeoloc')
-      setTimeout(() => context.store.dispatch('setReverseGeoloc'), 1000)
-      setTimeout(() => context.store.dispatch('sendGeoloc'), 1500)
     }
-    if ("geolocation" in navigator && context.store.getters.loadedMapPosition) {
-      const geolocPosition = await navigator.geolocation.getCurrentPosition(success, error, options)
-    }
+    // if ("geolocation" in navigator && (!context.store.getters.loadedMapPosition || !context.store.getters.loadedLocation)) {
+    const geolocPosition = await navigator.geolocation.getCurrentPosition(success, error, options)
+    // }
     return {
       // mySuggestions
     }

@@ -39,7 +39,7 @@
               </v-col>
               <v-col cols="10">
                 <v-range-slider
-                  :value="ageValue"
+                  v-model="ageValue"
                   :rules="ageRules"
                   :thumb-size="34"
                   track-fill-color="purple accent-4"
@@ -49,7 +49,14 @@
                   min="18"
                   max="100"
                   label="Age"
-                />
+                >
+                  <v-text-field
+                    :value="ageValue[0]"
+                  />
+                  <v-text-field
+                    :value="ageValue[1]"
+                  />
+                </v-range-slider>
               </v-col>
             </v-row>
             <v-row>
@@ -63,6 +70,7 @@
                   v-model="proximity"
                   :thumb-size="34"
                   :rules="distanceRules"
+                  max="20000"
                   thumb-label="always"
                   thumb-color="deep-purple accent-3"
                   label="Distance (km)"
@@ -79,7 +87,7 @@
               </v-col>
               <v-col cols="10">
                 <v-range-slider
-                  :value="scoreValue"
+                  v-model="scoreValue"
                   :rules="scoreRules"
                   :thumb-size="34"
                   track-fill-color="purple accent-4"
@@ -89,12 +97,18 @@
                   min="0"
                   max="1000"
                   label="Popularity"
-                />
+                >
+                  <v-text-field
+                    :value="scoreValue[0]"
+                  />
+                  <v-text-field
+                    :value="scoreValue[1]"
+                  />
+                </v-range-slider>
               </v-col>
             </v-row>
             <v-row
               style="background-color: rgba(0, 0, 0, 0)"
-              align="bottom"
             >
               <v-col cols="1">
                 <v-icon class="hidden-xs-only" right large>
@@ -132,22 +146,184 @@
         </v-form>
       </div>
     </div>
+    <div v-if="checker === true">
+      <v-row>
+        <v-col>
+          <v-row>
+            <v-range-slider
+              v-model.lazy="filterAge"
+              :thumb-size="32"
+              thumb-label="always"
+              track-fill-color="purple accent-4"
+              thumb-color="indigo accent-2"
+              track-color="purple lighten-3"
+              min="18"
+              max="100"
+              label="Age"
+            >
+              <v-text-field
+                :value="filterAge[0]"
+              />
+              <v-text-field
+                :value="filterAge[1]"
+              />
+            </v-range-slider>
+          </v-row>
+        </v-col>
+        <v-col>
+          <v-row>
+            <v-slider
+              v-model.lazy="filterDistance"
+              :thumb-size="32"
+              :rules="distanceRules"
+              max="20000"
+              thumb-label="always"
+              thumb-color="deep-purple accent-3"
+              label="Distance (km)"
+              track-color="purple lighten-3"
+              track-fill-color="purple accent-4"
+            />
+          </v-row>
+        </v-col>
+        <v-col>
+          <v-row>
+            <v-range-slider
+              v-model="filterScore"
+              :rules="scoreRules"
+              :thumb-size="34"
+              track-fill-color="purple accent-4"
+              thumb-label="always"
+              thumb-color="indigo accent-2"
+              track-color="purple lighten-3"
+              min="0"
+              max="1000"
+              label="Popularity"
+            >
+              <v-text-field
+                :value="filterScore[0]"
+              />
+              <v-text-field
+                :value="filterScore[1]"
+              />
+            </v-range-slider>
+          </v-row>
+        </v-col>
+        <v-col>
+          <v-row>
+            <v-text-field
+              v-model.lazy="filterTags"
+            />
+            <v-select
+              v-model.lazy="filterTags"
+              :items="hobbies"
+              label="Tag"
+              outlined
+            />
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-container
+        v-if="loadedUsers.profile_complete === 1 && token"
+      >
+        <v-carousel
+          :hide-delimiters="true"
+          continuous
+        >
+          <v-carousel-item
+            v-for="(item,i) in filterAdvancedSearch(loadedAdvancedSearch)"
+            :key="i"
+            reverse-transition="fade-transition"
+          >
+            <v-card
+              :hover="true"
+              v-ripple="{ class: `purple--text` }"
+              class="mx-auto"
+              max-width="420"
+            >
+              <v-card-subtitle>
+                <v-row justify="end">
+                  Online&nbsp;
+                </v-row>
+                <div class="headline font-weight-bold purple--text text--accent-4">
+                  {{ item.username }}
+                </div>
+                <div class="title font-italic purple--text text--accent-3">
+                  {{ myGender[item.gender_id - 1] }} AGE y/o
+                </div>
+                <div class="title font-italic purple--text text--accent-3">
+                  Interested in {{ genderLF[item.interested_in - 1] }}
+                </div>
+                <v-row justify="end">
+                  Score: SCORE&nbsp;
+                </v-row>
+                <v-card-text class="purple--text text--lighten-5">
+                  <div>&nbsp;</div>
+                  <div>{{ item.name }} {{ item.surname }}</div>
+                  <div>&nbsp;</div>
+                  <div>Tags: {{ item.hobbies.toString() }}</div>
+                </v-card-text>
+                <v-card-text class="purple--text text--lighten-5">
+                  <div
+                    v-if="item.location.country"
+                  >
+                    Country: {{ item.location.country }}
+                  </div>
+                  <div>City: {{ item.location.city }}</div>
+                  <div
+                    v-if="item.location.district"
+                  >
+                    District: {{ item.location.district }}
+                  </div>
+                  <div>
+                    Distance: {{ item.distance }} km
+                  </div>
+                </v-card-text>
+              </v-card-subtitle>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  @click="love(item.username)"
+                  fab
+                  color="pink lighten-3"
+                  bottom
+                  left
+                  absolute
+                  x-large
+                >
+                  <v-icon>mdi-cards-heart</v-icon>
+                </v-btn>
+                <v-btn
+                  color="purple"
+                  text
+                />
+              </v-card-actions>
+            </v-card>
+          </v-carousel-item>
+        </v-carousel>
+      </v-container>
+    </div>
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
   data () {
     return {
       valid: true,
-      proximity: 10,
-      ageValue: [0, 100],
+      ageValue: [18, 100],
+      proximity: 4200,
       scoreValue: [0, 1000],
       tags: [],
       hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron'],
+      myGender: ['Bi', 'Man', 'Woman'],
+      genderLF: ['Men & Women', 'Men', 'Women'],
+      filterAge: [18, 100],
+      filterDistance: 20000,
+      filterScore: [0, 1000],
+      filterTags: '',
       ageRules: [
         v => !!v || 'Target age required',
         v => (v[1] < 101) || 'Target age too high',
@@ -162,7 +338,7 @@ export default {
       ],
       distanceRules: [
         v => !!v || 'Target distance required',
-        v => (v < 101) || 'Distance max is 100 km',
+        v => (v < 20001) || 'Distance max is 20 000 km',
         v => (v >= 0) || 'Distance minimum is 0 km',
         v => /[0-9]+/.test(v) || 'Use the slider to pick a value'
       ],
@@ -182,45 +358,82 @@ export default {
     },
     token () {
       return this.$store.getters.token
+    },
+    checker () {
+      return this.$store.getters.checker
+    },
+    loadedAdvancedSearch () {
+      return this.$store.getters.loadedAdvancedSearch
     }
   },
   methods: {
     matchme () {
       if (this.$refs.form.validate()) {
-        /* eslint-disable */
-        console.log('store', this.$store)
-        this.$axios ({
-          method: 'post',
-          url: process.env.serverUrl + '/matchme',
-          data: {
-            interested_in: this.interested_in,
-            proximity: this.proximity,
-            tags: this.tags,
-            popularity: this.scoreValue,
-            age: this.ageValue
-          },
-          headers: {
-            'Authorization': 'Bearer ' + this.$store.getters.token
-          }
-        })
+        this.$store.dispatch('setChecker', false)
+        axios
+          .get(process.env.serverUrl + '/social/search', {
+            params: {
+              age: this.ageValue.toString(),
+              popularity: this.scoreValue.toString(),
+              distance: this.proximity,
+              tags: this.tags.toString(),
+              gender: this.loadedUsers.interested_in
+            },
+            headers: {
+              Authorization: 'Bearer ' + this.$store.getters.token
+            }
+          })
           .then((response) => {
-          /* eslint-disable */
-            console.log('response_axios_matchme', response)
-            console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
-            this.$router.push('/')
+            /* eslint-disable */
+            console.log('response_GET_advancedSearch', response)
+            this.$store.dispatch('setAdvancedSearch', response.data.client)
+            this.$store.dispatch('setMessage', response.statusText)
+            this.$store.dispatch('setChecker', true)
           })
           .catch((error) => {
-            console.log ('error_axios_matchme', error)
-            console.log('error_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
+            console.log('error_GET_advancedSearch', error)
+            console.log('error_client', error.response.statusText)
+            this.$store.dispatch('setMessage', error.response.statusText)
           })
-        // this.$router.push('/users')
       }
     },
-    scoreIcon (value) {
-      return this.scoreIcons[value]
+    filterAdvancedSearch (item) {
+      self = this
+      return item.filter(function (item) {
+        if (self.filterDistance) {
+          // item.distance <= self.filterDistance && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
+          return item.distance <= self.filterDistance && item.hobbies.includes(self.filterTags)// && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
+          // filterTags
+        }
+      })
     },
+    love (target) {
+      // eslint-disable-next-line
+      console.log('thisTEST', this)
+      this.store.dispatch('setChecker', false)
+      this.$axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/like',
+        data: {
+          username: target
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters.token
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_like', response)
+          console.log('response_client', response.client)
+          this.$store.dispatch('setMessage', response.client)
+          context.store.dispatch('setChecker', true)
+        })
+        .catch((error) => {
+          console.log ('error_POST_like', error)
+          console.log('error_client', error.response.data.client)
+          this.$store.dispatch('setMessage', error.response.data.client)
+        })
+    }
   }
 }
 </script>

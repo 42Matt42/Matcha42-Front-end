@@ -16,6 +16,7 @@ const createStore = () => {
       loadedViews: [],
       loadedSearchProfile: [],
       loadedSuggestions: [],
+      loadedAdvancedSearch: [],
       loadedPictures: [],
       checker: 'false'
     },
@@ -40,6 +41,8 @@ const createStore = () => {
         state.loadedLikes = []
         state.loadedViews = []
         state.loadedSearchProfile = []
+        state.loadedSuggestions = []
+        state.loadedAdvancedSearch = []
       },
       registerUser (state, user) {
         state.loadedUsers.registered = user
@@ -78,6 +81,12 @@ const createStore = () => {
         state.loadedSuggestions = suggestions.data
         for (let i = 0; i < parseInt(suggestions.lenght); i++) {
           state.loadedSuggestions[i].location = JSON.parse(suggestions.data[i].location)
+        }
+      },
+      setAdvancedSearch (state, results) {
+        state.loadedAdvancedSearch = results.data
+        for (let i = 0; i < parseInt(results.lenght); i++) {
+          state.loadedAdvancedSearch[i].location = JSON.parse(results.data[i].location)
         }
       },
       setPictures (state, pictures) {
@@ -142,6 +151,7 @@ const createStore = () => {
             console.log('response_axios_googleAPI', response)
             console.log('response_statusText', response.statusText)
             vuexContext.commit('setMapPosition', response.data)
+            vuexContext.dispatch('setReverseGeoloc')
           })
           .catch((error) => {
             console.log ('error_axios_googleAPIwelcomePage', error)
@@ -154,6 +164,7 @@ const createStore = () => {
             /* eslint-disable */
             console.log('response_GET_cityfinder', response)
             vuexContext.dispatch('setLocation', response.data)
+            vuexContext.dispatch('sendGeoloc')
           })
           .catch((error) => {
             console.log('error_GET_cityfinder', error)
@@ -242,6 +253,9 @@ const createStore = () => {
       setSuggestions (vuexContext, suggestions) {
         vuexContext.commit('setSuggestions', suggestions)
       },
+      setAdvancedSearch (vuexContext, results) {
+        vuexContext.commit('setAdvancedSearch', results)
+      },
       setPictures (vuexContext, pictures) {
         vuexContext.commit('setPictures', pictures)
       },
@@ -299,6 +313,9 @@ const createStore = () => {
       },
       loadedSuggestions (state) {
         return state.loadedSuggestions
+      },
+      loadedAdvancedSearch (state) {
+        return state.loadedAdvancedSearch
       },
       loadedPictures (state) {
         return state.loadedPictures

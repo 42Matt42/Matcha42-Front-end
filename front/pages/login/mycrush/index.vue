@@ -217,7 +217,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
@@ -242,31 +242,31 @@ export default {
       return this.$store.getters.token
     }
   },
-  // async asyncData (context) {
-  //   const mySuggestions = await axios
-  //     .get(process.env.serverUrl + '/social/potential', {
-  //       params: {
-  //         number: 42
-  //       },
-  //       headers: {
-  //         Authorization: 'Bearer ' + context.app.store.getters.token
-  //       }
-  //     })
-  //     .then((response) => {
-  //       /* eslint-disable */
-  //       console.log('response_GET_Suggestions', response)
-  //       context.store.dispatch('setSuggestions', response.data.client)
-  //       context.store.dispatch('setMessage', response.statusText)
-  //     })
-  //     .catch((error) => {
-  //       console.log('error_GET_Suggestions', error)
-  //       console.log('error_client', error.response.statusText)
-  //       context.store.dispatch('setMessage', error.response.statusText)
-  //     })
-  //   return {
-  //     mySuggestions
-  //   }
-  // },
+  async asyncData (context) {
+    const mySuggestions = await axios
+      .get(process.env.serverUrl + '/social/potential', {
+        params: {
+          number: 42
+        },
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_GET_Suggestions', response)
+        context.store.dispatch('setSuggestions', response.data.client)
+        context.store.dispatch('setMessage', response.statusText)
+      })
+      .catch((error) => {
+        console.log('error_GET_Suggestions', error)
+        console.log('error_client', error.response.statusText)
+        context.store.dispatch('setMessage', error.response.statusText)
+      })
+    return {
+      mySuggestions
+    }
+  },
   methods: {
     filterSuggest (suggest) {
       return suggest.filter(function (suggest) {
