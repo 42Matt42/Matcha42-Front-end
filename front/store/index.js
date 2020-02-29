@@ -127,6 +127,64 @@ const createStore = () => {
       setLocation (vuexContext, location) {
         vuexContext.commit('setLocation', location)
       },
+      setIpGeoloc (vuexContext) {
+        // eslint-disable-next-line
+        console.log('vuexContext', vuexContext)
+        axios({
+          method: 'post',
+          url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
+          data: {
+            considerIp: 'true'
+          }
+        })
+          .then((response) => {
+          /* eslint-disable */
+            console.log('response_axios_googleAPI', response)
+            console.log('response_statusText', response.statusText)
+            vuexContext.commit('setMapPosition', response.data)
+          })
+          .catch((error) => {
+            console.log ('error_axios_googleAPIwelcomePage', error)
+        })
+      },
+      setReverseGeoloc (vuexContext) {
+        return axios
+          .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + vuexContext.getters.loadedMapPosition.lng + '&lat=' + vuexContext.getters.loadedMapPosition.lat + '&accept-language=en', {})
+          .then((response) => {
+            /* eslint-disable */
+            console.log('response_GET_cityfinder', response)
+            vuexContext.dispatch('setLocation', response.data)
+          })
+          .catch((error) => {
+            console.log('error_GET_cityfinder', error)
+          })
+      },
+      sendGeoloc (vuexContext) {
+        axios ({
+          method: 'post',
+          url: process.env.serverUrl + '/edit/location',
+          data: {
+            location: JSON.stringify({
+              accuracy: vuexContext.getters.loadedMapPosition.accuracy,
+              lat: vuexContext.getters.loadedMapPosition.lat,
+              lng: vuexContext.getters.loadedMapPosition.lng,
+              country: vuexContext.getters.loadedLocation.country,
+              city: vuexContext.getters.loadedLocation.city,
+              district: vuexContext.getters.loadedLocation.district
+            })
+          },
+          headers: {
+            'Authorization': 'Bearer ' + vuexContext.getters.token
+          }
+        })
+          .then((response) => {
+          /* eslint-disable */
+            console.log('response_axios_loadedMapPosition', response)
+          })
+          .catch((error) => {
+            console.log ('error_axios_loadedMapPosition', error)
+          })
+      },
       registerUser (vuexContext, user) {
         const createdUser = {
           ...user

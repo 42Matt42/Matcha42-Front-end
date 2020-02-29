@@ -205,7 +205,7 @@
           cols="2"
         >
           <v-row
-            class="purple--text text--lighten-4"
+            class="purple--text text--lighten-4 hidden-sm-only"
             justify="end"
           >
             Connected:&nbsp;&nbsp;

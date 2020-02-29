@@ -99,42 +99,19 @@
       <v-card-subtitle>
         <div>
           <v-row justify="end">
-            Online
+            Online&nbsp;
           </v-row>
           <div class="headline font-weight-bold purple--text text--accent-4">
             {{ loadedUsers.username }}
           </div>
           <div class="title font-italic purple--text text--accent-3">
-            <div
-              v-if="loadedUsers.gender_id === 1"
-            >
-              Male, {{ loadedUsers.age }} y/o
-            </div>
-            <div
-              v-else
-            >
-              Female, {{ loadedUsers.age }} y/o
-            </div>
+            {{ myGender[loadedUsers.gender_id - 1] }} {{ loadedUsers.age }} y/o
           </div>
           <div class="title font-italic purple--text text--accent-3">
-            <div
-              v-if="loadedUsers.interested_in === 2"
-            >
-              Interested in Men
-            </div>
-            <div
-              v-if="loadedUsers.interested_in === 3"
-            >
-              Interested in Women
-            </div>
-            <div
-              v-else
-            >
-              Bi
-            </div>
+            Interested in {{ genderLF[loadedUsers.interested_in - 1] }}
           </div>
           <v-row justify="end">
-            Score: {{ loadedUsers.score }}
+            Score: {{ loadedUsers.score }}&nbsp;
           </v-row>
         </div>
       </v-card-subtitle>
@@ -143,7 +120,7 @@
         <div>{{ loadedUsers.name }} {{ loadedUsers.surname }}</div>
         <div>Anniversary: {{ birthday }}</div>
         <div>&nbsp;</div>
-        <div>Tags: {{ loadedUsers.tags }}</div>
+        <div>Tags: {{ loadedUsers.tags.toString() }}</div>
         <div>&nbsp;</div>
         <div>Description: {{ loadedUsers.bio }}</div>
       </v-card-text>
@@ -184,7 +161,9 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
-      valid: true
+      valid: true,
+      myGender: ['Bi', 'Man', 'Woman'],
+      genderLF: ['Men & Women', 'Men', 'Women']
     }
   },
   computed: {
@@ -233,26 +212,5 @@ export default {
       usermypics
     }
   },
-  // async asyncData (context) {
-  //   let [birthday, gender] = await Promise.all([
-  //     birthday = moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM'),
-  //     gender = context.store.getters.loadedUsers.gender_id
-  //   ])
-  //   return {
-  //     birthday: birthday,
-  //     gender: gender
-  //   }
-  // },
-  // methods: {
-  //   strGender (gender) {
-  //     if (gender === 1) {
-  //       return 'Male'
-  //     }
-  //     if (gender === 2) {
-  //       return 'Female'
-  //     }
-  //     return 'Undefined'
-  //   }
-  // }
 }
 </script>

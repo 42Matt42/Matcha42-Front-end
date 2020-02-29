@@ -41,42 +41,19 @@
         <v-card-subtitle>
           <div>
             <v-row justify="end">
-              Online
+              Online&nbsp;
             </v-row>
             <div class="headline font-weight-bold purple--text text--accent-4">
               {{ loadedSearchProfile.username }}
             </div>
             <div class="title font-italic purple--text text--accent-3">
-              <div
-                v-if="loadedSearchProfile.gender_id === 1"
-              >
-                Male, {{ loadedSearchProfile.age }} y/o
-              </div>
-              <div
-                v-else
-              >
-                Female, {{ loadedSearchProfile.age }} y/o
-              </div>
+              {{ myGender[loadedSearchProfile.gender_id - 1] }} {{ loadedSearchProfile.age }} y/o
             </div>
             <div class="title font-italic purple--text text--accent-3">
-              <div
-                v-if="loadedSearchProfile.interested_in === 2"
-              >
-                Interested in Men
-              </div>
-              <div
-                v-if="loadedSearchProfile.interested_in === 3"
-              >
-                Interested in Women
-              </div>
-              <div
-                v-if="loadedSearchProfile.interested_in === 1"
-              >
-                Bi
-              </div>
+              Interested in {{ genderLF[loadedSearchProfile.interested_in - 1] }}
             </div>
             <v-row justify="end">
-              Score: {{ loadedSearchProfile.score }}
+              Score: {{ loadedSearchProfile.score }}&nbsp;
             </v-row>
           </div>
         </v-card-subtitle>
@@ -86,7 +63,7 @@
           <div>{{ loadedSearchProfile.name }} {{ loadedSearchProfile.surname }}</div>
           <div>Anniversary: {{ birthday }}</div>
           <div>&nbsp;</div>
-          <div>Tags: {{ loadedSearchProfile.tags }}</div>
+          <div>Tags: {{ loadedSearchProfile.tags.toString() }}</div>
           <div>&nbsp;</div>
           <div>Description: {{ loadedSearchProfile.bio }}</div>
         </v-card-text>
@@ -135,15 +112,17 @@
 </template>
 
 <script>
-import axios from 'axios'
-import moment from 'moment'
+// import axios from 'axios'
+// import moment from 'moment'
 
 export default {
   middleware: 'authenticated',
   data () {
     return {
       target: this.$route.params.username,
-      valid: true
+      valid: true,
+      myGender: ['Bi', 'Man', 'Woman'],
+      genderLF: ['Men & Women', 'Men', 'Women']
     }
   },
   computed: {
@@ -172,69 +151,67 @@ export default {
       return this.$store.getters.loadedLocation
     }
   },
-  async asyncData (context) {
-    if (context.params.username !== context.store.getters.loadedUsers.username) {
-      /* eslint-disable */
-      console.log('context', context)
-      // if (context.store.getters.token) {
-      const iView = await axios({
-        method: 'post',
-        // url: '/t/bd05h-1581710318/post',
-        url: process.env.serverUrl + '/social/view',
-        data: {
-          username: context.route.params.username
-        },
-        headers: {
-          Authorization: 'Bearer ' + context.store.getters.token
-        }
-      })
-        .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_view', response)
-          console.log('response_statusText', response.data.client)
-          context.store.dispatch('setMessage', response.data.client)
-        })
-        .catch((error) => {
-          console.log ('error_POST_view', error)
-          console.log('error_client', error.response.data.client)
-          context.store.dispatch('setMessage', error.response.data.client)
-        })
-      context.store.dispatch('setChecker', false)
-      const getXuserInfo = await axios
-        .get(process.env.serverUrl + '/users/profile', {
-          params: {
-            username: context.route.params.username
-          },
-          headers: {
-            Authorization: 'Bearer ' + context.app.store.getters.token
-          }
-        })
-        .then((response) => {
-          /* eslint-disable */
-          console.log('response_async_XuserInfo', response)
-          context.store.dispatch('setSearchProfile', response.data.userdata)
-          context.store.dispatch('setMessage', response.statusText)
-          context.store.dispatch('setChecker', true)
-        })
-        .catch((error) => {
-          console.log('error_async_XuserInfo', error)
-          console.log('error_client', error.response.statusText)
-          context.store.dispatch('setMessage', error.response.statusText)
-        })
-      const birthday = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM')
-      return {
-        iView,
-        getXuserInfo,
-        birthday
-      }
-    }
-  },
+  // async asyncData (context) {
+  //   if (context.params.username !== context.store.getters.loadedUsers.username) {
+  //     /* eslint-disable */
+  //     console.log('context', context)
+  //     // if (context.store.getters.token) {
+  //     const iView = await axios({
+  //       method: 'post',
+  //       url: process.env.serverUrl + '/social/view',
+  //       data: {
+  //         username: context.route.params.username
+  //       },
+  //       headers: {
+  //         Authorization: 'Bearer ' + context.store.getters.token
+  //       }
+  //     })
+  //       .then((response) => {
+  //       /* eslint-disable */
+  //         console.log('response_POST_view', response)
+  //         console.log('response_statusText', response.data.client)
+  //         context.store.dispatch('setMessage', response.data.client)
+  //       })
+  //       .catch((error) => {
+  //         console.log ('error_POST_view', error)
+  //         console.log('error_client', error.response.data.client)
+  //         context.store.dispatch('setMessage', error.response.data.client)
+  //       })
+  //     context.store.dispatch('setChecker', false)
+  //     const getXuserInfo = await axios
+  //       .get(process.env.serverUrl + '/users/profile', {
+  //         params: {
+  //           username: context.route.params.username
+  //         },
+  //         headers: {
+  //           Authorization: 'Bearer ' + context.app.store.getters.token
+  //         }
+  //       })
+  //       .then((response) => {
+  //         /* eslint-disable */
+  //         console.log('response_async_XuserInfo', response)
+  //         context.store.dispatch('setSearchProfile', response.data.userdata)
+  //         context.store.dispatch('setMessage', response.statusText)
+  //         context.store.dispatch('setChecker', true)
+  //       })
+  //       .catch((error) => {
+  //         console.log('error_async_XuserInfo', error)
+  //         console.log('error_client', error.response.statusText)
+  //         context.store.dispatch('setMessage', error.response.statusText)
+  //       })
+  //     const birthday = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM')
+  //     return {
+  //       iView,
+  //       getXuserInfo,
+  //       birthday
+  //     }
+  //   }
+  // },
   methods: {
     love () {
       this.$axios({
         method: 'post',
         url: process.env.serverUrl + '/social/like',
-        // url: '/t/bd05h-1581710318/post',
         data: {
           username: this.target
         },

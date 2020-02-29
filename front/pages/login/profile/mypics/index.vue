@@ -405,7 +405,6 @@ export default {
           }
         })
         xhr.open('POST', process.env.serverUrl + '/users/upload')
-        // xhr.open('POST', '/t/bd05h-1581710318/post')
         xhr.setRequestHeader('Authorization', 'Bearer ' + this.$store.getters.token)
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')

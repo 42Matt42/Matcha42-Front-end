@@ -232,17 +232,10 @@ export default {
       ],
       genderRules: [
         v => !!v || 'Gender required',
-        v => (v > 0 && v < 3) || 'Pick one of the 2 choices',
+        v => (v > 1 && v < 4) || 'Pick one of the 2 choices',
         v => /[0-9]+/.test(v) || 'Use the form to pick a value'
       ],
       hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron']
-      // for test purposes when the server is off:
-      // loadedUsers: {
-      //   interested_in: '1',
-      //   gender_id: '1',
-      //   birth_date: '2000-01-01',
-      //   bio: ''
-      // }
     }
   },
   computed: {
