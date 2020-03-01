@@ -101,7 +101,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 
 export default {
@@ -135,30 +135,28 @@ export default {
     }
   },
   async asyncData (context) {
-  // const mySuggestions = await axios
-  //     .get(process.env.serverUrl + '/social/potential', {
-  //       params: {
-  //         number: 42
-  //       },
-  //       headers: {
-  //         Authorization: 'Bearer ' + context.app.store.getters.token
-  //       }
-  //     })
-  //     .then((response) => {
-  //       /* eslint-disable */
-  //       console.log('response_GET_Suggestions', response)
-  //       context.store.dispatch('setSuggestions', response.data.client)
-  //       context.store.dispatch('setMessage', response.statusText)
-  //     })
-  //     .catch((error) => {
-  //       console.log('error_GET_Suggestions', error)
-  //       console.log('error_client', error.response.statusText)
-  //       context.store.dispatch('setMessage', error.response.statusText)
-  //     })
-    // if (!context.store.getters.loadedMapPosition) {
+    const mySuggestions = await axios
+      .get(process.env.serverUrl + '/social/potential', {
+        params: {
+          number: 5
+        },
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_GET_Suggestions', response)
+        context.store.dispatch('setSuggestions', response.data.client)
+        context.store.dispatch('setMessage', response.statusText)
+      })
+      .catch((error) => {
+        console.log('error_GET_Suggestions', error)
+        console.log('error_client', error.response.statusText)
+        context.store.dispatch('setMessage', error.response.statusText)
+      })
     /* eslint-disable */
     console.log('context', context)
-    // let promise = new Promise((resolve, reject) => {
     const options = {
       enableHighAccuracy: true,
       timeout: 8000,
@@ -181,74 +179,13 @@ export default {
       console.log(`ERROR(${error.code}): ${error.message}`)
       context.store.dispatch('setIpGeoloc')
     }
-    // if ("geolocation" in navigator && (!context.store.getters.loadedMapPosition || !context.store.getters.loadedLocation)) {
-    const geolocPosition = await navigator.geolocation.getCurrentPosition(success, error, options)
-    // }
+    if ("geolocation" in navigator) {
+      const geolocPosition = await navigator.geolocation.getCurrentPosition(success, error, options)
+    }
     return {
-      // mySuggestions
+      mySuggestions
     }
   }
-    //   const geoloc = await axios({
-    //     method: 'post',
-    //     url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
-    //     data: {
-    //       considerIp: 'true'
-    //     }
-    //   })
-    //     .then((response) => {
-    //     /* eslint-disable */
-    //       console.log('response_axios_googleAPI', response)
-    //       console.log('response_statusText', response.statusText)
-    //       context.store.dispatch('setMessage', response.statusText)
-    //       context.store.dispatch('setMapPosition', response.data)
-    //       axios
-    //         .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + response.data.location.lng + '&lat=' + response.data.location.lat, {
-    //           headers: {
-    //             Authorization: 'Bearer ' + context.store.getters.token
-    //           }
-    //         })
-    //         .then((response) => {
-    //           /* eslint-disable */
-    //           console.log('response_GET_cityfinder', response)
-    //           context.store.dispatch('setLocation', response.data)
-    //           axios.post({
-    //             method: 'post',
-    //             // url: process.env.serverUrl + '/edit/location',
-    //             url: 'http://10.12.5.2:8080/api/edit/location',
-    //             data: {
-    //               location: {
-    //                 accuracy: context.store.getters.loadedMapPosition.accuracy,
-    //                 lat: context.store.getters.loadedMapPosition.lat,
-    //                 lng: context.store.getters.loadedMapPosition.lng,
-    //                 country: context.store.getters.loadedLocation.country,
-    //                 city: context.store.getters.loadedLocation.city,
-    //                 district: context.store.getters.loadedLocation.district
-    //               }
-    //             // },
-    //             // headers: {
-    //             //   'Authorization': 'Bearer ' + context.store.getters.token
-    //             }
-    //           })
-    //             .then((response) => {
-    //             /* eslint-disable */
-    //               console.log('response_POST_edit/location', response)
-    //             })
-    //             .catch((error) => {
-    //               console.log ('error_POST_edit/location', error)
-    //             })
-    //         })
-    //         .catch((error) => {
-    //           console.log('error_GET_cityfinder', error)
-    //         })
-    //       // this.$router.push('/')
-    //     })
-    //     .catch((error) => {
-    //       console.log ('error_axios_googleAPIwelcomePage', error)
-    //     })
-    //   return {
-    //     geoloc
-    //   }
-    // }
 }
 </script>
 

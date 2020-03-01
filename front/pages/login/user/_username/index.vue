@@ -40,7 +40,16 @@
         </v-img>
         <v-card-subtitle>
           <div>
-            <v-row justify="end">
+            <v-row
+              v-if="loadedSearchProfile.last_connexion"
+              justify="end"
+            >
+              {{ loadedSearchProfile.last_connexion }}&nbsp;
+            </v-row>
+            <v-row
+              v-else
+              justify="end"
+            >
               Online&nbsp;
             </v-row>
             <div class="headline font-weight-bold purple--text text--accent-4">
@@ -105,6 +114,30 @@
             color="purple"
             text
           />
+          <v-spacer />
+          <v-btn
+            @click="block"
+            fab
+            color="pink lighten-3"
+            bottom
+            left
+            absolute
+            x-large
+          >
+            <v-icon>mdi-account-cancel</v-icon>
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            @click="report"
+            fab
+            color="pink lighten-3"
+            bottom
+            left
+            absolute
+            x-large
+          >
+            <v-icon>mdi-alert-octagon-outline</v-icon>
+          </v-btn>
         </v-card-actions>
       </v-card>
     </div>
@@ -112,8 +145,8 @@
 </template>
 
 <script>
-// import axios from 'axios'
-// import moment from 'moment'
+import axios from 'axios'
+import moment from 'moment'
 
 export default {
   middleware: 'authenticated',
@@ -151,62 +184,63 @@ export default {
       return this.$store.getters.loadedLocation
     }
   },
-  // async asyncData (context) {
-  //   if (context.params.username !== context.store.getters.loadedUsers.username) {
-  //     /* eslint-disable */
-  //     console.log('context', context)
-  //     // if (context.store.getters.token) {
-  //     const iView = await axios({
-  //       method: 'post',
-  //       url: process.env.serverUrl + '/social/view',
-  //       data: {
-  //         username: context.route.params.username
-  //       },
-  //       headers: {
-  //         Authorization: 'Bearer ' + context.store.getters.token
-  //       }
-  //     })
-  //       .then((response) => {
-  //       /* eslint-disable */
-  //         console.log('response_POST_view', response)
-  //         console.log('response_statusText', response.data.client)
-  //         context.store.dispatch('setMessage', response.data.client)
-  //       })
-  //       .catch((error) => {
-  //         console.log ('error_POST_view', error)
-  //         console.log('error_client', error.response.data.client)
-  //         context.store.dispatch('setMessage', error.response.data.client)
-  //       })
-  //     context.store.dispatch('setChecker', false)
-  //     const getXuserInfo = await axios
-  //       .get(process.env.serverUrl + '/users/profile', {
-  //         params: {
-  //           username: context.route.params.username
-  //         },
-  //         headers: {
-  //           Authorization: 'Bearer ' + context.app.store.getters.token
-  //         }
-  //       })
-  //       .then((response) => {
-  //         /* eslint-disable */
-  //         console.log('response_async_XuserInfo', response)
-  //         context.store.dispatch('setSearchProfile', response.data.userdata)
-  //         context.store.dispatch('setMessage', response.statusText)
-  //         context.store.dispatch('setChecker', true)
-  //       })
-  //       .catch((error) => {
-  //         console.log('error_async_XuserInfo', error)
-  //         console.log('error_client', error.response.statusText)
-  //         context.store.dispatch('setMessage', error.response.statusText)
-  //       })
-  //     const birthday = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM')
-  //     return {
-  //       iView,
-  //       getXuserInfo,
-  //       birthday
-  //     }
-  //   }
-  // },
+  async asyncData (context) {
+    if (context.params.username !== context.store.getters.loadedUsers.username) {
+      /* eslint-disable */
+      console.log('context', context)
+      // if (context.store.getters.token) {
+      const iView = await axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/view',
+        data: {
+          username: context.route.params.username
+        },
+        headers: {
+          Authorization: 'Bearer ' + context.store.getters.token
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_view', response)
+          console.log('response_statusText', response.data.client)
+          context.store.dispatch('setMessage', response.data.client)
+        })
+        .catch((error) => {
+          console.log ('error_POST_view', error)
+          console.log('error_client', error.response.data.client)
+          context.store.dispatch('setMessage', error.response.data.client)
+        })
+      context.store.dispatch('setChecker', false)
+      const getXuserInfo = await axios
+        .get(process.env.serverUrl + '/users/profile', {
+          params: {
+            username: context.route.params.username
+          },
+          headers: {
+            Authorization: 'Bearer ' + context.app.store.getters.token
+          }
+        })
+        .then((response) => {
+          /* eslint-disable */
+          console.log('response_async_XuserInfo', response)
+          context.store.dispatch('setSearchProfile', response.data.userdata)
+          context.store.dispatch('setMessage', response.statusText)
+          context.store.dispatch('setChecker', true)
+        })
+        .catch((error) => {
+          console.log('error_async_XuserInfo', error)
+          console.log('error_client', error.response.statusText)
+          context.store.dispatch('setMessage', error.response.statusText)
+          context.redirect('/')
+        })
+      const birthday = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM')
+      return {
+        iView,
+        getXuserInfo,
+        birthday
+      }
+    }
+  },
   methods: {
     love () {
       this.$axios({
@@ -227,6 +261,52 @@ export default {
         })
         .catch((error) => {
           console.log ('error_POST_like', error)
+          console.log('error_client', error.response.data.client)
+          this.$store.dispatch('setMessage', error.response.data.client)
+        })
+    },
+    block () {
+      this.$axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/block',
+        data: {
+          username: this.target
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters.token
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_block', response)
+          console.log('response_client', response.client)
+          this.$store.dispatch('setMessage', response.client)
+        })
+        .catch((error) => {
+          console.log ('error_POST_block', error)
+          console.log('error_client', error.response.data.client)
+          this.$store.dispatch('setMessage', error.response.data.client)
+        })
+    },
+    report () {
+      this.$axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/report',
+        data: {
+          username: this.target
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters.token
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_report', response)
+          console.log('response_client', response.client)
+          this.$store.dispatch('setMessage', response.client)
+        })
+        .catch((error) => {
+          console.log ('error_POST_report', error)
           console.log('error_client', error.response.data.client)
           this.$store.dispatch('setMessage', error.response.data.client)
         })

@@ -254,7 +254,7 @@
                   Interested in {{ genderLF[item.interested_in - 1] }}
                 </div>
                 <v-row justify="end">
-                  Score: SCORE&nbsp;
+                  Score: {{ item.score }}&nbsp;
                 </v-row>
                 <v-card-text class="purple--text text--lighten-5">
                   <div>&nbsp;</div>

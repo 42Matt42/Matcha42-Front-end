@@ -11,51 +11,48 @@
       <v-list dense>
         <div v-if="`${token}` == 'null'">
           <v-list-item
-            v-for="item in iLogout"
-            :key="item.text"
+            v-for="itemLogout in iLogout"
+            :key="itemLogout.text"
             link
           >
-            <nuxt-link :to="{ path: `${item.url}` }">
+            <nuxt-link :to="{ path: `${itemLogout.url}` }">
               <v-list-item-action>
                 <v-btn
                   class="ma-2"
                   color="purple lighten-3"
                   dark
                 >
-                  {{ item.text }}
+                  {{ itemLogout.text }}
                   &nbsp;
                   <v-icon
                     class="purple--text text--lighten-5"
                   >
-                    {{ item.icon }}
+                    {{ itemLogout.icon }}
                   </v-icon>
                 </v-btn>
-                <!-- <v-list-item-subtitle class="purple--text text--lighten-5">
-                  {{ item.text }}
-                </v-list-item-subtitle> -->
               </v-list-item-action>
             </nuxt-link>
           </v-list-item>
         </div>
         <div v-else>
           <v-list-item
-            v-for="item in iLogin"
-            :key="item.text"
+            v-for="itemLogin in iLogin"
+            :key="itemLogin.text"
             link
           >
-            <nuxt-link :to="{ path: `${item.url}` }">
+            <nuxt-link :to="{ path: `${itemLogin.url}` }">
               <v-list-item-action>
                 <v-btn
                   class="ma-2"
                   color="purple lighten-3"
                   dark
                 >
-                  {{ item.text }}
+                  {{ itemLogin.text }}
                   &nbsp;
                   <v-icon
                     class="purple--text text--lighten-5"
                   >
-                    {{ item.icon }}
+                    {{ itemLogin.icon }}
                   </v-icon>
                 </v-btn>
                 <!-- <v-list-item-subtitle class="purple--text text--lighten-5">
@@ -70,26 +67,32 @@
         >
           &nbsp; Suggestions
         </v-subheader>
-        <v-list>
-          <v-list-item
-            v-for="item in items2"
-            :key="item.text"
-            link
-          >
+        <v-list
+          v-for="(itemSuggest, j) in loadedSuggestions"
+          :key="j"
+          link
+        >
+          <v-list-item>
             <v-list-item-avatar>
               <img
+                :src="`data:image/*;base64,${itemSuggest.photo}`"
                 alt=""
               >
             </v-list-item-avatar>
-            <v-list-item-title v-text="item.username" />
-            <v-list-item-subtitle
-              v-text="item.sex"
-              class="purple--text text--lighten-5"
-            />
-            <v-list-item-subtitle
-              v-html="item.age"
-              class="purple--text text--lighten-5"
-            />
+            <v-list-item-content>
+              <v-list-item-title
+                v-text="itemSuggest.username"
+                class="purple--text text--lighten-5"
+              />
+              <v-list-item-subtitle
+                v-text="`${myGender[itemSuggest.gender_id - 1] }`"
+                class="purple--text text--lighten-5"
+              />
+              <v-list-item-subtitle
+                v-text="`${itemSuggest.age} y/o`"
+                class="purple--text text--lighten-5"
+              />
+            </v-list-item-content>
           </v-list-item>
         </v-list>
         <v-list-item
@@ -124,19 +127,19 @@
           </v-list-item-title>
         </v-list-item>
         <v-list-item
-          v-for="item in filterInterestedIn(itemsInterestedIn, loadedUsers.interested_in)"
-          :key="item.id"
+          v-for="itemInterestedIn in filterInterestedInLayout(itemsInterestedIn, loadedUsers.interested_in)"
+          :key="itemInterestedIn.id"
           color="purple--text text--lighten-5"
         >
           <v-icon
             class="purple--text text--lighten-5"
           >
-            {{ item.icon }}
+            {{ itemInterestedIn.icon }}
           </v-icon>
           <v-list-item-title
             class="purple--text text--lighten-5"
           >
-            &nbsp;LF {{ item.name }}
+            &nbsp;LF {{ itemInterestedIn.name }}
           </v-list-item-title>
         </v-list-item>
       </v-list>
@@ -252,7 +255,6 @@
         </div>
         <nuxt />
         <!-- <v-row
-          :src="`https://randomuser.me/api/portraits/women/${item.picture}.jpg`"
           justify="center"
           align="center"
         >
@@ -296,6 +298,8 @@ export default {
     snackbar: true,
     searchUsername: '',
     timeoutDuration: 4242,
+    counter: 0,
+    myGender: ['Bi', 'Man', 'Woman'],
     iLogin: [
       { icon: 'mdi-home', text: 'Home', url: '/' },
       { icon: 'mdi-duck', text: 'Match me', url: '/login/matchme' },
@@ -307,13 +311,6 @@ export default {
       { icon: 'mdi-home', text: 'Home', url: '/' },
       { icon: 'mdi-login', text: 'Login', url: '/login' },
       { icon: 'mdi-content-save', text: 'Register', url: '/register' }
-    ],
-    items2: [
-      // { picture: 28, text: '<span class='text--primary'>Hippopotame<span>', sex: 'W', age: 24 },
-      { picture: 38, text: 'Panda', sex: 'W', age: 22 },
-      { picture: 48, text: 'Girafe', sex: 'W', age: 28 },
-      { picture: 58, text: 'Tortue', sex: 'W', age: 18 },
-      { picture: 78, text: 'Colombe', sex: 'W', age: 40 }
     ],
     itemsInterestedIn: [
       { id: 1, name: 'Men & Women', icon: 'mdi-human-male-female' },
@@ -336,18 +333,18 @@ export default {
     },
     loadedPictures () {
       return this.$store.getters.loadedPictures
+    },
+    loadedSuggestions () {
+      return this.$store.getters.loadedSuggestions
     }
   },
   methods: {
     keySearchUser (event) {
-      /* eslint-disable */
-      // console.log('event', event)
-      // console.log('this', this)
       this.$router.push('/login/user/' + `${this.searchUsername}`)
     },
-    filterInterestedIn (item, interested_in) {
+    filterInterestedInLayout (item, sex) {
       return item.filter(function (item) {
-        return item.id === interested_in
+        return item.id === sex
       })
     }
   }
