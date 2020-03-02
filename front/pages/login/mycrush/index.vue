@@ -1,6 +1,5 @@
 <template>
   <div>
-    <br><v-divider v-if="checker === true" /><br>
     <v-container fluid>
       <v-row>
         <v-col>
@@ -41,41 +40,50 @@
         </v-col>
       </v-row>
     </v-container>
-    <br><v-divider /><br>
     <v-container
       class="font-weight-black purple--text text--lighten-5"
     >
       My crushes
     </v-container>
-    <v-list style="background-color: transparent">
-      <v-list-item
-        v-for="(item, no) in loadedMatch"
-        :key="no"
-      >
-        <div>
-          <v-icon
-            class="purple--text text--lighten-5"
+    <v-container style="background-color: transparent">
+      <v-list style="background-color: transparent">
+        <v-list-item
+          v-for="(itemMatchs, a) in loadedMatchList"
+          :key="a"
+        >
+          <nuxt-link
+            :to="{ path: `/login/user/${itemMatchs.username}` }"
           >
-            mdi-heart
-          </v-icon>
-          <v-list-item-title
-            class="purple--text text--lighten-5 text-xs-left"
-          >
-            &nbsp;Username: {{ item.username }}
-          </v-list-item-title>
-        </div>
-      </v-list-item>
-    </v-list>
-    <div v-if="checker === false">
-      <p>
-        Please, 42user, go back to the welcome page and try again !
-      </p>
-    </div>
+            <div>
+              <p
+                class="text-xs-right"
+              >
+                <v-list-item-title
+                  class="purple--text text--lighten-5 text-xs-left"
+                >
+                  <v-icon
+                    class="purple--text text--lighten-5"
+                  >
+                    mdi-heart
+                  </v-icon>
+                  {{ itemMatchs.username }}
+                  <v-icon
+                    class="purple--text text--lighten-5"
+                  >
+                    mdi-heart
+                  </v-icon>
+                </v-list-item-title>
+              </p>
+            </div>
+          </nuxt-link>
+        </v-list-item>
+      </v-list>
+    </v-container>
   </div>
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
@@ -87,24 +95,53 @@ export default {
     }
   },
   computed: {
-    checker () {
-      return this.$store.getters.checker
-    },
+    // checker () {
+    //   return this.$store.getters.checker
+    // },
     serverMessage () {
       return this.$store.getters.serverMessage
     },
     loadedSuggestions () {
       return this.$store.getters.loadedSuggestions
     },
+    loadedMatchList () {
+      return this.$store.getters.loadedMatchList
+    },
     token () {
       return this.$store.getters.token
     }
   },
+  async asyncData (context) {
+    const matchList = await axios
+      .get(process.env.serverUrl + '/social/match', {
+        headers: {
+          'Authorization': 'Bearer ' + context.app.store.getters.token
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_asyncGET_matchList', response)
+        console.log('response.data.client', response.data.client)
+        if (response.data.client.length != 0) {
+          console.log('Test_A')
+          context.store.dispatch('setMatchList', response.data.client)
+        }
+        else {
+          context.store.dispatch('setMessage', 'No match so far')
+        }
+      })
+      .catch(function(error) {
+        /* eslint-disable */
+        console.log('error_asyncGET_matchList', error)
+        context.store.dispatch('setMessage', error.response.data.client)
+      })
+      return {
+        matchList
+      }
+  },
   methods: {
     love (target) {
       // eslint-disable-next-line
-      console.log('thisTEST', this)
-      this.store.dispatch('setChecker', false)
       this.$axios({
         method: 'post',
         url: process.env.serverUrl + '/social/like',
@@ -120,14 +157,32 @@ export default {
           console.log('response_POST_like', response)
           console.log('response_client', response.client)
           this.$store.dispatch('setMessage', response.client)
-          context.store.dispatch('setChecker', true)
         })
         .catch((error) => {
           console.log ('error_POST_like', error)
           console.log('error_client', error.response.data.client)
           this.$store.dispatch('setMessage', error.response.data.client)
         })
-    }
+    },
+    // matchList () {
+    //   axios
+    //     .get(process.env.serverUrl + '/social/match', {
+    //       headers: {
+    //         Authorization: 'Bearer ' + this.$store.getters.token
+    //       }
+    //     })
+    //     .then((response) => {
+    //       /* eslint-disable */
+    //       console.log('response_GET_matchList', response)
+    //       this.$store.dispatch('setMatchList', response.data.client)
+    //       this.$store.dispatch('setMessage', response.statusText)
+    //     })
+    //     .catch((error) => {
+    //       console.log('error_GET_matchList', error)
+    //       console.log('error_client', error.response.statusText)
+    //       this.$store.dispatch('setMessage', error.response.statusText)
+    //     })
+    // }
   }
 }
 </script>

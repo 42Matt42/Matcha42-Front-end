@@ -300,10 +300,10 @@ export default {
           })
       }
     },
-    customFilter (item, queryText, itemText) {
-      const textOne = item.name.toLowerCase()
-      const textTwo = item.value.country.toLowerCase()
-      const textThree = item.abbr.toLowerCase()
+    customFilter (itemCustomFilter, queryText, itemText) {
+      const textOne = itemCustomFilter.name.toLowerCase()
+      const textTwo = itemCustomFilter.value.country.toLowerCase()
+      const textThree = itemCustomFilter.abbr.toLowerCase()
       const searchText = queryText.toLowerCase()
       return textOne.indexOf(searchText) > -1 ||
         textTwo.indexOf(searchText) > -1 ||

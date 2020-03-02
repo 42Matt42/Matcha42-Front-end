@@ -96,27 +96,7 @@
             <v-row
               align-start
             >
-              <v-col
-                v-if="filterLove(loadedLikes, loadedSearchProfile.username)"
-              >
-                <v-btn
-                  @click="dislike"
-                  fab
-                  color="deep-purple lighten-5"
-                  absolute
-                  x-large
-                >
-                  <v-icon
-                    color="deep-purple accent-3"
-                  >
-                    mdi-heart-broken
-                  </v-icon>
-                </v-btn>
-              </v-col>
-
-              <v-col
-                v-else
-              >
+              <v-col>
                 <v-btn
                   @click="love"
                   fab
@@ -131,8 +111,22 @@
                   </v-icon>
                 </v-btn>
               </v-col>
-
-              <v-col cols="4" />
+              <v-col>
+                <v-btn
+                  @click="dislike"
+                  fab
+                  color="deep-purple lighten-5"
+                  absolute
+                  x-large
+                >
+                  <v-icon
+                    color="deep-purple accent-3"
+                  >
+                    mdi-heart-broken
+                  </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="2" />
               <v-col>
                 <v-btn
                   @click="block"
@@ -286,7 +280,7 @@ export default {
     }
     else {
       context.store.dispatch('deleteSearchProfile')
-      context.redirect('/')
+      context.redirect('/login/profile')
     }
   },
   methods: {
@@ -315,7 +309,7 @@ export default {
     dislike () {
       this.$axios({
         method: 'post',
-        url: process.env.serverUrl + '/social/like',
+        url: process.env.serverUrl + '/social/dislike',
         data: {
           username: this.target
         },
@@ -380,18 +374,13 @@ export default {
           this.$store.dispatch('setMessage', error.response.data.client)
         })
     },
-    filterLove (lovers, target) {
-      return lovers.filter(function (lover) {
-        console.log('lover', lover)
-        console.log('target', target)
-        if (lover.user_who_likes === target) {
-          return true
-        }
-        else {
-          return false
-        }
-      })
-    }
+    // filterLove (lovers, target) {
+    //   return lovers.filter(function (lover) {
+    //     console.log('lover', lover.user_liked)
+    //     console.log('target', target)
+    //     return lover.user_liked === target
+    //   })
+    // }
   }
 }
 </script>

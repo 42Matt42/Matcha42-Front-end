@@ -24,7 +24,7 @@
                   <v-icon
                     class="purple--text text--lighten-5"
                   >
-                    mdi-heart
+                    mdi-heart-half-full
                   </v-icon>
                   {{ itemLikes.user_who_likes }} liked your profile {{ itemLikes.loveAge }} ({{ itemLikes.loveDate }})
                 </v-list-item-title>
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     filterLikes (loves) {
-      return loves.filter(function (love) {
+      return loves.received.filter(function (love) {
         love.loveAge = moment(love.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
         love.loveDate = moment(love.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
         return love

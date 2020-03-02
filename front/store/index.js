@@ -14,6 +14,7 @@ const createStore = () => {
       loadedUsers: [],
       loadedLikes: [],
       loadedViews: [],
+      loadedMatchlist: [],
       loadedSearchProfile: [],
       loadedSuggestions: [],
       loadedSuggestionsSidebar: [],
@@ -64,6 +65,9 @@ const createStore = () => {
       setViews (state, views) {
         state.loadedViews = views
       },
+      setMatchList (state, matchList) {
+        state.loadedMatchList = matchList
+      },
       setSearchProfile (state, profile) {
         state.loadedSearchProfile = profile
         state.loadedSearchProfile.location = JSON.parse(profile.location)
@@ -84,12 +88,13 @@ const createStore = () => {
       setSuggestions (state, suggestions) {
         state.loadedSuggestions = suggestions.data
         for (let i = 0; i < parseInt(suggestions.length); i++) {
-          state.loadedSuggestions[i].location = JSON.parse(suggestions.data[i].location)
+          state.loadedSuggestions[i].location = suggestions.data[i].location
+          state.loadedSuggestions[i].hobbies = suggestions.data[i].hobbies.toString()
         }
       },
-      setSuggestionsSidebar (state, suggestions) {
-        for (let i = 0; i < 2; i++) {
-          state.loadedSuggestionsSidebar[i] = suggestions[i]
+      setSuggestionsSidebar (state, suggestionsFormatted) {
+        for (let i = 0; i < 3; i++) {
+          state.loadedSuggestionsSidebar[i] = suggestionsFormatted[i]
         }
       },
       setAdvancedSearch (state, results) {
@@ -235,6 +240,9 @@ const createStore = () => {
       setViews (vuexContext, views) {
         vuexContext.commit('setViews', views)
       },
+      setMatchList (vuexContext, matchList) {
+        vuexContext.commit('setMatchList', matchList)
+      },
       setSearchProfile (vuexContext, profile) {
         vuexContext.commit('setSearchProfile', profile)
       },
@@ -243,6 +251,7 @@ const createStore = () => {
       },
       setSuggestions (vuexContext, suggestions) {
         vuexContext.commit('setSuggestions', suggestions)
+        vuexContext.dispatch('setSuggestionsSidebar')
       },
       setSuggestionsSidebar (vuexContext) {
         vuexContext.commit('setSuggestionsSidebar', vuexContext.getters.loadedSuggestions)
@@ -301,6 +310,9 @@ const createStore = () => {
       },
       loadedViews (state) {
         return state.loadedViews
+      },
+      loadedMatchList (state) {
+        return state.loadedMatchList
       },
       loadedSearchProfile (state) {
         return state.loadedSearchProfile

@@ -11,8 +11,8 @@
       <v-list dense>
         <div v-if="`${token}` == 'null'">
           <v-list-item
-            v-for="itemLogout in iLogout"
-            :key="itemLogout.text"
+            v-for="(itemLogout,exit) in iLogout"
+            :key="exit"
             link
           >
             <nuxt-link :to="{ path: `${itemLogout.url}` }">
@@ -55,9 +55,6 @@
                     {{ itemLogin.icon }}
                   </v-icon>
                 </v-btn>
-                <!-- <v-list-item-subtitle class="purple--text text--lighten-5">
-                  {{ item.text }}
-                </v-list-item-subtitle> -->
               </v-list-item-action>
             </nuxt-link>
           </v-list-item>
@@ -69,7 +66,7 @@
             Suggestions&nbsp;
           </v-subheader>
           <v-list
-            v-for="(itemSuggest, j) in loadedSuggestions"
+            v-for="(itemSuggest, j) in loadedSuggestionsSidebar"
             :key="j"
           >
             <v-list-item>
@@ -260,34 +257,6 @@
           </v-snackbar>
         </div>
         <nuxt />
-        <!-- <v-row
-          justify="center"
-          align="center"
-        >
-          <v-col class="shrink">
-            <v-tooltip right>
-              <nuxt />
-            </v-tooltip>
-            <v-tooltip right>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  v-on="on"
-                  icon
-                  large
-                  href="www.google.fr"
-                  target="_blank"
-                >
-                  <v-icon
-                    large
-                  >
-                    mdi-codepen
-                  </v-icon>
-                </v-btn>
-              </template>
-              <span>Codepen</span>
-            </v-tooltip>
-          </v-col>
-        </v-row> -->
       </v-container>
     </v-content>
   </v-app>
@@ -340,17 +309,20 @@ export default {
     loadedPictures () {
       return this.$store.getters.loadedPictures
     },
-    loadedSuggestions () {
-      return this.$store.getters.loadedSuggestions
+    // loadedSuggestions () {
+    //   return this.$store.getters.loadedSuggestions
+    // },
+    loadedSuggestionsSidebar () {
+      return this.$store.getters.loadedSuggestionsSidebar
     }
   },
   methods: {
     keySearchUser (event) {
       this.$router.push('/login/user/' + `${this.searchUsername}`)
     },
-    filterInterestedInLayout (item, sex) {
-      return item.filter(function (item) {
-        return item.id === sex
+    filterInterestedInLayout (itemFilterLayout, sex) {
+      return itemFilterLayout.filter(function (itemFilterLayout) {
+        return itemFilterLayout.id === sex
       })
     }
   }

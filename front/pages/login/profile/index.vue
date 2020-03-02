@@ -140,9 +140,9 @@
         height="20vh"
       >
         <v-carousel-item
-          v-for="(item,z) in loadedPictures"
+          v-for="(itemProfile,z) in loadedPictures"
           :key="z"
-          :src="`data:image/*;base64,${item}`"
+          :src="`data:image/*;base64,${itemProfile}`"
           v-ripple="{ class: `purple--text` }"
           reverse-transition="fade-transition"
         />

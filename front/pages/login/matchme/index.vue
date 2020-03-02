@@ -154,6 +154,7 @@
             <v-range-slider
               v-model.lazy="filterAge"
               :thumb-size="32"
+              :rules="ageRules"
               thumb-label="always"
               track-fill-color="purple accent-4"
               thumb-color="indigo accent-2"
@@ -211,9 +212,6 @@
         </v-col>
         <v-col>
           <v-row>
-            <v-text-field
-              v-model.lazy="filterTags"
-            />
             <v-select
               v-model.lazy="filterTags"
               :items="hobbies"
@@ -231,7 +229,7 @@
           continuous
         >
           <v-carousel-item
-            v-for="(item,index) in filterAdvancedSearch(loadedAdvancedSearch)"
+            v-for="(itemAdvancedSearch,index) in filterAdvancedSearch(loadedAdvancedSearch)"
             :key="index"
             reverse-transition="fade-transition"
           >
@@ -242,45 +240,64 @@
               max-width="420"
             >
               <v-card-subtitle>
-                <div class="headline font-weight-bold purple--text text--accent-4">
-                  {{ item.username }}
-                </div>
-                <div class="title font-italic purple--text text--accent-3">
-                  {{ myGender[item.gender_id - 1] }} AGE y/o
-                </div>
-                <div class="title font-italic purple--text text--accent-3">
-                  Interested in {{ genderLF[item.interested_in - 1] }}
-                </div>
+                <v-row>
+                  <v-col cols="8">
+                    <div>
+                      <div class="headline font-weight-bold purple--text text--accent-4">
+                        {{ itemAdvancedSearch.username }}
+                      </div>
+                      <div class="title font-italic purple--text text--accent-3">
+                        {{ myGender[itemAdvancedSearch.gender_id - 1] }} AGE y/o
+                      </div>
+                      <div class="title font-italic purple--text text--accent-3">
+                        Interested in {{ genderLF[itemAdvancedSearch.interested_in - 1] }}
+                      </div>
+                    </div>
+                  </v-col>
+                  <v-col cols="4">
+                    <div>
+                      <v-avatar
+                        class="profile indigo accent-4"
+                        size="96"
+                      >
+                        <v-img
+                          :src="`data:image/*;base64,${itemAdvancedSearch.photo[0]}`"
+                        />
+                      </v-avatar>
+                    </div>
+                  </v-col>
+                </v-row>
+
                 <v-row justify="end">
-                  Score: {{ item.score }}&nbsp;
+                  Score: {{ itemAdvancedSearch.score }}&nbsp;
                 </v-row>
                 <v-card-text class="purple--text text--lighten-5">
                   <div>&nbsp;</div>
-                  <div>{{ item.name }} {{ item.surname }}</div>
+                  <div>{{ itemAdvancedSearch.name }} {{ itemAdvancedSearch.surname }}</div>
                   <div>&nbsp;</div>
-                  <div>Tags: {{ item.hobbies.toString() }}</div>
+                  <div>Tags: {{ itemAdvancedSearch.hobbies.toString() }}</div>
                 </v-card-text>
                 <v-card-text class="purple--text text--lighten-5">
                   <div
-                    v-if="item.location.country"
+                    v-if="itemAdvancedSearch.location.country"
                   >
-                    Country: {{ item.location.country }}
+                    Country: {{ itemAdvancedSearch.location.country }}
                   </div>
-                  <div>City: {{ item.location.city }}</div>
+                  <div>City: {{ itemAdvancedSearch.location.city }}</div>
                   <div
-                    v-if="item.location.district"
+                    v-if="itemAdvancedSearch.location.district"
                   >
-                    District: {{ item.location.district }}
+                    District: {{ itemAdvancedSearch.location.district }}
                   </div>
                   <div>
-                    Distance: {{ item.distance }} km
+                    Distance: {{ itemAdvancedSearch.distance }} km
                   </div>
                 </v-card-text>
               </v-card-subtitle>
               <v-card-actions>
                 <v-spacer />
                 <v-btn
-                  @click="love(item.username)"
+                  @click="love(itemAdvancedSearch.username)"
                   fab
                   color="pink lighten-3"
                   bottom
@@ -395,12 +412,12 @@ export default {
           })
       }
     },
-    filterAdvancedSearch (item) {
+    filterAdvancedSearch (itemFilterAdvancedSearch) {
       self = this
-      return item.filter(function (item) {
+      return itemFilterAdvancedSearch.filter(function (itemFilterAdvancedSearch) {
         if (self.filterDistance) {
           // item.distance <= self.filterDistance && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
-          return item.distance <= self.filterDistance && item.hobbies.includes(self.filterTags)// && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
+          return itemFilterAdvancedSearch.distance <= self.filterDistance && itemFilterAdvancedSearch.hobbies.includes(self.filterTags)// && itemFilterAdvancedSearch.age >= self.filterAge[0] && itemFilterAdvancedSearch.age <= self.filterAge[1] && itemFilterAdvancedSearch.score >= self.filterScore[0] && itemFilterAdvancedSearch.score <= filterScore[1]
           // filterTags
         }
       })
