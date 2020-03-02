@@ -3,7 +3,7 @@
     <div>
       <br>
       <v-container
-        class="font-weight-black"
+        class="font-weight-black purple--text text--lighten-5"
       >
         Let's find the one !
       </v-container>
@@ -132,10 +132,10 @@
                 <v-btn
                   @click="matchme"
                   :disabled="!valid"
-                  color="blue lighten-4"
+                  color="blue lighten-5"
                   class="mr-4"
                 >
-                  FIND the one &nbsp;
+                  FIND the one ! &nbsp;
                   <v-icon>
                     mdi-book-open-page-variant
                   </v-icon>
@@ -145,6 +145,7 @@
           </v-container>
         </v-form>
       </div>
+      <br>
     </div>
     <div v-if="checker === true">
       <v-row>
@@ -230,8 +231,8 @@
           continuous
         >
           <v-carousel-item
-            v-for="(item,i) in filterAdvancedSearch(loadedAdvancedSearch)"
-            :key="i"
+            v-for="(item,index) in filterAdvancedSearch(loadedAdvancedSearch)"
+            :key="index"
             reverse-transition="fade-transition"
           >
             <v-card
@@ -241,9 +242,6 @@
               max-width="420"
             >
               <v-card-subtitle>
-                <v-row justify="end">
-                  Online&nbsp;
-                </v-row>
                 <div class="headline font-weight-bold purple--text text--accent-4">
                   {{ item.username }}
                 </div>

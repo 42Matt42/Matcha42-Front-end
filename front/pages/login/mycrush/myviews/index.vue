@@ -8,19 +8,23 @@
     <v-container style="background-color: transparent">
       <v-list style="background-color: transparent">
         <v-list-item
-          v-for="(item, i) in filterViews(loadedViews)"
-          :key="i"
+          v-for="(itemViews, x) in filterViews(loadedViews)"
+          :key="x"
         >
-          <v-icon
-            class="purple--text text--lighten-5"
+          <nuxt-link
+            :to="{ path: `/login/user/${itemViews.user_who_views}` }"
           >
-            mdi-target-account
-          </v-icon>
-          <v-list-item-title
-            class="purple--text text--lighten-5"
-          >
-            &nbsp;msaubin&nbsp;viewed your profile {{ item.viewAge }} ({{ item.date }})
-          </v-list-item-title>
+            <v-list-item-title
+              class="purple--text text--lighten-5"
+            >
+              <v-icon
+                class="purple--text text--lighten-5"
+              >
+                mdi-target-account
+              </v-icon>
+              {{ itemViews.user_who_views }} viewed your profile {{ itemViews.viewAge }} ({{ itemViews.viewDate }})
+            </v-list-item-title>
+          </nuxt-link>
         </v-list-item>
       </v-list>
     </v-container>
@@ -71,10 +75,10 @@ export default {
     }
   },
   methods: {
-    filterViews (view) {
-      return view.filter(function (view) {
-        view.viewAge = moment(view.date, 'X').fromNow()
-        view.date = moment(view.date, 'X').format('MMMM Do YYYY, h:mm:ss a')
+    filterViews (views) {
+      return views.filter(function (view) {
+        view.viewAge = moment(view.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
+        view.viewDate = moment(view.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
         return view
       })
     }

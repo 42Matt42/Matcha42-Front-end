@@ -1,8 +1,11 @@
 <template>
   <div>
     <div>
-      <br>
-      <br>
+      <v-container
+        class="font-weight-black purple--text text--lighten-5"
+      >
+        <br>Reset password with your email
+      </v-container>
       <v-form
         ref="form"
         v-model="valid"
@@ -14,7 +17,7 @@
               cols="8"
             >
               <v-text-field
-                v-model="reset.email"
+                v-model.trim="reset.email"
                 :rules="emailRules"
                 counter="42"
                 label="Email"

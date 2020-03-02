@@ -16,6 +16,7 @@ const createStore = () => {
       loadedViews: [],
       loadedSearchProfile: [],
       loadedSuggestions: [],
+      loadedSuggestionsSidebar: [],
       loadedAdvancedSearch: [],
       loadedPictures: [],
       checker: 'false'
@@ -42,6 +43,7 @@ const createStore = () => {
         state.loadedViews = []
         state.loadedSearchProfile = []
         state.loadedSuggestions = []
+        state.loadedSuggestionsSidebar = []
         state.loadedAdvancedSearch = []
       },
       registerUser (state, user) {
@@ -64,8 +66,10 @@ const createStore = () => {
       },
       setSearchProfile (state, profile) {
         state.loadedSearchProfile = profile
-        // state.loadedSearchProfile.photos = profile.photos
         state.loadedSearchProfile.location = JSON.parse(profile.location)
+      },
+      deleteSearchProfile (state) {
+        state.loadedSearchProfile = []
       },
       setMapPosition (state, geoloc) {
         state.loadedMapPosition.accuracy = geoloc.accuracy
@@ -79,15 +83,20 @@ const createStore = () => {
       },
       setSuggestions (state, suggestions) {
         state.loadedSuggestions = suggestions.data
-        for (let i = 0; i < parseInt(suggestions.lenght); i++) {
+        for (let i = 0; i < parseInt(suggestions.length); i++) {
           state.loadedSuggestions[i].location = JSON.parse(suggestions.data[i].location)
+        }
+      },
+      setSuggestionsSidebar (state, suggestions) {
+        for (let i = 0; i < 2; i++) {
+          state.loadedSuggestionsSidebar[i] = suggestions[i]
         }
       },
       setAdvancedSearch (state, results) {
         state.loadedAdvancedSearch = results.data
-        for (let i = 0; i < parseInt(results.lenght); i++) {
-          state.loadedAdvancedSearch[i].location = JSON.parse(results.data[i].location)
-        }
+        // for (let i = 0; i < parseInt(results.length); i++) {
+        //   state.loadedAdvancedSearch[i].location = JSON.parse(results.data[i].location)
+        // }
       },
       setPictures (state, pictures) {
         for (let i = 0; i < pictures.length; i++) {
@@ -217,27 +226,6 @@ const createStore = () => {
         return {
         }
       },
-      // updateUser (vuexContext, updatedUser) {
-      //   const upUser = {
-      //     ...updatedUser
-      //   }
-      //   axios
-      //     .post(process.env.serverUrl + '/users/update', upUser)
-      //     .then((response) => {
-      //       /* eslint-disable */
-      //       console.log('response_updateUser', response)
-      //       vuexContext.commit('setMessage', response.client)
-      //     //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
-      //     })
-      //     /* eslint-disable */
-      //     .catch((error) => {
-      //       console.log ('error_updateUser', error)
-      //       console.log('error_client', error.response.client)
-      //       vuexContext.commit('setMessage', error.response.client)
-      //     })
-      //   return {
-      //   }
-      // },
       setChecker (vuexContext, value) {
         vuexContext.commit('setChecker', value)
       },
@@ -250,8 +238,14 @@ const createStore = () => {
       setSearchProfile (vuexContext, profile) {
         vuexContext.commit('setSearchProfile', profile)
       },
+      deleteSearchProfile (vuexContext) {
+        vuexContext.commit('deleteSearchProfile')
+      },
       setSuggestions (vuexContext, suggestions) {
         vuexContext.commit('setSuggestions', suggestions)
+      },
+      setSuggestionsSidebar (vuexContext) {
+        vuexContext.commit('setSuggestionsSidebar', vuexContext.getters.loadedSuggestions)
       },
       setAdvancedSearch (vuexContext, results) {
         vuexContext.commit('setAdvancedSearch', results)
@@ -313,6 +307,9 @@ const createStore = () => {
       },
       loadedSuggestions (state) {
         return state.loadedSuggestions
+      },
+      loadedSuggestionsSidebar (state) {
+        return state.loadedSuggestionsSidebar
       },
       loadedAdvancedSearch (state) {
         return state.loadedAdvancedSearch

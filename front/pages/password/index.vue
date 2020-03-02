@@ -17,7 +17,7 @@
             >
               <div>
                 <v-text-field
-                  v-model="password1"
+                  v-model.trim="password1"
                   :rules="passRules"
                   :type="passwordVisible ? 'text' : 'password'"
                   counter="20"
@@ -31,7 +31,7 @@
               cols="5"
             >
               <v-text-field
-                v-model="password2"
+                v-model.trim="password2"
                 :rules="passRules"
                 :type="passwordVisible ? 'text' : 'password'"
                 counter="20"

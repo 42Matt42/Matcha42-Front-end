@@ -61,7 +61,8 @@
     </v-container>
     <br><v-divider /><br>
     <v-container
-      class="font-weight-black"
+      class="font-weight-black purple--text text--lighten-5"
+      style="display: flex; justify-content: center;"
     >
       My profile page
     </v-container>
@@ -98,9 +99,6 @@
       </v-img>
       <v-card-subtitle>
         <div>
-          <v-row justify="end">
-            Online&nbsp;
-          </v-row>
           <div class="headline font-weight-bold purple--text text--accent-4">
             {{ loadedUsers.username }}
           </div>
@@ -118,7 +116,7 @@
       <v-card-text class="text--primary">
         <div>&nbsp;</div>
         <div>{{ loadedUsers.name }} {{ loadedUsers.surname }}</div>
-        <div>Anniversary: {{ birthday }}</div>
+        <div>Anniversary: {{ birthdayProfile }}</div>
         <div>&nbsp;</div>
         <div>Tags: {{ loadedUsers.tags.toString() }}</div>
         <div>&nbsp;</div>
@@ -142,8 +140,8 @@
         height="20vh"
       >
         <v-carousel-item
-          v-for="(item,i) in loadedPictures"
-          :key="i"
+          v-for="(item,z) in loadedPictures"
+          :key="z"
           :src="`data:image/*;base64,${item}`"
           v-ripple="{ class: `purple--text` }"
           reverse-transition="fade-transition"
@@ -155,7 +153,7 @@
 
 <script>
 import axios from 'axios'
-// import moment from 'moment'
+import moment from 'moment'
 
 export default {
   middleware: 'authenticated',
@@ -225,9 +223,11 @@ export default {
         console.log('error_client', error.response.data.client)
         context.store.dispatch('setMessage', error.response.data.client)
       })
+    const birthdayProfile = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
     return {
       usermypics,
-      userprofile
+      userprofile,
+      birthdayProfile
     }
   },
 }

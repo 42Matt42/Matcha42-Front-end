@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-container
-      class="font-weight-black"
+      class="font-weight-black purple--text text--lighten-5"
     >
-      Registration form
+      Do you wish for a lovely blast ? Register.
     </v-container>
     <div>
       <v-form
@@ -17,7 +17,7 @@
               cols="12"
             >
               <v-text-field
-                v-model="checkRegister.username"
+                v-model.trim="checkRegister.username"
                 :rules="rules.usernameRules"
                 counter="20"
                 label="Username"
@@ -30,7 +30,7 @@
               cols="6"
             >
               <v-text-field
-                v-model="checkRegister.name"
+                v-model.trim="checkRegister.name"
                 :rules="rules.nameRules"
                 counter="20"
                 label="First name"
@@ -41,7 +41,7 @@
               cols="6"
             >
               <v-text-field
-                v-model="checkRegister.surname"
+                v-model.trim="checkRegister.surname"
                 :rules="rules.nameRules"
                 counter="20"
                 label="Last name"
@@ -54,7 +54,7 @@
               cols="12"
             >
               <v-text-field
-                v-model="checkRegister.email"
+                v-model.trim="checkRegister.email"
                 :rules="rules.emailRules"
                 counter="42"
                 label="Email"
@@ -68,7 +68,7 @@
             >
               <div>
                 <v-text-field
-                  v-model="checkRegister.password"
+                  v-model.trim="checkRegister.password"
                   :rules="rules.passRules"
                   :type="passwordVisible ? 'text' : 'password'"
                   counter="20"
@@ -82,7 +82,7 @@
               cols="5"
             >
               <v-text-field
-                v-model="password2"
+                v-model.trim="password2"
                 :rules="rules.passRules"
                 :type="passwordVisible ? 'text' : 'password'"
                 counter="20"

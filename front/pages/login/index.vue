@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-container
-      class="font-weight-black"
+      class="font-weight-black purple--text text--lighten-5"
     >
-      Log in form
+      <br>Welcome !
     </v-container>
     <div>
       <br>
@@ -18,7 +18,7 @@
               cols="10"
             >
               <v-text-field
-                v-model="login.username"
+                v-model.trim="login.username"
                 counter="20"
                 label="Username"
                 required
@@ -31,7 +31,7 @@
             >
               <div>
                 <v-text-field
-                  v-model="login.password"
+                  v-model.trim="login.password"
                   :type="passwordVisible ? 'text' : 'password'"
                   counter="20"
                   label="Password"

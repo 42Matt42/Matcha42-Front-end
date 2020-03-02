@@ -3,7 +3,7 @@
     <div>
       <br>
       <v-container
-        class="font-weight-black"
+        class="font-weight-black purple--text text--lighten-5"
       >
         Update your personal information
       </v-container>
@@ -31,7 +31,7 @@
                 cols="10"
               >
                 <v-text-field
-                  v-model="loadedUsers.username"
+                  v-model.trim="loadedUsers.username"
                   :rules="usernameRules"
                   counter="20"
                   label="Username"
@@ -44,7 +44,7 @@
                 cols="5"
               >
                 <v-text-field
-                  v-model="loadedUsers.name"
+                  v-model.trim="loadedUsers.name"
                   :rules="nameRules"
                   counter="20"
                   label="First name"
@@ -55,7 +55,7 @@
                 cols="5"
               >
                 <v-text-field
-                  v-model="loadedUsers.surname"
+                  v-model.trim="loadedUsers.surname"
                   :rules="nameRules"
                   counter="20"
                   label="Last name"
@@ -68,7 +68,7 @@
                 cols="10"
               >
                 <v-text-field
-                  v-model="loadedUsers.email"
+                  v-model.trim="loadedUsers.email"
                   :rules="emailRules"
                   counter="42"
                   label="Email"
@@ -142,7 +142,7 @@
                 cols="10"
               >
                 <v-textarea
-                  v-model="loadedUsers.bio"
+                  v-model.trim="loadedUsers.bio"
                   :rules="bioRules"
                   :auto-grow="true"
                   :filled="true"

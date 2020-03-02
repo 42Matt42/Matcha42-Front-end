@@ -1,7 +1,8 @@
 <template>
   <div>
     <v-container
-      class="font-weight-black"
+      class="font-weight-black purple--text text--lighten-5"
+      style="display: flex; justify-content: center;"
     >
       Update your pictures<br>
     </v-container>
@@ -23,10 +24,9 @@
                 accept="image/*"
                 counter
                 show-size
-                filled
                 prepend-icon="mdi-camera"
-                placeholder="Picture 1"
-                label="Picture 1"
+                placeholder="Profile Picture"
+                label="Profile Picture"
                 truncate-length="42"
               />
             </v-row>
@@ -38,10 +38,9 @@
                 accept="image/*"
                 counter
                 show-size
-                filled
                 prepend-icon="mdi-camera"
-                placeholder="Picture 2"
-                label="Picture 2"
+                placeholder="Landscape Picture"
+                label="Landscape Picture"
                 truncate-length="42"
               />
             </v-row>
@@ -53,7 +52,6 @@
                 accept="image/*"
                 counter
                 show-size
-                filled
                 prepend-icon="mdi-camera"
                 placeholder="Picture 3"
                 label="Picture 3"
@@ -68,7 +66,6 @@
                 accept="image/*"
                 counter
                 show-size
-                filled
                 prepend-icon="mdi-camera"
                 placeholder="Picture 4"
                 label="Picture 4"
@@ -83,7 +80,6 @@
                 accept="image/*"
                 counter
                 show-size
-                filled
                 prepend-icon="mdi-camera"
                 placeholder="Picture 5"
                 label="Picture 5"

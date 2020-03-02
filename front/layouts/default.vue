@@ -62,86 +62,93 @@
             </nuxt-link>
           </v-list-item>
         </div>
-        <v-subheader
-          class="mt-4 title purple darken-4 purple--text text--lighten-5"
-        >
-          &nbsp; Suggestions
-        </v-subheader>
-        <v-list
-          v-for="(itemSuggest, j) in loadedSuggestions"
-          :key="j"
-          link
-        >
-          <v-list-item>
-            <v-list-item-avatar>
-              <img
-                :src="`data:image/*;base64,${itemSuggest.photo}`"
-                alt=""
+        <div v-if="token">
+          <v-subheader
+            class="mt-4 title purple font-italic font-weight-light darken-4 purple--text text--lighten-5 justify-center"
+          >
+            Suggestions&nbsp;
+          </v-subheader>
+          <v-list
+            v-for="(itemSuggest, j) in loadedSuggestions"
+            :key="j"
+          >
+            <v-list-item>
+              <nuxt-link
+                :to="{ path: `/login/user/${itemSuggest.username}` }"
+                style="display: flex; justify-content: center;"
               >
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title
-                v-text="itemSuggest.username"
-                class="purple--text text--lighten-5"
-              />
-              <v-list-item-subtitle
-                v-text="`${myGender[itemSuggest.gender_id - 1] }`"
-                class="purple--text text--lighten-5"
-              />
-              <v-list-item-subtitle
-                v-text="`${itemSuggest.age} y/o`"
-                class="purple--text text--lighten-5"
-              />
-            </v-list-item-content>
+                <v-list-item-avatar>
+                  <img
+                    :src="`data:image/*;base64,${itemSuggest.photo}`"
+                    alt=""
+                  >
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-text="itemSuggest.username"
+                    class="purple--text text--lighten-5"
+                  />
+                  <v-list-item-subtitle
+                    v-text="`${myGender[itemSuggest.gender_id - 1] }`"
+                    class="purple--text text--lighten-5"
+                  />
+                  <v-list-item-subtitle
+                    v-text="`${itemSuggest.age} y/o`"
+                    class="purple--text text--lighten-5"
+                  />
+                </v-list-item-content>
+              </nuxt-link>
+            </v-list-item>
+            <v-divider />
+          </v-list>
+          <v-list-item
+            class="mt-4"
+            link
+          >
+            <v-list-item-action>
+              <v-icon
+                color="purple lighten-5"
+              >
+                mdi-heart-pulse
+              </v-icon>
+            </v-list-item-action>
+            <v-list-item-title
+              class="purple--text text--lighten-5"
+            >
+              &nbsp; {{ loadedUsers.score }}
+            </v-list-item-title>
           </v-list-item>
-        </v-list>
-        <v-list-item
-          class="mt-4"
-          link
-        >
-          <v-list-item-action>
-            <v-icon
-              color="purple lighten-5"
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon
+                color="purple lighten-5"
+              >
+                mdi-map-marker
+              </v-icon>
+            </v-list-item-action>
+            <v-list-item-title
+              class="purple--text text--lighten-5"
             >
-              mdi-heart-pulse
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title
-            class="purple--text text--lighten-5"
+              &nbsp; {{ loadedLocation.city }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-for="itemInterestedIn in filterInterestedInLayout(itemsInterestedIn, loadedUsers.interested_in)"
+            :key="itemInterestedIn.id"
+            color="purple--text text--lighten-5"
           >
-            &nbsp; {{ loadedUsers.score }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-action>
             <v-icon
-              color="purple lighten-5"
+              class="purple--text text--lighten-5"
             >
-              mdi-map-marker
+              {{ itemInterestedIn.icon }}
             </v-icon>
-          </v-list-item-action>
-          <v-list-item-title
-            class="purple--text text--lighten-5"
-          >
-            &nbsp; {{ loadedLocation.city }}
-          </v-list-item-title>
-        </v-list-item>
-        <v-list-item
-          v-for="itemInterestedIn in filterInterestedInLayout(itemsInterestedIn, loadedUsers.interested_in)"
-          :key="itemInterestedIn.id"
-          color="purple--text text--lighten-5"
-        >
-          <v-icon
-            class="purple--text text--lighten-5"
-          >
-            {{ itemInterestedIn.icon }}
-          </v-icon>
-          <v-list-item-title
-            class="purple--text text--lighten-5"
-          >
-            &nbsp;LF {{ itemInterestedIn.name }}
-          </v-list-item-title>
-        </v-list-item>
+            <v-list-item-title
+              class="purple--text text--lighten-5"
+            >
+              &nbsp;LF {{ itemInterestedIn.name }}
+            </v-list-item-title>
+          </v-list-item>
+        </div>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -163,14 +170,13 @@
             </v-toolbar-title>
           </v-row>
         </v-col>
-        <!-- <v-spacer /> -->
         <v-col cols="6">
           <v-row
             justify="end"
           >
             <v-form @submit.prevent="keySearchUser">
               <v-text-field
-                v-model="searchUsername"
+                v-model.lazy.trim="searchUsername"
                 :append-icon-cb="() => {}"
                 append-icon="mdi-account-search"
                 color="purple darken-1"

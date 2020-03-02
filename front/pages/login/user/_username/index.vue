@@ -2,7 +2,8 @@
   <div>
     <div v-if="checker === true">
       <v-container
-        class="font-weight-black"
+        class="font-weight-black purple--text text--lighten-5"
+        style="display: flex; justify-content: center;"
       >
         {{ target }}'s profile page !
       </v-container>
@@ -11,6 +12,7 @@
         v-ripple="{ class: `purple--text` }"
         class="mx-auto"
         max-width="434"
+        color="deep-purple lighten-5"
       >
         <v-img
           :src="`data:image/*;base64,${loadedSearchProfile.photos[1]}`"
@@ -41,10 +43,11 @@
         <v-card-subtitle>
           <div>
             <v-row
-              v-if="loadedSearchProfile.last_connexion"
+              v-if="loadedSearchProfile.last_connection"
               justify="end"
+              class="font-italic"
             >
-              {{ loadedSearchProfile.last_connexion }}&nbsp;
+              Offline ({{ lastConnectionSearchProfile }})&nbsp;
             </v-row>
             <v-row
               v-else
@@ -70,7 +73,7 @@
         <v-card-text class="text--primary">
           <div>&nbsp;</div>
           <div>{{ loadedSearchProfile.name }} {{ loadedSearchProfile.surname }}</div>
-          <div>Anniversary: {{ birthday }}</div>
+          <div>Anniversary: {{ birthdaySearchProfile }}</div>
           <div>&nbsp;</div>
           <div>Tags: {{ loadedSearchProfile.tags.toString() }}</div>
           <div>&nbsp;</div>
@@ -88,58 +91,84 @@
           >
             District: {{ loadedSearchProfile.location.district }}
           </div>
-        </v-card-text>
 
-        <v-card-actions>
-          <v-btn
-            @click="show = !show"
-            icon
-            right
-          >
-            <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            @click="love"
-            fab
-            color="pink lighten-3"
-            bottom
-            left
-            absolute
-            x-large
-          >
-            <v-icon>mdi-cards-heart</v-icon>
-          </v-btn>
-          <v-btn
-            color="purple"
-            text
-          />
-          <v-spacer />
-          <v-btn
-            @click="block"
-            fab
-            color="pink lighten-3"
-            bottom
-            left
-            absolute
-            x-large
-          >
-            <v-icon>mdi-account-cancel</v-icon>
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            @click="report"
-            fab
-            color="pink lighten-3"
-            bottom
-            left
-            absolute
-            x-large
-          >
-            <v-icon>mdi-alert-octagon-outline</v-icon>
-          </v-btn>
-        </v-card-actions>
+          <v-card-actions>
+            <v-row
+              align-start
+            >
+              <v-col
+                v-if="filterLove(loadedLikes, loadedSearchProfile.username)"
+              >
+                <v-btn
+                  @click="dislike"
+                  fab
+                  color="deep-purple lighten-5"
+                  absolute
+                  x-large
+                >
+                  <v-icon
+                    color="deep-purple accent-3"
+                  >
+                    mdi-heart-broken
+                  </v-icon>
+                </v-btn>
+              </v-col>
+
+              <v-col
+                v-else
+              >
+                <v-btn
+                  @click="love"
+                  fab
+                  color="deep-purple lighten-5"
+                  absolute
+                  x-large
+                >
+                  <v-icon
+                    color="deep-purple accent-3"
+                  >
+                    mdi-cards-heart
+                  </v-icon>
+                </v-btn>
+              </v-col>
+
+              <v-col cols="4" />
+              <v-col>
+                <v-btn
+                  @click="block"
+                  fab
+                  color="deep-purple lighten-5"
+                  absolute
+                  x-large
+                >
+                  <v-icon
+                    color="indigo accent-1"
+                  >
+                    mdi-account-cancel
+                  </v-icon>
+                </v-btn>
+              </v-col>
+
+              <v-col>
+                <v-btn
+                  @click="report"
+                  fab
+                  color="deep-purple lighten-5"
+                  absolute
+                  x-large
+                >
+                  <v-icon
+                    color="indigo accent-1"
+                  >
+                    mdi-alert-octagon-outline
+                  </v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card-text>
       </v-card>
+      <br><br>
     </div>
   </div>
 </template>
@@ -171,17 +200,11 @@ export default {
     loadedSearchProfile () {
       return this.$store.getters.loadedSearchProfile
     },
-    loadedPictures () {
-      return this.$store.getters.loadedPictures
-    },
     token () {
       return this.$store.getters.token
     },
-    loadedMapPosition () {
-      return this.$store.getters.loadedMapPosition
-    },
-    loadedLocation () {
-      return this.$store.getters.loadedLocation
+    loadedLikes () {
+      return this.$store.getters.loadedLikes
     }
   },
   async asyncData (context) {
@@ -230,15 +253,40 @@ export default {
         .catch((error) => {
           console.log('error_async_XuserInfo', error)
           console.log('error_client', error.response.statusText)
-          context.store.dispatch('setMessage', error.response.statusText)
+          context.store.dispatch('deleteSearchProfile')
           context.redirect('/')
         })
-      const birthday = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM')
+      const myLikes = await axios
+        .get(process.env.serverUrl + '/social/like', {
+          headers: {
+            Authorization: 'Bearer ' + context.app.store.getters.token
+          }
+        })
+        .then((response) => {
+          /* eslint-disable */
+          console.log('response_GET_like', response)
+          context.store.dispatch('setLikes', response.data.client)
+          context.store.dispatch('setMessage', response.client)
+        })
+        .catch((error) => {
+          console.log('error_GET_like', error)
+          console.log('error_client', error.response.data.client)
+          context.store.dispatch('setMessage', error.response.data.client)
+        })
+      const birthdaySearchProfile = await moment(context.store.getters.loadedSearchProfile.birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
+      const lastConnectionSearchProfile = await moment(context.store.getters.loadedSearchProfile.last_connection, 'YYYY-MM-DDTHH:mm:ss[Z]').format('L')
       return {
         iView,
         getXuserInfo,
-        birthday
+        myLikes,
+        // yourLikes,
+        birthdaySearchProfile,
+        lastConnectionSearchProfile
       }
+    }
+    else {
+      context.store.dispatch('deleteSearchProfile')
+      context.redirect('/')
     }
   },
   methods: {
@@ -260,8 +308,29 @@ export default {
           this.$store.dispatch('setMessage', response.client)
         })
         .catch((error) => {
-          console.log ('error_POST_like', error)
-          console.log('error_client', error.response.data.client)
+          console.log('error_LIKE_client', error.response.data.client)
+          this.$store.dispatch('setMessage', error.response.data.client)
+        })
+    },
+    dislike () {
+      this.$axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/like',
+        data: {
+          username: this.target
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters.token
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_dislike', response)
+          console.log('response_client', response.client)
+          this.$store.dispatch('setMessage', response.client)
+        })
+        .catch((error) => {
+          console.log('error_DISLIKE_client', error.response.data.client)
           this.$store.dispatch('setMessage', error.response.data.client)
         })
     },
@@ -310,6 +379,18 @@ export default {
           console.log('error_client', error.response.data.client)
           this.$store.dispatch('setMessage', error.response.data.client)
         })
+    },
+    filterLove (lovers, target) {
+      return lovers.filter(function (lover) {
+        console.log('lover', lover)
+        console.log('target', target)
+        if (lover.user_who_likes === target) {
+          return true
+        }
+        else {
+          return false
+        }
+      })
     }
   }
 }

@@ -3,30 +3,34 @@
     <v-container
       class="font-weight-black purple--text text--lighten-5"
     >
-      Likes
+      My Likes
     </v-container>
     <v-container style="background-color: transparent">
       <v-list style="background-color: transparent">
         <v-list-item
-          v-for="(item, i) in filterLikes(loadedLikes)"
-          :key="i"
+          v-for="(itemLikes, y) in filterLikes(loadedLikes)"
+          :key="y"
         >
-          <div>
-            <p
-              class="text-xs-right"
-            >
-              <v-icon
-                class="purple--text text--lighten-5"
+          <nuxt-link
+            :to="{ path: `/login/user/${itemLikes.user_who_likes}` }"
+          >
+            <div>
+              <p
+                class="text-xs-right"
               >
-                mdi-heart
-              </v-icon>
-              <v-list-item-title
-                class="purple--text text--lighten-5 text-xs-left"
-              >
-                &nbsp;msaubin&nbsp;liked your profile {{ item.loveAge }} ({{ item.date }})
-              </v-list-item-title>
-            </p>
-          </div>
+                <v-list-item-title
+                  class="purple--text text--lighten-5 text-xs-left"
+                >
+                  <v-icon
+                    class="purple--text text--lighten-5"
+                  >
+                    mdi-heart
+                  </v-icon>
+                  {{ itemLikes.user_who_likes }} liked your profile {{ itemLikes.loveAge }} ({{ itemLikes.loveDate }})
+                </v-list-item-title>
+              </p>
+            </div>
+          </nuxt-link>
         </v-list-item>
       </v-list>
     </v-container>
@@ -78,10 +82,10 @@ export default {
     }
   },
   methods: {
-    filterLikes (love) {
-      return love.filter(function (love) {
-        love.loveAge = moment(love.date, 'X').fromNow()
-        love.date = moment(love.date, 'X').format('MMMM Do YYYY, h:mm:ss a')
+    filterLikes (loves) {
+      return loves.filter(function (love) {
+        love.loveAge = moment(love.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
+        love.loveDate = moment(love.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
         return love
       })
     }
