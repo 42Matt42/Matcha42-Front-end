@@ -13,7 +13,6 @@
           <v-list-item
             v-for="(itemLogout,exit) in iLogout"
             :key="exit"
-            link
           >
             <nuxt-link :to="{ path: `${itemLogout.url}` }">
               <v-list-item-action>
@@ -37,8 +36,7 @@
         <div v-else>
           <v-list-item
             v-for="itemLogin in iLogin"
-            :key="itemLogin.text"
-            link
+            :key="itemLogin.idLogin"
           >
             <nuxt-link :to="{ path: `${itemLogin.url}` }">
               <v-list-item-action>
@@ -100,7 +98,6 @@
           </v-list>
           <v-list-item
             class="mt-4"
-            link
           >
             <v-list-item-action>
               <v-icon
@@ -115,7 +112,7 @@
               &nbsp; {{ loadedUsers.score }}
             </v-list-item-title>
           </v-list-item>
-          <v-list-item link>
+          <v-list-item>
             <v-list-item-action>
               <v-icon
                 color="purple lighten-5"
@@ -276,11 +273,11 @@ export default {
     counter: 0,
     myGender: ['Bi', 'Man', 'Woman'],
     iLogin: [
-      { icon: 'mdi-home', text: 'Home', url: '/' },
-      { icon: 'mdi-duck', text: 'Match me', url: '/login/matchme' },
-      { icon: 'mdi-heart-multiple-outline', text: 'My crush', url: '/login/mycrush' },
-      { icon: 'mdi-account-circle', text: 'Profile', url: '/login/profile' },
-      { icon: 'mdi-power', text: '', url: '/login/logout' }
+      { idLogin: 1, icon: 'mdi-home', text: 'Home', url: '/' },
+      { idLogin: 2, icon: 'mdi-duck', text: 'Match me', url: '/login/matchme' },
+      { idLogin: 3, icon: 'mdi-heart-multiple-outline', text: 'My crush', url: '/login/mycrush' },
+      { idLogin: 4, icon: 'mdi-account-circle', text: 'Profile', url: '/login/profile' },
+      { idLogin: 5, icon: 'mdi-power', text: '', url: '/login/logout' }
     ],
     iLogout: [
       { icon: 'mdi-home', text: 'Home', url: '/' },

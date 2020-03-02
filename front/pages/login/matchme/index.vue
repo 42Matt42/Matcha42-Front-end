@@ -418,7 +418,6 @@ export default {
         if (self.filterDistance) {
           // item.distance <= self.filterDistance && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
           return itemFilterAdvancedSearch.distance <= self.filterDistance && itemFilterAdvancedSearch.hobbies.includes(self.filterTags)// && itemFilterAdvancedSearch.age >= self.filterAge[0] && itemFilterAdvancedSearch.age <= self.filterAge[1] && itemFilterAdvancedSearch.score >= self.filterScore[0] && itemFilterAdvancedSearch.score <= filterScore[1]
-          // filterTags
         }
       })
     },
