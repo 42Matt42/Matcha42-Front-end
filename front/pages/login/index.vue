@@ -147,6 +147,9 @@ export default {
             this.$store.dispatch('setToken', response.token)
             console.log('response_client', response.client)
             this.$store.dispatch('setMessage', response.client)
+            console.log('THIS', this)
+            console.log('EMIT', this.$emit)
+            this.$emit('login', this.login.username)
             if (response.userdata.profile_complete === 0)
               this.$router.push('/login/profile/settings')
             else

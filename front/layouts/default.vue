@@ -260,12 +260,17 @@
 </template>
 
 <script>
+// import socketio from 'socket.io'
+// import VueSocketIO from 'vue-socket.io'
+// export const SocketInstance = socketio('http://10.13.6.19:8080')
+
 export default {
   props: {
     // eslint-disable-next-line
     source: String
   },
   data: () => ({
+    // socketMessage: '',
     drawer: null,
     snackbar: true,
     searchUsername: '',
@@ -313,6 +318,21 @@ export default {
       return this.$store.getters.loadedSuggestionsSidebar
     }
   },
+  sockets: {
+    connect () {
+      // Fired when the socket connects.
+      this.isConnected = true
+    },
+
+    disconnect () {
+      this.isConnected = false
+    },
+
+    // Fired when the server sends something on the "messageChannel" channel.
+    messageChannel (data) {
+      this.socketMessage = data
+    }
+  },
   methods: {
     keySearchUser (event) {
       this.$router.push('/login/user/' + `${this.searchUsername}`)
@@ -322,6 +342,10 @@ export default {
         return itemFilterLayout.id === sex
       })
     }
+    // pingServer() {
+    //   // Send the "pingServer" event to the server.
+    //   this.$socket.emit('pingServer', 'PING!')
+    // }
   }
   //   logout () {
   //     this.$store.dispatch('setLogout', null)

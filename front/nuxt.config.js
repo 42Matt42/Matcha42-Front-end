@@ -1,12 +1,12 @@
 import colors from 'vuetify/es5/util/colors'
-import { Http2ServerRequest } from 'http2';
+import { Http2ServerRequest } from 'http2'
 
 export default {
   env: {
     // process.env.baseUrl
     baseUrl: 'http://localhost:3000', // || process.env.BASE_URL ||
     // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login'
-    serverUrl: 'http://localhost:8080/api' // || process.env.SERVER_URL
+    serverUrl: 'http://10.13.6.19:8080/api' // || process.env.SERVER_URL
   },
   mode: 'spa',
   /*
@@ -38,7 +38,8 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-  ],
+    { src: '~/plugins/socket.client.js' }
+],
   /*
   ** Nuxt.js dev-modules
   */

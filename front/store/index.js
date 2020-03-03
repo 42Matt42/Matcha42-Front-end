@@ -1,6 +1,9 @@
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
+// import socketio from 'socket.io'
+// import VueSocketIO from 'vue-socket.io'
+// export const SocketInstance = socketio('http://10.13.6.19:8080')
 // const cookieparser = process.server ? require('cookieparser') : undefined
 
 const createStore = () => {
@@ -20,9 +23,26 @@ const createStore = () => {
       loadedSuggestionsSidebar: [],
       loadedAdvancedSearch: [],
       loadedPictures: [],
-      checker: 'false'
+      checker: 'false',
+      user: {},
+      messages: [],
+      users: []
     },
     mutations: {
+      setUser (state, user) {
+        state.user = user
+      },
+      newMessage (state, msg) {
+        state.messages = [...state.messages, msg]
+      },
+      updateUsers (state, users) {
+        state.users = users
+      },
+      clearData (state) {
+        state.user = {}
+        state.messages = []
+        state.users = []
+      },
       setUserData (state, userinfo) {
         state.loadedUsers = userinfo
       },

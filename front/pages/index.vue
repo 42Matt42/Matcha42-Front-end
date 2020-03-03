@@ -284,7 +284,7 @@ export default {
       context.store.dispatch('setIpGeoloc')
     }
 
-    if (context.app.store.getters.token) {
+    if (context.app.store.getters.token && !context.app.store.getters.loadedLocation.city) {
       // geolocalisation process
       if ('geolocation' in navigator) {
         await navigator.geolocation.getCurrentPosition(success, error, options)
