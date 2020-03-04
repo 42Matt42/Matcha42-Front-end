@@ -3,10 +3,10 @@ import { Http2ServerRequest } from 'http2'
 
 export default {
   env: {
-    // process.env.baseUrl
+    // example: use process.env.baseUrl
     baseUrl: 'http://localhost:3000', // || process.env.BASE_URL ||
-    // 'https://cors-anywhere.herokuapp.com/https://matcha42saubinbartol.herokuapp.com/login'
-    serverUrl: 'http://10.13.6.19:8080/api' // || process.env.SERVER_URL
+    serverUrl: 'http://10.13.12.22:8080/api', // || process.env.SERVER_URL
+    serverUrlsocketio: 'http://10.13.12.22:8080'
   },
   mode: 'spa',
   /*
@@ -19,6 +19,9 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+    ],
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -37,9 +40,7 @@ export default {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [
-    { src: '~/plugins/socket.client.js' }
-],
+  plugins: [],
   /*
   ** Nuxt.js dev-modules
   */
@@ -48,8 +49,7 @@ export default {
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/vuetify',
-    '@nuxtjs/proxy'
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Nuxt.js modules
@@ -58,17 +58,6 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/axios'
   ],
-  proxy: {
-    '/api': {
-      target: 'https://matcha42saubinbartol.herokuapp.com/',
-      pathRewrite: {
-        '^/api' : '/'
-        }
-      }
-  },
-  axios: {
-    proxy: true
-  },
 
   /*
   ** vuetify module configuration

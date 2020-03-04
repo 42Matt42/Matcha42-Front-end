@@ -99,6 +99,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   middleware: 'notAuthenticated',
   data () {
@@ -135,6 +136,7 @@ export default {
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
+        const socketLogin = io.connect(process.env.serverUrlsocketio)
         this.$axios
           .$post(process.env.serverUrl + '/users/login', {
             username: this.login.username,
@@ -147,9 +149,7 @@ export default {
             this.$store.dispatch('setToken', response.token)
             console.log('response_client', response.client)
             this.$store.dispatch('setMessage', response.client)
-            console.log('THIS', this)
-            console.log('EMIT', this.$emit)
-            this.$emit('login', this.login.username)
+            socketLogin.emit('login', this.login.username)
             if (response.userdata.profile_complete === 0)
               this.$router.push('/login/profile/settings')
             else
