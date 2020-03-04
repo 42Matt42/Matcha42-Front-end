@@ -342,10 +342,6 @@ export default {
         return itemFilterLayout.id === sex
       })
     }
-    // pingServer() {
-    //   // Send the "pingServer" event to the server.
-    //   this.$socket.emit('pingServer', 'PING!')
-    // }
   }
   //   logout () {
   //     this.$store.dispatch('setLogout', null)

@@ -319,18 +319,18 @@ export default {
       mySuggestions
     }
   },
-  created () {
-    const socket = io.connect(process.env.serverUrlsocketio)
-    // eslint-disable-next-line
-    window.onbeforeunload = () => {
-      socket.emit('disconnect', this.username)
-    }
-    socket.on('chat', (data) => {
-      // eslint-disable-next-line
-      console.log('hello')
-        this.message = data
-    })
-  },
+  // created () {
+  //   const socket = io.connect(process.env.serverUrlsocketio)
+  //   // eslint-disable-next-line
+  //   window.onbeforeunload = () => {
+  //     socket.emit('disconnect', this.username)
+  //   }
+  //   socket.on('chat', (data) => {
+  //     // eslint-disable-next-line
+  //     console.log('hello')
+  //       this.message = data
+  //   })
+  // },
   methods: {
     filterSuggestions (itemFilterSuggestions) {
       self = this

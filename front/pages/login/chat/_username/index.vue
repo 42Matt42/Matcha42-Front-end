@@ -78,12 +78,11 @@ export default {
     }
   },
   created () {
-    const socket = io.connect(process.env.serverUrlsocketio)
     // eslint-disable-next-line
     // window.onbeforeunload = () => {
     //   socket.emit('disconnect', this.username)
     // }
-    socket.on('chat', (data) => {
+    this.store.getters.loadedSocket.on('chat', (data) => {
       // eslint-disable-next-line
       console.log('CREATED__test')
       this.chatListener = data
@@ -105,9 +104,8 @@ export default {
   // },
   methods: {
     sendChatMessage () {
-      const socket2 = io.connect(process.env.serverUrlsocketio)
       if (this.$refs.form.validate()) {
-        socket2.emit('chat', this.loadedUsers.username, this.loadedUsers.username, this.chatMessage)
+        this.store.getters.loadedSocket.emit('chat', this.loadedUsers.username, this.loadedUsers.username, this.chatMessage)
         console.log('Chat message: ', this.chatMessage)
         console.log('sent by: ', this.loadedUsers.username)
         console.log('to: ', this.loadedUsers.username)

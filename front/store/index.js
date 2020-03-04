@@ -1,15 +1,13 @@
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-// import socketio from 'socket.io'
-// import VueSocketIO from 'vue-socket.io'
-// export const SocketInstance = socketio('http://10.13.6.19:8080')
-// const cookieparser = process.server ? require('cookieparser') : undefined
+import ionia from 'socket.io-client'
 
 const createStore = () => {
   return new Vuex.Store({
     plugins: [createPersistedState()],
     state: {
+      loadedSocket: {},
       serverMessage: 'default',
       token: null,
       loadedMapPosition: {},
@@ -29,19 +27,8 @@ const createStore = () => {
       users: []
     },
     mutations: {
-      setUser (state, user) {
-        state.user = user
-      },
-      newMessage (state, msg) {
-        state.messages = [...state.messages, msg]
-      },
-      updateUsers (state, users) {
-        state.users = users
-      },
-      clearData (state) {
-        state.user = {}
-        state.messages = []
-        state.users = []
+      setSocket (state, connectionSocket) {
+        state.loadedSocket = connectionSocket // io.connect('http://10.13.12.22:8080') // process.env.serverUrlsocketio)
       },
       setUserData (state, userinfo) {
         state.loadedUsers = userinfo
@@ -130,6 +117,10 @@ const createStore = () => {
       }
     },
     actions: {
+      setSocket (vuexContext) {
+        const socketConnection = ionia.connect('http://10.13.12.22:8080')
+        vuexContext.commit('setSocket', socketConnection)
+      },
       setUserData (vuexContext, users) {
         vuexContext.commit('setUserData', users)
         if (users.birth_date) {
@@ -137,6 +128,7 @@ const createStore = () => {
         }
       },
       setLogout (vuexContext) {
+        // vuexContext.getters.loadedSocket.emit('disconnect', vuexContext.getters.loadedUsers.username)
         vuexContext.commit('setLogout')
       },
       getUserData (vuexContext) {
@@ -304,6 +296,9 @@ const createStore = () => {
       }
     },
     getters: {
+      loadedSocket (state) {
+        return state.loadedSocket
+      },
       loadedUsers (state) {
         return state.loadedUsers
       },
