@@ -257,10 +257,10 @@
             color="purple accent-3"
           >
             <div class="font-italic font-weight-medium">
-              Notification:&nbsp;{{ loadedSnackbarMessage }}
+              Notification:&nbsp;{{ loadedSnackbarMessage.message }}
             </div>
             <v-btn
-              @click="$store.dispatch('setSnackbarStatus', false)"
+              @click="closeNotif(loadedSnackbarMessage.id)"
               color="purple lighten-5"
               class="font-italic"
               text
@@ -362,11 +362,11 @@ export default {
     // window.onbeforeunload = () => {
     //   socket.emit('disconnect', this.username)
     // }
-    socket.on('chat', (data) => {
+    socket.on('notification', (data) => {
       // eslint-disable-next-line
       console.log('CREATED__test')
       this.chatListener = data
-      this.$store.dispatch('setMessage', data)
+      this.$store.dispatch('setSnackbarMessage', data)
     })
   },
   methods: {
@@ -395,6 +395,27 @@ export default {
           console.log('error_GET_notif', error)
           console.log('error_client', error.response.statusText)
           this.$store.dispatch('setMessage', error.response.statusText)
+        })
+    },
+    closeNotif (id) {
+      this.$axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/notification',
+        data: {
+          notificationId: id
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters.token
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_closeNotif', response)
+          this.$store.dispatch('setMessage', response.data.client)
+          this.$store.dispatch('setSnackbarStatus', false)
+        })
+        .catch((error) => {
+          this.$store.dispatch('setMessage', error.response.data.client)
         })
     }
   }

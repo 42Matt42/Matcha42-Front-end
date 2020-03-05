@@ -5,10 +5,10 @@ export default {
   env: {
     // example: use process.env.baseUrl
     baseUrl: 'http://localhost:3000', // || process.env.BASE_URL ||
-    // serverUrl: 'http://10.13.12.22:8080/api', // || process.env.SERVER_URL
-    // serverUrlIo: 'http://10.13.12.22:8080'
-    serverUrl: 'http://localhost:8080/api', // || process.env.SERVER_URL
-    serverUrlIo: 'http://localhost:8080'
+    serverUrl: 'http://10.12.5.20:8080/api', // || process.env.SERVER_URL
+    serverUrlIo: 'http://10.12.5.20:8080'
+    // serverUrl: 'http://localhost:8080/api', // || process.env.SERVER_URL
+    // serverUrlIo: 'http://localhost:8080'
   },
   mode: 'spa',
   /*

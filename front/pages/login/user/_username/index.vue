@@ -273,8 +273,8 @@ export default {
       const lastConnectionSearchProfile = await moment(context.store.getters.loadedSearchProfile.last_connection, 'YYYY-MM-DDTHH:mm:ss[Z]').format('L')
       return {
         iView,
-        getXuserInfo,
-        myLikes,
+        // getXuserInfo,
+        // myLikes,
         birthdaySearchProfile,
         lastConnectionSearchProfile
       }
@@ -299,8 +299,13 @@ export default {
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_like', response)
-          console.log('response_client', response.client)
-          socket.emit('like', this.$store.getters.loadedUsers.username, this.target)
+          console.log('response_client', response.data.client)
+          if (response.data.client.includes('Liked and matched with')) {
+            socket.emit('likeback', this.$store.getters.loadedUsers.username, this.target)
+          }
+          else {
+            socket.emit('like', this.$store.getters.loadedUsers.username, this.target)
+          }
           this.$store.dispatch('setMessage', response.client)
         })
         .catch((error) => {
@@ -321,8 +326,11 @@ export default {
       })
         .then((response) => {
         /* eslint-disable */
-          console.log('response_POST_dislike', response)
+          console.log('response_DISLIKE', response)
           console.log('response_client', response.client)
+          if (response.data.client.includes('Disliked and unmatched')) {
+            socket.emit('dislike', this.$store.getters.loadedUsers.username, this.target)
+          }
           this.$store.dispatch('setMessage', response.client)
         })
         .catch((error) => {

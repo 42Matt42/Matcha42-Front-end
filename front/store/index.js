@@ -51,6 +51,8 @@ const createStore = () => {
         state.token = token
       },
       setLogout (state) {
+        state.loadedSnackbarStatus = false
+        state.loadedSnackbarMessage = ''
         state.loadedNotifications = {}
         state.serverMessage = null
         state.token = null

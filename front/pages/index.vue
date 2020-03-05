@@ -210,6 +210,7 @@ export default {
       filterDistance: 20000,
       filterScore: [0, 1000],
       filterTags: '',
+      filterOrderBy: 'age',
       ageRules: [
         v => !!v || 'Target age required',
         v => (v[1] < 101) || 'Target age too high',
@@ -317,28 +318,18 @@ export default {
       mySuggestions
     }
   },
-  // created () {
-  //   const socket = io.connect(process.env.serverUrlIo)
-  //   // eslint-disable-next-line
-  //   window.onbeforeunload = () => {
-  //     socket.emit('disconnect', this.username)
-  //   }
-  //   socket.on('chat', (data) => {
-  //     // eslint-disable-next-line
-  //     console.log('hello')
-  //       this.message = data
-  //   })
-  // },
   methods: {
     filterSuggestions (itemFilterSuggestions) {
       self = this
-      return itemFilterSuggestions.filter(function (itemFilterSuggestions) {
-        if (self.filterDistance) {
-          // item.distance <= self.filterDistance && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
-          return itemFilterSuggestions.distance <= self.filterDistance && itemFilterSuggestions.hobbies.includes(self.filterTags)// && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
-          // filterTags
-        }
-      })
+      // return orderBy(function (itemFilterSuggestions, filterOrderBy) {
+        return itemFilterSuggestions.filter(function (itemFilterSuggestions) {
+          if (self.filterDistance) {
+            // item.distance <= self.filterDistance && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
+            return itemFilterSuggestions.distance <= self.filterDistance && itemFilterSuggestions.hobbies.includes(self.filterTags)// && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
+            // filterTags
+          }
+        })
+      // })
     },
     chatSendMessage (msg) {
       socket.emit('chat', this.loadedUsers.username, this.loadedUsers.username, msg)
