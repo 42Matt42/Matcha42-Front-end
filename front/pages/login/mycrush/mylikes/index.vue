@@ -39,6 +39,7 @@
 
 <script>
 import axios from 'axios'
+// import socket from '~/plugins/socket.io.js'
 import moment from 'moment'
 
 export default {

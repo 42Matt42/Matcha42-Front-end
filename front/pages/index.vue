@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ message }}
     <v-container
       v-if="loadedUsers.profile_complete === 1 && token"
     >
@@ -204,7 +203,6 @@ export default {
   },
   data () {
     return {
-      message: 'Hello Vue !',
       myGender: ['Bi', 'Man', 'Woman'],
       genderLF: ['Men & Women', 'Men', 'Women'],
       hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron'],
@@ -320,7 +318,7 @@ export default {
     }
   },
   // created () {
-  //   const socket = io.connect(process.env.serverUrlsocketio)
+  //   const socket = io.connect(process.env.serverUrlIo)
   //   // eslint-disable-next-line
   //   window.onbeforeunload = () => {
   //     socket.emit('disconnect', this.username)

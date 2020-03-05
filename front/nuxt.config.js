@@ -5,8 +5,10 @@ export default {
   env: {
     // example: use process.env.baseUrl
     baseUrl: 'http://localhost:3000', // || process.env.BASE_URL ||
-    serverUrl: 'http://10.13.12.22:8080/api', // || process.env.SERVER_URL
-    serverUrlsocketio: 'http://10.13.12.22:8080'
+    // serverUrl: 'http://10.13.12.22:8080/api', // || process.env.SERVER_URL
+    // serverUrlIo: 'http://10.13.12.22:8080'
+    serverUrl: 'http://localhost:8080/api', // || process.env.SERVER_URL
+    serverUrlIo: 'http://localhost:8080'
   },
   mode: 'spa',
   /*
@@ -21,7 +23,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     // script: [
-    //   { src: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js' }
+    //   { import socket from '~/plugins/socket.io.js' }
     // ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -40,7 +42,7 @@ export default {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [],
+  plugins: ['~/plugins/socket.io.js'],
   /*
   ** Nuxt.js dev-modules
   */
@@ -57,6 +59,7 @@ export default {
   modules: [
     '@nuxtjs/pwa',
     '@nuxtjs/axios'
+    // ['~/io']
   ],
 
   /*

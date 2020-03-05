@@ -142,6 +142,21 @@
               &nbsp;LF {{ itemInterestedIn.name }}
             </v-list-item-title>
           </v-list-item>
+          <br>
+          <v-btn
+            @click="getNotif"
+            color="green lighten-5"
+          >
+            getNOTIF
+          </v-btn>
+          <br><br>
+          <v-btn
+            @click="$store.dispatch('setSnackbarMessage', 'Hallo!')"
+            color="indigo darken-4"
+            class="indigo--text text--lighten-5"
+          >
+            Notif Test
+          </v-btn>
         </div>
       </v-list>
     </v-navigation-drawer>
@@ -235,21 +250,22 @@
       >
         <div class="text-center ma-2">
           <v-snackbar
-            v-model="snackbar"
+            v-model="loadedSnackbarStatus"
             :timeout="timeoutDuration"
             top
             right
             color="purple accent-3"
           >
             <div class="font-italic font-weight-medium">
-              Notification:&nbsp;{{ serverMessage }}
+              Notification:&nbsp;{{ loadedSnackbarMessage }}
             </div>
             <v-btn
-              @click="snackbar = false"
+              @click="$store.dispatch('setSnackbarStatus', false)"
               color="purple lighten-5"
+              class="font-italic"
               text
             >
-              Close
+              Mark as read
             </v-btn>
           </v-snackbar>
         </div>
@@ -260,6 +276,9 @@
 </template>
 
 <script>
+/* eslint-disable */
+import socket from '~/plugins/socket.io.js'
+import axios from 'axios'
 // import socketio from 'socket.io'
 // import VueSocketIO from 'vue-socket.io'
 // export const SocketInstance = socketio('http://10.13.6.19:8080')
@@ -272,9 +291,9 @@ export default {
   data: () => ({
     // socketMessage: '',
     drawer: null,
-    snackbar: true,
+    // snackbar: true,
     searchUsername: '',
-    timeoutDuration: 4242,
+    timeoutDuration: 0,
     counter: 0,
     myGender: ['Bi', 'Man', 'Woman'],
     iLogin: [
@@ -296,6 +315,9 @@ export default {
     ]
   }),
   computed: {
+    loadedNotifications () {
+      return this.$store.getters.loadedNotifications
+    },
     loadedUsers () {
       return this.$store.getters.loadedUsers
     },
@@ -316,22 +338,36 @@ export default {
     // },
     loadedSuggestionsSidebar () {
       return this.$store.getters.loadedSuggestionsSidebar
+    },
+    loadedSnackbarMessage: {
+      get() {
+        return this.$store.state.loadedSnackbarMessage
+      },
+      set(state) {
+        this.$store.dispatch('setSnackbarMessage', state)
+      }
+      // return this.$store.state.serverMessage
+    },
+    loadedSnackbarStatus: {
+      get() {
+        return this.$store.state.loadedSnackbarStatus
+      },
+      set(state) {
+        this.$store.dispatch('setSnackbarStatus', state)
+      }
     }
   },
-  sockets: {
-    connect () {
-      // Fired when the socket connects.
-      this.isConnected = true
-    },
-
-    disconnect () {
-      this.isConnected = false
-    },
-
-    // Fired when the server sends something on the "messageChannel" channel.
-    messageChannel (data) {
-      this.socketMessage = data
-    }
+  created () {
+    // eslint-disable-next-line
+    // window.onbeforeunload = () => {
+    //   socket.emit('disconnect', this.username)
+    // }
+    socket.on('chat', (data) => {
+      // eslint-disable-next-line
+      console.log('CREATED__test')
+      this.chatListener = data
+      this.$store.dispatch('setMessage', data)
+    })
   },
   methods: {
     keySearchUser (event) {
@@ -341,6 +377,25 @@ export default {
       return itemFilterLayout.filter(function (itemFilterLayout) {
         return itemFilterLayout.id === sex
       })
+    },
+    getNotif () {
+      axios
+        .get(process.env.serverUrl + '/social/notification', {
+          headers: {
+            Authorization: 'Bearer ' + this.$store.getters.token
+          }
+        })
+        .then((response) => {
+          /* eslint-disable */
+          console.log('response_GET_notif', response)
+          this.$store.dispatch('setNotifications', response.data.client)
+          this.$store.dispatch('setMessage', response.statusText)
+        })
+        .catch((error) => {
+          console.log('error_GET_notif', error)
+          console.log('error_client', error.response.statusText)
+          this.$store.dispatch('setMessage', error.response.statusText)
+        })
     }
   }
   //   logout () {

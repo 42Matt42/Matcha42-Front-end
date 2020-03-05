@@ -3,10 +3,9 @@
     <v-container
       class="font-weight-black purple--text text--lighten-5"
     >
-      <br>Welcome !
+      <br>Chat room with {{ target }}
     </v-container>
     <div>
-      {{ chatListener }}
       <br>
       <v-form
         ref="form"
@@ -34,8 +33,8 @@
               <v-btn
                 @click="sendChatMessage"
                 :disabled="!valid"
-                color="blue lighten-4"
-                class="mr-4"
+                color="purple accent-4"
+                class="mr-4 purple--text text--lighten-5"
               >
                 Send Message !
               </v-btn>
@@ -44,20 +43,38 @@
         </v-container>
       </v-form>
     </div>
+    <v-list
+      subheader
+      three-line
+      style="background-color: transparent"
+    >
+      <v-list-item
+        v-for="(itemChat, arrayLine) in chatListener"
+        :key="arrayLine"
+      >
+        <v-list-item-content>
+          <v-list-item-subtitle>{{ itemChat.split(':', 1)[0] }}:</v-list-item-subtitle>
+          <v-list-item-title>{{ itemChat.split(/^\w+:/, 2)[1] }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
 <script>
+import socket from '~/plugins/socket.io.js'
+
 /* eslint-disable */
 export default {
   data () {
     return {
+      target: this.$route.params.username,
       login: {
         username: '',
         password: ''
       },
       chatMessage: '',
-      chatListener: '',
+      chatListener: [],
       valid: true,
       // chatRules: [
       //   v => !!v || 'Username is required',
@@ -82,30 +99,17 @@ export default {
     // window.onbeforeunload = () => {
     //   socket.emit('disconnect', this.username)
     // }
-    this.store.getters.loadedSocket.on('chat', (data) => {
+    socket.on('chat', (data) => {
       // eslint-disable-next-line
-      console.log('CREATED__test')
-      this.chatListener = data
-      this.store.dispatch('setMessage', data)
+      console.log('CREATED__test', data)
+      this.chatListener.push(data)
+      this.$store.dispatch('setMessage', 'New PM')
     })
   },
-  // mounted () {
-  //   const socket = io.connect(process.env.serverUrlsocketio)
-  //   // eslint-disable-next-line
-  //   // window.onbeforeunload = () => {
-  //   //   socket.emit('disconnect', this.username)
-  //   // }
-  //   socket.on('chat', (data) => {
-  //     // eslint-disable-next-line
-  //     console.log('MOUNTED__test')
-  //     this.chatListener = data
-  //     this.store.dispatch('setMessage', data)
-  //   })
-  // },
   methods: {
     sendChatMessage () {
       if (this.$refs.form.validate()) {
-        this.store.getters.loadedSocket.emit('chat', this.loadedUsers.username, this.loadedUsers.username, this.chatMessage)
+        socket.emit('chat', this.loadedUsers.username, 'bigwolf755', this.chatMessage)
         console.log('Chat message: ', this.chatMessage)
         console.log('sent by: ', this.loadedUsers.username)
         console.log('to: ', this.loadedUsers.username)

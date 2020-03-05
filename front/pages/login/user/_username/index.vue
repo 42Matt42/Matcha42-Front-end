@@ -170,6 +170,7 @@
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import socket from '~/plugins/socket.io.js'
 
 export default {
   middleware: 'authenticated',
@@ -220,6 +221,7 @@ export default {
         /* eslint-disable */
           console.log('response_POST_view', response)
           console.log('response_statusText', response.data.client)
+          socket.emit('view', context.store.getters.loadedUsers.username, context.route.params.username)
           context.store.dispatch('setMessage', response.data.client)
         })
         .catch((error) => {
@@ -273,7 +275,6 @@ export default {
         iView,
         getXuserInfo,
         myLikes,
-        // yourLikes,
         birthdaySearchProfile,
         lastConnectionSearchProfile
       }
@@ -299,6 +300,7 @@ export default {
         /* eslint-disable */
           console.log('response_POST_like', response)
           console.log('response_client', response.client)
+          socket.emit('like', this.$store.getters.loadedUsers.username, this.target)
           this.$store.dispatch('setMessage', response.client)
         })
         .catch((error) => {

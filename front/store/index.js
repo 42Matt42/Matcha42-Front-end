@@ -1,34 +1,45 @@
 import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
-import ionia from 'socket.io-client'
+import socket from '~/plugins/socket.io.js'
 
 const createStore = () => {
   return new Vuex.Store({
     plugins: [createPersistedState()],
     state: {
-      loadedSocket: {},
+      loadedSnackbarStatus: false,
+      loadedSnackbarMessage: '',
+      loadedNotifications: {},
       serverMessage: 'default',
       token: null,
       loadedMapPosition: {},
       loadedLocation: {},
       loadedUsers: [],
+      loadedPictures: [],
       loadedLikes: [],
       loadedViews: [],
-      loadedMatchlist: [],
       loadedSearchProfile: [],
+      loadedMatchlist: [],
       loadedSuggestions: [],
       loadedSuggestionsSidebar: [],
       loadedAdvancedSearch: [],
-      loadedPictures: [],
-      checker: 'false',
-      user: {},
-      messages: [],
-      users: []
+      checker: 'false'
     },
     mutations: {
-      setSocket (state, connectionSocket) {
-        state.loadedSocket = connectionSocket // io.connect('http://10.13.12.22:8080') // process.env.serverUrlsocketio)
+      modifySnackbar (state, { show = true, timeout = 0, color = 'success', message }) {
+        state.loadedSnackbarStatus = show
+        state.timeout = timeout
+        state.color = color
+        state.loadedSnackbarMessage = message
+      },
+      setSnackbarMessage (state, message) {
+        state.loadedSnackbarMessage = message
+      },
+      setSnackbarStatus (state, value) {
+        state.loadedSnackbarStatus = value
+      },
+      setNotifications (state, notifSocket) {
+        state.loadedNotifications = notifSocket
       },
       setUserData (state, userinfo) {
         state.loadedUsers = userinfo
@@ -40,19 +51,21 @@ const createStore = () => {
         state.token = token
       },
       setLogout (state) {
-        state.loadedUsers = []
-        state.loadedPictures = []
-        state.token = null
+        state.loadedNotifications = {}
         state.serverMessage = null
-        state.checker = false
+        state.token = null
         state.loadedMapPosition = {}
         state.loadedLocation = {}
+        state.loadedUsers = []
+        state.loadedPictures = []
         state.loadedLikes = []
         state.loadedViews = []
         state.loadedSearchProfile = []
+        state.loadedMatchlist = []
         state.loadedSuggestions = []
         state.loadedSuggestionsSidebar = []
         state.loadedAdvancedSearch = []
+        state.checker = false
       },
       registerUser (state, user) {
         state.loadedUsers.registered = user
@@ -117,9 +130,18 @@ const createStore = () => {
       }
     },
     actions: {
-      setSocket (vuexContext) {
-        const socketConnection = ionia.connect('http://10.13.12.22:8080')
-        vuexContext.commit('setSocket', socketConnection)
+      setSnackbarMessage (vuexContext, message) {
+        vuexContext.commit('setSnackbarMessage', message)
+        vuexContext.commit('setSnackbarStatus', true)
+      },
+      setSnackbarStatus (vuexContext, boolean) {
+        vuexContext.commit('setSnackbarStatus', boolean)
+      },
+      notify (vuexContext, data) {
+        vuexContext.commit('modifySnackbar', data)
+      },
+      setNotifications (vuexContext, notif) {
+        vuexContext.commit('setNotifications', notif)
       },
       setUserData (vuexContext, users) {
         vuexContext.commit('setUserData', users)
@@ -128,7 +150,7 @@ const createStore = () => {
         }
       },
       setLogout (vuexContext) {
-        // vuexContext.getters.loadedSocket.emit('disconnect', vuexContext.getters.loadedUsers.username)
+        socket.emit('disconnect', vuexContext.getters.loadedUsers.username)
         vuexContext.commit('setLogout')
       },
       getUserData (vuexContext) {
@@ -296,8 +318,14 @@ const createStore = () => {
       }
     },
     getters: {
-      loadedSocket (state) {
-        return state.loadedSocket
+      loadedSnackbarMessage (state) {
+        return state.loadedSnackbarMessage
+      },
+      loadedSnackbarStatus (state) {
+        return state.loadedSnackbarStatus
+      },
+      loadedNotifications (state) {
+        return state.loadedNotifications
       },
       loadedUsers (state) {
         return state.loadedUsers

@@ -99,7 +99,8 @@
 </template>
 
 <script>
-import ionia from 'socket.io-client'
+// import ionia from 'socket.io-client'
+import socket from '~/plugins/socket.io.js'
 
 /* eslint-disable */
 export default {
@@ -138,8 +139,9 @@ export default {
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
-        const yesman = ionia.connect('http://10.13.12.22:8080')
-        console.log('YES__MAN__', yesman)
+        // const yesman = ionia.connect('http://10.13.12.22:8080')
+        // console.log('YES__MAN__', yesman)
+        console.log('_______socket_______', socket)
         this.$axios
           .$post(process.env.serverUrl + '/users/login', {
             username: this.login.username,
@@ -153,8 +155,11 @@ export default {
             console.log('response_client', response.client)
             this.$store.dispatch('setMessage', response.client)
             // BOOM
-            this.$store.commit('setSocket', yesman)
-            // this.$store.getters.loadedSocket.emit('login', this.login.username)
+            // this.$store.commit('setSocketEmit', yesman.emit('login', this.login.username))
+            // this.$store.commit('setSocketOn', yesman.on)
+            // this.$store.getters.loadedSocketEmit
+            // this.$store.getters.loadedSocketEmit('login', this.login.username)
+            socket.emit('login', this.login.username)
             if (response.userdata.profile_complete === 0)
               this.$router.push('/login/profile/settings')
             else

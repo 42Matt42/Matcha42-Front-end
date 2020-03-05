@@ -51,31 +51,44 @@
           v-for="(itemMatchs, a) in loadedMatchList"
           :key="a"
         >
-          <nuxt-link
-            :to="{ path: `/login/user/${itemMatchs.username}` }"
-          >
-            <div>
-              <p
-                class="text-xs-right"
+          <div>
+            <p
+              class="text-xs-right"
+            >
+              <v-list-item-title
+                class="purple--text text--lighten-5 text-xs-left"
               >
-                <v-list-item-title
-                  class="purple--text text--lighten-5 text-xs-left"
+                <v-icon
+                  class="purple--text text--lighten-5"
                 >
-                  <v-icon
-                    class="purple--text text--lighten-5"
-                  >
-                    mdi-heart
-                  </v-icon>
+                  mdi-heart
+                </v-icon>
+                <nuxt-link
+                  :to="{ path: `/login/user/${itemMatchs.username}` }"
+                  class="subtitle-1"
+                >
                   {{ itemMatchs.username }}
-                  <v-icon
-                    class="purple--text text--lighten-5"
+                </nuxt-link>
+                <v-icon
+                  class="purple--text text--lighten-5"
+                >
+                  mdi-heart
+                </v-icon>
+                <i class="font-weight-light">may be the one !&nbsp;&nbsp;&nbsp;</i>
+                <nuxt-link :to="{ path: `/login/chat/${itemMatchs.username}` }">
+                  <v-btn
+                    color="teal accent-3"
                   >
-                    mdi-heart
-                  </v-icon>
-                </v-list-item-title>
-              </p>
-            </div>
-          </nuxt-link>
+                    <v-icon
+                      class="purple--text text--lighten-5"
+                    >
+                      mdi-forum
+                    </v-icon>
+                  </v-btn>
+                </nuxt-link>
+              </v-list-item-title>
+            </p>
+          </div>
         </v-list-item>
       </v-list>
     </v-container>
