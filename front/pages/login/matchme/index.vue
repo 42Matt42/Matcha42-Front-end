@@ -92,7 +92,7 @@
                   :thumb-size="34"
                   track-fill-color="purple accent-4"
                   thumb-label="always"
-                  thumb-color="indigo accent-2"
+                  thumb-color="light-blue darken-2"
                   track-color="purple lighten-3"
                   min="0"
                   max="1000"
@@ -333,100 +333,6 @@
               </v-range-slider>
             </v-row>
           </v-col>
-        </v-row><v-row>
-          <v-col cols="1">
-          </v-col>
-          <v-col cols="4">
-            <v-row>
-              <v-select
-                v-model.lazy="orderByChoice"
-                :items="orderByList"
-                label="OrderBy"
-                outlined
-              />
-            </v-row>
-          </v-col>
-          <v-col cols="1">
-          </v-col>
-          <v-col cols="4">
-            <v-row>
-              <v-select
-                v-model.lazy="filterTags"
-                :items="hobbies"
-                label="FilterBy Tag"
-                outlined
-              />
-            </v-row>
-          </v-col>
-          <v-col cols="1">
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="11">
-            <v-row>
-              <v-range-slider
-                v-model.lazy="filterAge"
-                :thumb-size="32"
-                :rules="ageRules"
-                thumb-label="always"
-                track-fill-color="purple accent-4"
-                thumb-color="indigo darken-3"
-                track-color="purple lighten-3"
-                min="18"
-                max="100"
-                label="Filter by Age"
-              >
-                <v-text-field
-                  :value="filterAge[0]"
-                />
-                <v-text-field
-                  :value="filterAge[1]"
-                />
-              </v-range-slider>
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="11">
-            <v-row>
-              <v-slider
-                v-model.lazy="filterDistance"
-                :thumb-size="32"
-                :rules="distanceRules"
-                max="20000"
-                thumb-label="always"
-                thumb-color="deep-purple accent-3"
-                label="Filter by Distance (km)"
-                track-color="purple lighten-3"
-                track-fill-color="purple accent-4"
-              />
-            </v-row>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="11">
-            <v-row>
-              <v-range-slider
-                v-model="filterScore"
-                :rules="scoreRules"
-                :thumb-size="34"
-                track-fill-color="purple accent-4"
-                thumb-label="always"
-                thumb-color="indigo accent-2"
-                track-color="purple lighten-3"
-                min="0"
-                max="1000"
-                label="Filter by Popularity"
-              >
-                <v-text-field
-                  :value="filterScore[0]"
-                />
-                <v-text-field
-                  :value="filterScore[1]"
-                />
-              </v-range-slider>
-            </v-row>
-          </v-col>
         </v-row>
       </v-container>
     </div>
@@ -452,6 +358,8 @@ export default {
       filterDistance: 20000,
       filterScore: [0, 1000],
       filterTags: '',
+      orderByChoice: 'Auto',
+      orderByList: ['Auto', 'Age', 'Popularity', 'Distance', 'Tags'],
       ageRules: [
         v => !!v || 'Target age required',
         v => (v[1] < 101) || 'Target age too high',
@@ -527,9 +435,52 @@ export default {
     },
     filterAdvancedSearch (itemFilterAdvancedSearch) {
       self = this
-      return itemFilterAdvancedSearch.filter(function (itemFilterAdvancedSearch) {
+      return itemFilterAdvancedSearch = itemFilterAdvancedSearch.filter(function (itemFilterAdvancedSearch) {
         if (self.filterDistance) {
           return itemFilterAdvancedSearch.distance <= self.filterDistance && itemFilterAdvancedSearch.hobbies.includes(self.filterTags) && itemFilterAdvancedSearch.age >= self.filterAge[0] && itemFilterAdvancedSearch.age <= self.filterAge[1] && itemFilterAdvancedSearch.score >= self.filterScore[0] && itemFilterAdvancedSearch.score <= self.filterScore[1]
+        }
+      })
+      .sort(function compare(user1, user2) {
+        if (self.orderByChoice === 'Auto') {
+          if (user1.matchScore < user2.matchScore) {
+            return -1;
+          }
+          if (user1.matchScore > user2.matchScore) {
+            return 1;
+          }
+        }
+        if (self.orderByChoice === 'Age') {
+          if (user1.age < user2.age) {
+            return -1;
+          }
+          if (user1.age > user2.age) {
+            return 1;
+          }
+        }
+        if (self.orderByChoice === 'Popularity') {
+          if (user1.score < user2.score) {
+            return -1;
+          }
+          if (user1.score > user2.score) {
+            return 1;
+          }
+        }
+        if (self.orderByChoice === 'Distance') {
+          if (user1.distance < user2.distance) {
+            return -1;
+          }
+          if (user1.distance > user2.distance) {
+            return 1;
+          }
+          return 0;
+        }
+        if (self.orderByChoice === 'Tags') {
+          if (user1.hobbies < user2.hobbies) {
+            return -1;
+          }
+          if (user1.hobbies > user2.hobbies) {
+            return 1;
+          }
         }
       })
     },
