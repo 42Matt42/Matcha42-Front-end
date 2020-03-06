@@ -19,6 +19,7 @@ const createStore = () => {
       loadedLikes: [],
       loadedViews: [],
       loadedSearchProfile: [],
+      loadedStatus: {},
       loadedMatchList: [],
       loadedChatHistory: [],
       loadedSuggestions: [],
@@ -97,6 +98,9 @@ const createStore = () => {
       setSearchProfile (state, profile) {
         state.loadedSearchProfile = profile
         state.loadedSearchProfile.location = JSON.parse(profile.location)
+      },
+      setStatus (state, status) {
+        state.loadedStatus = status
       },
       deleteSearchProfile (state) {
         state.loadedSearchProfile = []
@@ -289,6 +293,9 @@ const createStore = () => {
       setSearchProfile (vuexContext, profile) {
         vuexContext.commit('setSearchProfile', profile)
       },
+      setStatus (vuexContext, status) {
+        vuexContext.commit('setStatus', status)
+      },
       deleteSearchProfile (vuexContext) {
         vuexContext.commit('deleteSearchProfile')
       },
@@ -371,6 +378,9 @@ const createStore = () => {
       },
       loadedSearchProfile (state) {
         return state.loadedSearchProfile
+      },
+      loadedStatus (state) {
+        return state.loadedStatus
       },
       loadedSuggestions (state) {
         return state.loadedSuggestions

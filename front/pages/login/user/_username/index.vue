@@ -43,7 +43,7 @@
         <v-card-subtitle>
           <div>
             <v-row
-              v-if="filterStatus(statusListener)"
+              v-if="filterStatus()"
               justify="end"
             >
               Online&nbsp;
@@ -176,7 +176,7 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
-      statusListener: [],
+      statusListener: {},
       target: this.$route.params.username,
       valid: true,
       myGender: ['Bi', 'Man', 'Woman'],
@@ -204,6 +204,7 @@ export default {
     }
   },
   async asyncData (context) {
+    context.store.dispatch('setChecker', false)
     if (context.params.username !== context.store.getters.loadedUsers.username) {
       /* eslint-disable */
       console.log('context', context)
@@ -230,7 +231,6 @@ export default {
           console.log('error_client', error.response.data.client)
           context.store.dispatch('setMessage', error.response.data.client)
         })
-      context.store.dispatch('setChecker', false)
       const getXuserInfo = await axios
         .get(process.env.serverUrl + '/users/profile', {
           params: {
@@ -284,14 +284,15 @@ export default {
       context.store.dispatch('deleteSearchProfile')
       context.redirect('/login/profile')
     }
-  },
-  created () {
-    socket.on('online', (usersStatus) => {
-      // eslint-disable-next-line
-      console.log('CREATED_online', usersStatus)
-      this.statusListener.push(usersStatus)
-      this.$store.dispatch('setMessage', 'usersStatus array updated !')
-    })
+  // },
+  // created () {
+  //   socket.on('onlinee', (usersStatus) => {
+  //     // eslint-disable-next-line
+  //     console.log('CREATED_online_username_usersStatus', usersStatus)
+  //     this.statusListener = usersStatus
+  //     console.log('CREATED_online_username_this.statusListener: statusListener', this.statusListener)
+  //     this.$store.dispatch('setMessage', 'usersStatus array updated !')
+  //   })
   },
   methods: {
     love () {
@@ -393,11 +394,12 @@ export default {
           this.$store.dispatch('setMessage', error.response.data.client)
         })
     },
-    filterStatus (statusListener) {
-      console.log('statusListener', statusListener)
+    filterStatus () {
+      console.log('statusListener_filterStatus', this.$store.getters.loadedStatus)
       // return statusListener.filter(function (statusListener) {
       //   return statusListener === target
-      return statusListener[this.target] // !== null
+      console.log('this.target_filterStatus', this.target)
+      return this.$store.getters.loadedStatus[this.target] // !== null
     }
   }
 }

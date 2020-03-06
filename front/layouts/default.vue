@@ -289,9 +289,8 @@ export default {
     source: String
   },
   data: () => ({
-    // socketMessage: '',
+    statusListener2: '',
     drawer: null,
-    // snackbar: true,
     searchUsername: '',
     timeoutDuration: 0,
     counter: 0,
@@ -317,6 +316,9 @@ export default {
   computed: {
     loadedNotifications () {
       return this.$store.getters.loadedNotifications
+    },
+    loadedStatus () {
+      return this.$store.getters.loadedStatus
     },
     loadedUsers () {
       return this.$store.getters.loadedUsers
@@ -364,9 +366,15 @@ export default {
     // }
     socket.on('notification', (data) => {
       // eslint-disable-next-line
-      console.log('CREATED__test')
       this.chatListener = data
       this.$store.dispatch('setSnackbarMessage', data)
+    }),
+    socket.on('onlinee', (usersStatus) => {
+      // eslint-disable-next-line
+      this.statusListener2 = usersStatus
+      console.log('bMounted_online: this.statusListener2', this.statusListener2)
+      this.$store.dispatch('setStatus', this.statusListener2)
+      this.$store.dispatch('setMessage', 'usersStatus array updated !')
     })
   },
   methods: {

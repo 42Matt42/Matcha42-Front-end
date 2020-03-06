@@ -165,7 +165,7 @@ export default {
     // }
     socket.on('chat', (data) => {
       // eslint-disable-next-line
-      console.log('CREATED__test', data)
+      console.log('CREATED__chat', data)
       this.chatListener.push(data)
       this.$store.dispatch('setMessage', 'New PM')
     })
