@@ -19,7 +19,8 @@ const createStore = () => {
       loadedLikes: [],
       loadedViews: [],
       loadedSearchProfile: [],
-      loadedMatchlist: [],
+      loadedMatchList: [],
+      loadedChatHistory: [],
       loadedSuggestions: [],
       loadedSuggestionsSidebar: [],
       loadedAdvancedSearch: [],
@@ -63,7 +64,7 @@ const createStore = () => {
         state.loadedLikes = []
         state.loadedViews = []
         state.loadedSearchProfile = []
-        state.loadedMatchlist = []
+        state.loadedMatchList = []
         state.loadedSuggestions = []
         state.loadedSuggestionsSidebar = []
         state.loadedAdvancedSearch = []
@@ -87,8 +88,11 @@ const createStore = () => {
       setViews (state, views) {
         state.loadedViews = views
       },
-      setMatchList (state, matchList) {
-        state.loadedMatchList = matchList
+      setMatchList (state, matchlist) {
+        state.loadedMatchList = matchlist
+      },
+      setChatHistory (state, history) {
+        state.loadedChatHistory = history
       },
       setSearchProfile (state, profile) {
         state.loadedSearchProfile = profile
@@ -279,6 +283,9 @@ const createStore = () => {
       setMatchList (vuexContext, matchList) {
         vuexContext.commit('setMatchList', matchList)
       },
+      setChatHistory (vuexContext, history) {
+        vuexContext.loadedChatHistory = history
+      },
       setSearchProfile (vuexContext, profile) {
         vuexContext.commit('setSearchProfile', profile)
       },
@@ -358,6 +365,9 @@ const createStore = () => {
       },
       loadedMatchList (state) {
         return state.loadedMatchList
+      },
+      loadedChatHistory (state) {
+        return state.loadedChatHistory
       },
       loadedSearchProfile (state) {
         return state.loadedSearchProfile

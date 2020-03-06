@@ -99,7 +99,32 @@
     </v-container>
     <v-container v-if="loadedSuggestions[0]">
       <v-row>
-        <v-col>
+        <v-col cols="1" />
+        <v-col cols="4">
+          <v-row>
+            <v-select
+              v-model.lazy="orderByChoice"
+              :items="orderByList"
+              label="OrderBy"
+              outlined
+            />
+          </v-row>
+        </v-col>
+        <v-col cols="1" />
+        <v-col cols="4">
+          <v-row>
+            <v-select
+              v-model.lazy="filterTags"
+              :items="hobbies"
+              label="FilterBy Tag"
+              outlined
+            />
+          </v-row>
+        </v-col>
+        <v-col cols="1" />
+      </v-row>
+      <v-row>
+        <v-col cols="11">
           <v-row>
             <v-range-slider
               v-model.lazy="filterAge"
@@ -107,11 +132,11 @@
               :rules="ageRules"
               thumb-label="always"
               track-fill-color="purple accent-4"
-              thumb-color="indigo accent-2"
+              thumb-color="indigo darken-3"
               track-color="purple lighten-3"
               min="18"
               max="100"
-              label="Age"
+              label="Filter by Age"
             >
               <v-text-field
                 :value="filterAge[0]"
@@ -122,7 +147,9 @@
             </v-range-slider>
           </v-row>
         </v-col>
-        <v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="11">
           <v-row>
             <v-slider
               v-model.lazy="filterDistance"
@@ -131,13 +158,15 @@
               max="20000"
               thumb-label="always"
               thumb-color="deep-purple accent-3"
-              label="Distance (km)"
+              label="Filter by Distance (km)"
               track-color="purple lighten-3"
               track-fill-color="purple accent-4"
             />
           </v-row>
         </v-col>
-        <v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="11">
           <v-row>
             <v-range-slider
               v-model="filterScore"
@@ -149,7 +178,7 @@
               track-color="purple lighten-3"
               min="0"
               max="1000"
-              label="Popularity"
+              label="Filter by Popularity"
             >
               <v-text-field
                 :value="filterScore[0]"
@@ -158,16 +187,6 @@
                 :value="filterScore[1]"
               />
             </v-range-slider>
-          </v-row>
-        </v-col>
-        <v-col>
-          <v-row>
-            <v-select
-              v-model.lazy="filterTags"
-              :items="hobbies"
-              label="Tag"
-              outlined
-            />
           </v-row>
         </v-col>
       </v-row>
@@ -203,6 +222,7 @@ export default {
   },
   data () {
     return {
+      loading: true,
       myGender: ['Bi', 'Man', 'Woman'],
       genderLF: ['Men & Women', 'Men', 'Women'],
       hobbies: ['#gamer', '#surfer', '#hacker', '#starwars', '#meditation', '#42', '#geek', '#fashion', '#hipster', '#horse', '#vegan', '#meat', '#', '#coding', '#C', '#python', '#anime', '#yachting', '#matcha', '#macron'],
@@ -210,7 +230,8 @@ export default {
       filterDistance: 20000,
       filterScore: [0, 1000],
       filterTags: '',
-      filterOrderBy: 'age',
+      orderByChoice: 'Auto',
+      orderByList: ['Auto', 'Age', 'Popularity', 'Distance', 'Tags'],
       ageRules: [
         v => !!v || 'Target age required',
         v => (v[1] < 101) || 'Target age too high',
@@ -321,19 +342,54 @@ export default {
   methods: {
     filterSuggestions (itemFilterSuggestions) {
       self = this
-      // return orderBy(function (itemFilterSuggestions, filterOrderBy) {
-        return itemFilterSuggestions.filter(function (itemFilterSuggestions) {
-          if (self.filterDistance) {
-            // item.distance <= self.filterDistance && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
-            return itemFilterSuggestions.distance <= self.filterDistance && itemFilterSuggestions.hobbies.includes(self.filterTags)// && item.age >= self.filterAge[0] && item.age <= self.filterAge[1] && item.score >= self.filterScore[0] && item.score <= filterScore[1]
-            // filterTags
+      return itemFilterSuggestions = itemFilterSuggestions.filter(function (itemFilterSuggestions) {
+        if (self.filterDistance) {
+          return itemFilterSuggestions.distance <= self.filterDistance && itemFilterSuggestions.hobbies.includes(self.filterTags) && itemFilterSuggestions.age >= self.filterAge[0] && itemFilterSuggestions.age <= self.filterAge[1] && itemFilterSuggestions.score >= self.filterScore[0] && itemFilterSuggestions.score <= self.filterScore[1]
+        }
+      })
+      .sort(function compare(user1, user2) {
+        if (self.orderByChoice === 'Auto') {
+          if (user1.matchScore < user2.matchScore) {
+            return -1;
           }
-        })
-      // })
-    },
-    chatSendMessage (msg) {
-      socket.emit('chat', this.loadedUsers.username, this.loadedUsers.username, msg)
-      console.log('Chat message sent to', this.loadedUsers.username)
+          if (user1.matchScore > user2.matchScore) {
+            return 1;
+          }
+        }
+        if (self.orderByChoice === 'Age') {
+          if (user1.age < user2.age) {
+            return -1;
+          }
+          if (user1.age > user2.age) {
+            return 1;
+          }
+        }
+        if (self.orderByChoice === 'Popularity') {
+          if (user1.score < user2.score) {
+            return -1;
+          }
+          if (user1.score > user2.score) {
+            return 1;
+          }
+        }
+        if (self.orderByChoice === 'Distance') {
+          if (user1.distance < user2.distance) {
+            return -1;
+          }
+          if (user1.distance > user2.distance) {
+            return 1;
+          }
+          return 0;
+        }
+        if (self.orderByChoice === 'Tags') {
+          if (user1.hobbies < user2.hobbies) {
+            return -1;
+          }
+          if (user1.hobbies > user2.hobbies) {
+            return 1;
+          }
+        }
+      })
     }
   }
 }

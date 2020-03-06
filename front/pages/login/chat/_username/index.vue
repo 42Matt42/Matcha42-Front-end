@@ -45,14 +45,47 @@
     </div>
     <v-list
       subheader
-      three-line
+      two-line
+      style="background-color: transparent"
+    >
+      <v-list-item
+        v-for="(itemChat, arrayLine) in loadedChatHistory"
+        :key="arrayLine"
+      >
+        <v-list-item-content
+          v-if="itemChatHistory.split(':', 1)[0] == itemChatHistory.username"
+          justify="end"
+        >
+          <v-list-item-subtitle>{{ itemChatHistory.split(':', 1)[0] }}:</v-list-item-subtitle>
+          <v-list-item-title>{{ itemChatHistory.split(/^\w+:/, 2)[1] }}</v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-content
+          v-else
+        >
+          <v-list-item-subtitle>{{ itemChatHistory.split(':', 1)[0] }}:</v-list-item-subtitle>
+          <v-list-item-title>{{ itemChatHistory.split(/^\w+:/, 2)[1] }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <v-list
+      subheader
+      two-line
       style="background-color: transparent"
     >
       <v-list-item
         v-for="(itemChat, arrayLine) in chatListener"
         :key="arrayLine"
       >
-        <v-list-item-content>
+        <v-list-item-content
+          v-if="itemChat.split(':', 1)[0] == target"
+          justify="end"
+        >
+          <v-list-item-subtitle>{{ itemChat.split(':', 1)[0] }}:</v-list-item-subtitle>
+          <v-list-item-title>{{ itemChat.split(/^\w+:/, 2)[1] }}</v-list-item-title>
+        </v-list-item-content>
+        <v-list-item-content
+          v-else
+        >
           <v-list-item-subtitle>{{ itemChat.split(':', 1)[0] }}:</v-list-item-subtitle>
           <v-list-item-title>{{ itemChat.split(/^\w+:/, 2)[1] }}</v-list-item-title>
         </v-list-item-content>
@@ -62,6 +95,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import socket from '~/plugins/socket.io.js'
 
 /* eslint-disable */
@@ -69,6 +103,7 @@ export default {
   data () {
     return {
       target: this.$route.params.username,
+      // conversationId: this.$route.params.username.conversationId,
       login: {
         username: '',
         password: ''
@@ -92,6 +127,12 @@ export default {
     },
     loadedUsers () {
       return this.$store.getters.loadedUsers
+    },
+    loadedChatHistory () {
+      return this.$store.getters.loadedChatHistory
+    },
+    loadedMatchList () {
+      return this.$store.getters.loadedMatchList
     }
   },
   created () {
@@ -106,13 +147,43 @@ export default {
       this.$store.dispatch('setMessage', 'New PM')
     })
   },
+  async asyncData (context) {
+    console.log(context)
+    const matchDiscussion = await context.store.getters.loadedMatchList.filter(function (matchData) {
+      return matchData.username === context.route.params.username
+    })
+    const conversationHistory = await axios
+      .get(process.env.serverUrl + '/social/messages', {
+        params: {
+          conversation_id: matchDiscussion[0].conversationId,
+        },
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters.token
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_GET_ChatHistory', response)
+        context.store.dispatch('setChatHistory', response.data.client)
+        context.store.dispatch('setMessage', response.statusText)
+      })
+      .catch((error) => {
+        console.log('error_GET_ChatHistory', error)
+        console.log('error_client', error.response.statusText)
+        context.store.dispatch('setMessage', error.response.statusText)
+      })
+    return {
+      matchDiscussion,
+      conversationHistory
+    }
+  },
   methods: {
     sendChatMessage () {
       if (this.$refs.form.validate()) {
-        socket.emit('chat', this.loadedUsers.username, 'bigwolf755', this.chatMessage)
+        socket.emit('chat', this.loadedUsers.username, this.target, this.chatMessage)
         console.log('Chat message: ', this.chatMessage)
         console.log('sent by: ', this.loadedUsers.username)
-        console.log('to: ', this.loadedUsers.username)
+        console.log('to: ', this.target)
       }
     }
   }

@@ -46,7 +46,14 @@
       My crushes
     </v-container>
     <v-container style="background-color: transparent">
-      <v-list style="background-color: transparent">
+      <v-list
+        v-if="loadedMatchList === []"
+        style="background-color: transparent"
+      />
+      <v-list
+        v-else
+        style="background-color: transparent"
+      >
         <v-list-item
           v-for="(itemMatchs, a) in loadedMatchList"
           :key="a"
@@ -63,8 +70,9 @@
                 >
                   mdi-heart
                 </v-icon>
+                {{ itemMatchs.conversationId }}
                 <nuxt-link
-                  :to="{ path: `/login/user/${itemMatchs.username}` }"
+                  :to="{ path: `/login/user/${itemMatchs.username}/${itemMatchs.conversationId}` }"
                   class="subtitle-1"
                 >
                   {{ itemMatchs.username }}
@@ -176,26 +184,7 @@ export default {
           console.log('error_client', error.response.data.client)
           this.$store.dispatch('setMessage', error.response.data.client)
         })
-    },
-    // matchList () {
-    //   axios
-    //     .get(process.env.serverUrl + '/social/match', {
-    //       headers: {
-    //         Authorization: 'Bearer ' + this.$store.getters.token
-    //       }
-    //     })
-    //     .then((response) => {
-    //       /* eslint-disable */
-    //       console.log('response_GET_matchList', response)
-    //       this.$store.dispatch('setMatchList', response.data.client)
-    //       this.$store.dispatch('setMessage', response.statusText)
-    //     })
-    //     .catch((error) => {
-    //       console.log('error_GET_matchList', error)
-    //       console.log('error_client', error.response.statusText)
-    //       this.$store.dispatch('setMessage', error.response.statusText)
-    //     })
-    // }
+    }
   }
 }
 </script>
