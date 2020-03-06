@@ -70,9 +70,8 @@
                 >
                   mdi-heart
                 </v-icon>
-                {{ itemMatchs.conversationId }}
                 <nuxt-link
-                  :to="{ path: `/login/user/${itemMatchs.username}/${itemMatchs.conversationId}` }"
+                  :to="{ path: `/login/user/${itemMatchs.username}` }"
                   class="subtitle-1"
                 >
                   {{ itemMatchs.username }}

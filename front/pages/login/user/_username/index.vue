@@ -43,17 +43,17 @@
         <v-card-subtitle>
           <div>
             <v-row
-              v-if="loadedSearchProfile.last_connection"
+              v-if="filterStatus(statusListener)"
               justify="end"
-              class="font-italic"
             >
-              Offline ({{ lastConnectionSearchProfile }})&nbsp;
+              Online&nbsp;
             </v-row>
             <v-row
               v-else
               justify="end"
+              class="font-italic"
             >
-              Online&nbsp;
+              Offline ({{ lastConnectionSearchProfile }})&nbsp;
             </v-row>
             <div class="headline font-weight-bold purple--text text--accent-4">
               {{ loadedSearchProfile.username }}
@@ -176,6 +176,7 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
+      statusListener: [],
       target: this.$route.params.username,
       valid: true,
       myGender: ['Bi', 'Man', 'Woman'],
@@ -284,6 +285,14 @@ export default {
       context.redirect('/login/profile')
     }
   },
+  created () {
+    socket.on('online', (usersStatus) => {
+      // eslint-disable-next-line
+      console.log('CREATED_online', usersStatus)
+      this.statusListener.push(usersStatus)
+      this.$store.dispatch('setMessage', 'usersStatus array updated !')
+    })
+  },
   methods: {
     love () {
       this.$axios({
@@ -384,13 +393,12 @@ export default {
           this.$store.dispatch('setMessage', error.response.data.client)
         })
     },
-    // filterLove (lovers, target) {
-    //   return lovers.filter(function (lover) {
-    //     console.log('lover', lover.user_liked)
-    //     console.log('target', target)
-    //     return lover.user_liked === target
-    //   })
-    // }
+    filterStatus (statusListener) {
+      console.log('statusListener', statusListener)
+      return statusListener.filter(function (statusListener) {
+        return statusListener === target
+      })
+    }
   }
 }
 </script>

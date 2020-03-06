@@ -284,7 +284,7 @@ const createStore = () => {
         vuexContext.commit('setMatchList', matchList)
       },
       setChatHistory (vuexContext, history) {
-        vuexContext.loadedChatHistory = history
+        vuexContext.commit('setChatHistory', history)
       },
       setSearchProfile (vuexContext, profile) {
         vuexContext.commit('setSearchProfile', profile)

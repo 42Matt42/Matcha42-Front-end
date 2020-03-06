@@ -49,46 +49,69 @@
       style="background-color: transparent"
     >
       <v-list-item
-        v-for="(itemChat, arrayLine) in loadedChatHistory"
+        v-for="(itemChatHistory, arrayLine) in loadedChatHistory"
         :key="arrayLine"
       >
-        <v-list-item-content
-          v-if="itemChatHistory.split(':', 1)[0] == itemChatHistory.username"
-          justify="end"
+        <v-row
+          v-if="itemChatHistory.username == target"
         >
-          <v-list-item-subtitle>{{ itemChatHistory.split(':', 1)[0] }}:</v-list-item-subtitle>
-          <v-list-item-title>{{ itemChatHistory.split(/^\w+:/, 2)[1] }}</v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-content
+          <v-col cols="2" />
+          <v-col cols="10">
+            <v-list-item-content>
+              <v-list-item-subtitle>{{ itemChatHistory.username }}:</v-list-item-subtitle>
+              <v-list-item-title>{{ itemChatHistory.message_text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+        </v-row>
+        <v-row
           v-else
         >
-          <v-list-item-subtitle>{{ itemChatHistory.split(':', 1)[0] }}:</v-list-item-subtitle>
-          <v-list-item-title>{{ itemChatHistory.split(/^\w+:/, 2)[1] }}</v-list-item-title>
-        </v-list-item-content>
+          <v-col>
+            <v-list-item-content>
+              <v-list-item-subtitle>{{ itemChatHistory.username }}:</v-list-item-subtitle>
+              <v-list-item-title>{{ itemChatHistory.message_text }}</v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+        </v-row>
       </v-list-item>
     </v-list>
     <v-list
       subheader
-      two-line
       style="background-color: transparent"
     >
       <v-list-item
         v-for="(itemChat, arrayLine) in chatListener"
         :key="arrayLine"
       >
-        <v-list-item-content
+        <v-row
           v-if="itemChat.split(':', 1)[0] == target"
-          justify="end"
         >
-          <v-list-item-subtitle>{{ itemChat.split(':', 1)[0] }}:</v-list-item-subtitle>
-          <v-list-item-title>{{ itemChat.split(/^\w+:/, 2)[1] }}</v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-content
+          <v-col cols="2" />
+          <v-col cols="10">
+            <v-list-item-content>
+              <v-list-item-subtitle>
+                {{ itemChat.split(':', 1)[0] }}:
+              </v-list-item-subtitle>
+              <v-list-item-title>
+                {{ itemChat.split(/^\w+:/, 2)[1] }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+        </v-row>
+        <v-row
           v-else
         >
-          <v-list-item-subtitle>{{ itemChat.split(':', 1)[0] }}:</v-list-item-subtitle>
-          <v-list-item-title>{{ itemChat.split(/^\w+:/, 2)[1] }}</v-list-item-title>
-        </v-list-item-content>
+          <v-col>
+            <v-list-item-content>
+              <v-list-item-subtitle>
+                {{ itemChat.split(':', 1)[0] }}:
+              </v-list-item-subtitle>
+              <v-list-item-title>
+                {{ itemChat.split(/^\w+:/, 2)[1] }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-col>
+        </v-row>
       </v-list-item>
     </v-list>
   </div>
@@ -148,7 +171,6 @@ export default {
     })
   },
   async asyncData (context) {
-    console.log(context)
     const matchDiscussion = await context.store.getters.loadedMatchList.filter(function (matchData) {
       return matchData.username === context.route.params.username
     })
