@@ -156,7 +156,7 @@ const createStore = () => {
         }
       },
       setLogout (vuexContext) {
-        socket.emit('disconnect', vuexContext.getters.loadedUsers.username)
+        socket.emit('logout', vuexContext.getters.loadedUsers.username)
         vuexContext.commit('setLogout')
       },
       getUserData (vuexContext) {

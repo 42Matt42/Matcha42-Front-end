@@ -395,9 +395,9 @@ export default {
     },
     filterStatus (statusListener) {
       console.log('statusListener', statusListener)
-      return statusListener.filter(function (statusListener) {
-        return statusListener === target
-      })
+      // return statusListener.filter(function (statusListener) {
+      //   return statusListener === target
+      return statusListener[this.target] // !== null
     }
   }
 }
