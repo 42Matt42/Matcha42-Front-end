@@ -27,7 +27,6 @@
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
     "uws": "^100.0.1",
-    "vue-socket.io": "^3.0.7",
     "vuex-persistedstate": "^2.7.1"
   },
   "devDependencies": {
@@ -42,7 +41,7 @@
     "eslint-plugin-nuxt": "^0.5.1",
     "jest": "^24.1.0",
     "lint-staged": "^8.2.1",
-    "stylelint": "^10.1.0",
+    "stylelint": "^13.2.1",
     "vue-jest": "^4.0.0-0"
   }
 }

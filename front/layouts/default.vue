@@ -280,7 +280,6 @@
 import socket from '~/plugins/socket.io.js'
 import axios from 'axios'
 // import socketio from 'socket.io'
-// import VueSocketIO from 'vue-socket.io'
 // export const SocketInstance = socketio('http://10.13.6.19:8080')
 
 export default {
