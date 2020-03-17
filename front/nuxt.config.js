@@ -1,5 +1,6 @@
+
+// import { Http2ServerRequest } from 'http2'
 import colors from 'vuetify/es5/util/colors'
-import { Http2ServerRequest } from 'http2'
 
 export default {
   env: {
@@ -22,9 +23,6 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
-    // script: [
-    //   { import socket from '~/plugins/socket.io.js' }
-    // ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
@@ -59,7 +57,6 @@ export default {
   modules: [
     '@nuxtjs/pwa',
     '@nuxtjs/axios'
-    // ['~/io']
   ],
 
   /*

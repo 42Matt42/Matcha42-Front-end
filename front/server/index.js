@@ -5,7 +5,7 @@ const app = express()
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
-config.dev = process.env.NODE_ENV === 'production'
+config.dev = process.env.NODE_ENV === 'development'
 
 async function start () {
   // Init Nuxt.js
@@ -27,18 +27,9 @@ async function start () {
   // Listen the server
 
   // DEFAULT CONFIG
-  // app.listen(port, host)
-  // consola.ready({
-  //   message: `Server listening on http://${host}:${port}`,
-  //   badge: true
-  // })
-  // [msaubin] replaced by
-  // socket.io CONFIG
-  server.listen(port, () => {
-    consola.ready({
-      message: `Server listening on http://${host}:${port}`,
-      badge: true
-    })
+  app.listen(port, host)
+  consola.ready({
+    message: `Server listening on http://${host}:${port}`,
+    badge: true
   })
-}
-start()
+  

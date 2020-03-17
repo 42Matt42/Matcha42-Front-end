@@ -1,14 +1,11 @@
-<template>
-  <div class="container">
-    <article>
-      <h1 class="title">
-        Matcha !
-      </h1>
-      <p>Hello_World</p>
-    </article>
-  </div>
+><template>
+  <v-container>
+    Redirection page, the URL you typed does not exist.
+  </v-container>
 </template>
 
 <script>
-// import BigHeartLogo from '~/components/BigHeartLogo.vue'
+export default {
+  middleware: 'redirection'
+}
 </script>

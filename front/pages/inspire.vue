@@ -1,19 +1,11 @@
-<template>
-  <v-layout>
-    <v-flex class="text-center">
-      <img
-        src="/v.png"
-        alt="Vuetify.js"
-        class="mb-5"
-      >
-      <blockquote class="blockquote">
-        &#8220;First, solve the problem. Then, write the code.&#8221;
-        <footer>
-          <small>
-            <em>&mdash;@fbartoli</em>
-          </small>
-        </footer>
-      </blockquote>
-    </v-flex>
-  </v-layout>
+><template>
+  <v-container>
+    Redirection page, the URL you typed does not exist.
+  </v-container>
 </template>
+
+<script>
+export default {
+  middleware: 'redirection'
+}
+</script>
