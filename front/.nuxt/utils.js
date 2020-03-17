@@ -397,6 +397,19 @@ function parse (str, options) {
 }
 
 /**
+ * Prettier encoding of URI path segments.
+ *
+ * @param  {string}
+ * @return {string}
+ */
+function encodeURIComponentPretty (str, slashAllowed) {
+  const re = slashAllowed ? /[?#]/g : /[/?#]/g
+  return encodeURI(str).replace(re, (c) => {
+    return '%' + c.charCodeAt(0).toString(16).toUpperCase()
+  })
+}
+
+/**
  * Encode the asterisk parameter. Similar to `pretty`, but allows slashes.
  *
  * @param  {string}
