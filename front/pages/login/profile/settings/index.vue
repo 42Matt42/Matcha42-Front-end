@@ -28,19 +28,6 @@
             </v-row>
             <v-row>
               <v-col
-                cols="10"
-              >
-                <v-text-field
-                  v-model.trim="loadedUsers.username"
-                  :rules="usernameRules"
-                  counter="20"
-                  label="Username"
-                  required
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
                 cols="5"
               >
                 <v-text-field
@@ -203,12 +190,12 @@ export default {
   data () {
     return {
       valid: true,
-      usernameRules: [
-        v => !!v || 'Username is required',
-        v => (v && v.length <= 20) || 'Password must be less than 20 characters',
-        v => /.{6,}/.test(v) || '6 characters minimum.',
-        v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
-      ],
+      // usernameRules: [
+      //   v => !!v || 'Username is required',
+      //   v => (v && v.length <= 20) || 'Password must be less than 20 characters',
+      //   v => /.{6,}/.test(v) || '6 characters minimum.',
+      //   v => /^[a-zA-Z0-9_.-]*$/.test(v) || 'Must be alphanumeric characters [Abc123...]'
+      // ],
       nameRules: [
         v => !!v || 'Field required',
         v => (v && v.length <= 20) || 'Must be less than 20 characters',
@@ -258,7 +245,7 @@ export default {
           method: 'post',
           url: process.env.serverUrl + '/users/user',
           data: {
-            username: this.loadedUsers.username,
+            // username: this.loadedUsers.username,
             name: this.loadedUsers.name,
             surname: this.loadedUsers.surname,
             email: this.loadedUsers.email,

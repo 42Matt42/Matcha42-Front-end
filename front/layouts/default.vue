@@ -11,8 +11,8 @@
       <v-list dense>
         <div v-if="`${token}` == 'null'">
           <v-list-item
-            v-for="(itemLogout,exit) in iLogout"
-            :key="exit"
+            v-for="itemLogout in iLogout"
+            :key="itemLogout.idLogout"
           >
             <nuxt-link :to="{ path: `${itemLogout.url}` }">
               <v-list-item-action>
@@ -64,8 +64,8 @@
             Suggestions&nbsp;
           </v-subheader>
           <v-list
-            v-for="(itemSuggest, j) in loadedSuggestionsSidebar"
-            :key="j"
+            v-for="itemSuggest in loadedSuggestionsSidebar"
+            :key="itemSuggest.id"
           >
             <v-list-item>
               <nuxt-link
@@ -128,7 +128,7 @@
           </v-list-item>
           <v-list-item
             v-for="itemInterestedIn in filterInterestedInLayout(itemsInterestedIn, loadedUsers.interested_in)"
-            :key="itemInterestedIn.id"
+            :key="itemInterestedIn.idInterestedIn"
             color="purple--text text--lighten-5"
           >
             <v-icon
@@ -302,14 +302,14 @@ export default {
       { idLogin: 5, icon: 'mdi-power', text: '', url: '/login/logout' }
     ],
     iLogout: [
-      { icon: 'mdi-home', text: 'Home', url: '/' },
-      { icon: 'mdi-login', text: 'Login', url: '/login' },
-      { icon: 'mdi-content-save', text: 'Register', url: '/register' }
+      { idLogout: 1, icon: 'mdi-home', text: 'Home', url: '/' },
+      { idLogout: 2, icon: 'mdi-login', text: 'Login', url: '/login' },
+      { idLogout: 3, icon: 'mdi-content-save', text: 'Register', url: '/register' }
     ],
     itemsInterestedIn: [
-      { id: 1, name: 'Men & Women', icon: 'mdi-human-male-female' },
-      { id: 2, name: 'Men', icon: 'mdi-human-male' },
-      { id: 3, name: 'Women', icon: 'mdi-human-female' }
+      { idInterestedIn: 1, name: 'Men & Women', icon: 'mdi-human-male-female' },
+      { idInterestedIn: 2, name: 'Men', icon: 'mdi-human-male' },
+      { idInterestedIn: 3, name: 'Women', icon: 'mdi-human-female' }
     ]
   }),
   computed: {

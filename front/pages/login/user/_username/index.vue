@@ -176,7 +176,7 @@ export default {
   middleware: 'authenticated',
   data () {
     return {
-      statusListener: {},
+      // statusListener: {},
       target: this.$route.params.username,
       valid: true,
       myGender: ['Bi', 'Man', 'Woman'],

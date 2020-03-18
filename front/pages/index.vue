@@ -9,8 +9,8 @@
         height="550px"
       >
         <v-carousel-item
-          v-for="(itemSuggestions,k) in filterSuggestions(loadedSuggestions)"
-          :key="k"
+          v-for="itemSuggestions in filterSuggestions(loadedSuggestions)"
+          :key="itemSuggestions.id"
           reverse-transition="fade-transition"
         >
           <nuxt-link
@@ -390,7 +390,35 @@ export default {
           }
         }
       })
-    }
+    },
+    love (target) {
+      this.$axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/like',
+        data: {
+          username: target
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters.token
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_like', response)
+          console.log('response_client', response.data.client)
+          if (response.data.client.includes('Liked and matched with')) {
+            socket.emit('likeback', this.$store.getters.loadedUsers.username, this.target)
+          }
+          else {
+            socket.emit('like', this.$store.getters.loadedUsers.username, this.target)
+          }
+          this.$store.dispatch('setMessage', response.data.client)
+        })
+        .catch((error) => {
+          console.log('error_LIKE_client', error.response.data.client)
+          this.$store.dispatch('setMessage', error.response.data.client)
+        })
+    },
   }
 }
 </script>
