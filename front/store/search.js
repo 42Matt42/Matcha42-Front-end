@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const state = () => ({
   // Search
   loadedSearchProfile: [],
@@ -31,6 +33,12 @@ export const mutations = {
       state.loadedSuggestionsSidebar[i] = suggestionsFormatted[i]
     }
   },
+  deleteSuggestions (state) {
+    state.loadedSuggestions = []
+  },
+  deleteSuggestionsSidebar (state) {
+    state.loadedSuggestionsSidebar = []
+  },
   setAdvancedSearch (state, results) {
     state.loadedAdvancedSearch = results.data
     // for (let i = 0; i < parseInt(results.length); i++) {
@@ -61,6 +69,10 @@ export const actions = {
     commit('setSuggestions', suggestions)
     dispatch('setSuggestionsSidebar')
   },
+  deleteSuggestions ({ commit }) {
+    commit('deleteSuggestions')
+    commit('deleteSuggestionsSidebar')
+  },
   setSuggestionsSidebar ({ commit, getters }) {
     commit('setSuggestionsSidebar', getters.loadedSuggestions)
   },
@@ -69,6 +81,27 @@ export const actions = {
   },
   setLogoutSearch ({ commit }) {
     commit('setLogoutSearch')
+  },
+  getSuggestions ({ dispatch, rootGetters }) {
+    axios
+      .get(process.env.serverUrl + '/social/potential', {
+        params: {
+          number: 42
+        },
+        headers: {
+          Authorization: 'Bearer ' + rootGetters['user/token']
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_GET_Suggestions', response)
+        dispatch('setSuggestions', response.data.client)
+      })
+      .catch((error) => {
+        console.log('error_GET_Suggestions', error)
+      })
+    return {
+    }
   }
 }
 

@@ -128,19 +128,21 @@
               </v-col>
               <v-col cols="2" />
               <v-col>
-                <v-btn
-                  @click="block"
-                  fab
-                  color="deep-purple lighten-5"
-                  absolute
-                  x-large
-                >
-                  <v-icon
-                    color="indigo accent-1"
+                <nuxt-link to="/">
+                  <v-btn
+                    @click="block"
+                    fab
+                    color="deep-purple lighten-5"
+                    absolute
+                    x-large
                   >
-                    mdi-account-cancel
-                  </v-icon>
-                </v-btn>
+                    <v-icon
+                      color="indigo accent-1"
+                    >
+                      mdi-account-cancel
+                    </v-icon>
+                  </v-btn>
+                </nuxt-link>
               </v-col>
 
               <v-col>
@@ -204,6 +206,8 @@ export default {
     }
   },
   async asyncData (context) {
+    let birthdaySearchProfile = ''
+
     context.store.dispatch('user/setChecker', false)
     if (context.params.username !== context.store.getters['user/loadedUsers'].username) {
       /* eslint-disable */
@@ -265,7 +269,7 @@ export default {
           console.log('error_GET_like', error)
           console.log('error_client', error.response.data.client)
         })
-      const birthdaySearchProfile = await moment(context.store.getters['search/loadedSearchProfile'].birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
+      birthdaySearchProfile = await moment(context.store.getters['search/loadedSearchProfile'].birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
       const lastConnectionSearchProfile = await moment(context.store.getters['search/loadedSearchProfile'].last_connection, 'YYYY-MM-DDTHH:mm:ss[Z]').format('L')
       return {
         iView,
@@ -332,14 +336,12 @@ export default {
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_block', response)
-          console.log('response_client', response.client)
+          this.$store.dispatch('search/deleteSuggestions', {})
           this.$store.dispatch('interact/setMessage', "User blocked")
-          redirect('/')
+          this.$store.dispatch('search/getSuggestions')
         })
         .catch((error) => {
           console.log ('error_POST_block', error)
-          console.log('error_client', error.response.data.client)
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     report () {

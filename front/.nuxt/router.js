@@ -16,6 +16,7 @@ const _5d3a27de = () => interopDefault(import('..\\pages\\login\\mycrush\\index.
 const _c06ed2f8 = () => interopDefault(import('..\\pages\\login\\profile\\index.vue' /* webpackChunkName: "pages_login_profile_index" */))
 const _47336866 = () => interopDefault(import('..\\pages\\login\\mycrush\\mylikes\\index.vue' /* webpackChunkName: "pages_login_mycrush_mylikes_index" */))
 const _de2c6318 = () => interopDefault(import('..\\pages\\login\\mycrush\\myviews\\index.vue' /* webpackChunkName: "pages_login_mycrush_myviews_index" */))
+const _35c5b50e = () => interopDefault(import('..\\pages\\login\\mycrush\\notifications\\index.vue' /* webpackChunkName: "pages_login_mycrush_notifications_index" */))
 const _7f1c36ae = () => interopDefault(import('..\\pages\\login\\profile\\mygeoloc\\index.vue' /* webpackChunkName: "pages_login_profile_mygeoloc_index" */))
 const _6e51220f = () => interopDefault(import('..\\pages\\login\\profile\\mypics\\index.vue' /* webpackChunkName: "pages_login_profile_mypics_index" */))
 const _36d00281 = () => interopDefault(import('..\\pages\\login\\profile\\settings\\index.vue' /* webpackChunkName: "pages_login_profile_settings_index" */))
@@ -93,6 +94,10 @@ export const routerOptions = {
     path: "/login/mycrush/myviews",
     component: _de2c6318,
     name: "login-mycrush-myviews"
+  }, {
+    path: "/login/mycrush/notifications",
+    component: _35c5b50e,
+    name: "login-mycrush-notifications"
   }, {
     path: "/login/profile/mygeoloc",
     component: _7f1c36ae,

@@ -3,16 +3,19 @@
     <v-container
       class="font-weight-black purple--text text--lighten-5"
     >
-      My Likes
+      My Notifications
     </v-container>
-    <v-container style="background-color: transparent">
+    <v-container
+      v-if="loadedNotifications"
+      style="background-color: transparent"
+    >
       <v-list style="background-color: transparent">
         <v-list-item
-          v-for="(itemLikes, y) in filterLikes(loadedLikes)"
+          v-for="(itemNotif, y) in filterNotif(loadedNotifications)"
           :key="y"
         >
           <nuxt-link
-            :to="{ path: `/login/user/${itemLikes.user_who_likes}` }"
+            to="/"
           >
             <div>
               <p
@@ -24,9 +27,9 @@
                   <v-icon
                     class="purple--text text--lighten-5"
                   >
-                    mdi-heart-half-full
+                    mdi-heart
                   </v-icon>
-                  {{ itemLikes.user_who_likes }} liked your profile {{ itemLikes.loveAge }} ({{ itemLikes.loveDate }})
+                  {{ itemNotif }} {{ itemNotif }} ({{ itemNotif }})
                 </v-list-item-title>
               </p>
             </div>
@@ -52,40 +55,39 @@ export default {
     serverMessage () {
       return this.$store.getters['interact/serverMessage']
     },
-    loadedLikes () {
-      return this.$store.getters['interact/loadedLikes']
+    loadedNotifications () {
+      return this.$store.getters['interact/loadedNotifications']
     },
     token () {
       return this.$store.getters['user/token']
     }
   },
   async asyncData (context) {
-    const myLikes = await axios
-      .get(process.env.serverUrl + '/social/like', {
+    const myNotif = await axios
+      .get(process.env.serverUrl + '/social/notification', {
         headers: {
           Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
-        console.log('response_GET_like', response)
-        context.store.dispatch('interact/setLikes', response.data.client)
+        console.log('response_GET_notif', response)
+        context.store.dispatch('websocket/setNotifications', response.data.client)
       })
       .catch((error) => {
-        console.log('error_GET_like', error)
+        console.log('error_GET_notif', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
-      myLikes
+      myNotif
     }
   },
   methods: {
-    filterLikes (loves) {
-      return loves.received.filter(function (love) {
-        love.loveAge = moment(love.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
-        love.loveDate = moment(love.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
-        return love
+    filterNotif (notif) {
+      return notif.received.filter(function (notif) {
+        notif.notifAge = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
+        notif.notifDate = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
+        return notif
       })
     }
   }

@@ -392,7 +392,6 @@ export default {
           /* eslint-disable */
           console.log('response_GET_notif', response)
           this.$store.dispatch('websocket/setNotifications', response.data.client)
-          this.$store.dispatch('interact/setMessage', response.statusText)
         })
         .catch((error) => {
           console.log('error_GET_notif', error)

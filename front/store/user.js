@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import createPersistedState from 'vuex-persistedstate'
 import socket from '~/plugins/socket.io.js'
 
 export const state = () => ({
@@ -109,10 +108,9 @@ export const actions = {
         /* eslint-disable */
         console.log('GET response_store_mypics', response)
         commit('setPictures', response.data.client)
-        commit('setMessage', response.statusText)
       })
       .catch((error) => {
-        console.log('GET error_store_mypics', error.response)
+        // console.log('GET error_store_mypics', error.response)
       })
     return {
     }

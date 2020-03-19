@@ -213,7 +213,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 
 export default {
@@ -276,24 +275,24 @@ export default {
     }
   },
   async asyncData (context) {
+    // eslint-disable-next-line
+    console.log('ASYNC Home Page Bro')
     const options = {
       enableHighAccuracy: true,
       timeout: 8000,
       maximumAge: 60000
     }
-    let mySuggestions = []
+    // let mySuggestions = []
 
     function success (position) {
       const userAcceptsGeoloc = position.coords
       const location = {}
       // eslint-disable-next-line
-      console.log('context: ', context)
+      // console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
       // eslint-disable-next-line
-      console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
+      // console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
       // eslint-disable-next-line
-      console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
-      // eslint-disable-next-line
-      console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
+      // console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
       location.lat = userAcceptsGeoloc.latitude
       location.lng = userAcceptsGeoloc.longitude
       const accuracy = userAcceptsGeoloc.accuracy
@@ -311,83 +310,67 @@ export default {
       if ('geolocation' in navigator) {
         await navigator.geolocation.getCurrentPosition(success, error, options)
       }
-      //  process
-      if (!context.app.store.getters['search/loadedSuggestions'][0]) {
-        mySuggestions = await axios
-          .get(process.env.serverUrl + '/social/potential', {
-            params: {
-              number: 42
-            },
-            headers: {
-              Authorization: 'Bearer ' + context.app.store.getters['user/token']
-            }
-          })
-          .then((response) => {
-            /* eslint-disable */
-            console.log('response_GET_Suggestions', response)
-            context.store.dispatch('search/setSuggestions', response.data.client)
-          })
-          .catch((error) => {
-            console.log('error_GET_Suggestions', error)
-            console.log('error_client', error.response.statusText)
-          })
-      }
     }
-    return {
-      mySuggestions
+    if (!context.app.store.getters['search/loadedSuggestions'][0]) {
+      // eslint-disable-next-line
+      console.log('ASYNC Home Page Bro2', context.app.store.dispatch)
+      // eslint-disable-next-line
+      context.app.store.dispatch('search/getSuggestions')
     }
+    // return {
+    //   mySuggestions
+    // }
   },
   methods: {
     filterSuggestions (itemFilterSuggestions) {
-      self = this
-      return itemFilterSuggestions = itemFilterSuggestions.filter(function (itemFilterSuggestions) {
-        if (self.filterDistance) {
-          return itemFilterSuggestions.distance <= self.filterDistance && itemFilterSuggestions.hobbies.includes(self.filterTags) && itemFilterSuggestions.age >= self.filterAge[0] && itemFilterSuggestions.age <= self.filterAge[1] && itemFilterSuggestions.score >= self.filterScore[0] && itemFilterSuggestions.score <= self.filterScore[1]
+      const selfThis = this
+      return itemFilterSuggestions.filter(function (itemFilterSuggestions) {
+        if (selfThis.filterDistance) {
+          return itemFilterSuggestions.distance <= selfThis.filterDistance && itemFilterSuggestions.hobbies.includes(selfThis.filterTags) && itemFilterSuggestions.age >= selfThis.filterAge[0] && itemFilterSuggestions.age <= selfThis.filterAge[1] && itemFilterSuggestions.score >= selfThis.filterScore[0] && itemFilterSuggestions.score <= selfThis.filterScore[1]
         }
       })
-      .sort(function compare(user1, user2) {
-        if (self.orderByChoice === 'Auto') {
-          if (user1.matchScore < user2.matchScore) {
-            return -1;
+        .sort(function compare (user1, user2) {
+          if (selfThis.orderByChoice === 'Auto') {
+            if (user1.matchScore <= user2.matchScore) {
+              return -1
+            }
+            if (user1.matchScore > user2.matchScore) {
+              return 1
+            }
           }
-          if (user1.matchScore > user2.matchScore) {
-            return 1;
+          if (selfThis.orderByChoice === 'Age') {
+            if (user1.age <= user2.age) {
+              return -1
+            }
+            if (user1.age > user2.age) {
+              return 1
+            }
           }
-        }
-        if (self.orderByChoice === 'Age') {
-          if (user1.age < user2.age) {
-            return -1;
+          if (selfThis.orderByChoice === 'Popularity') {
+            if (user1.score <= user2.score) {
+              return -1
+            }
+            if (user1.score > user2.score) {
+              return 1
+            }
           }
-          if (user1.age > user2.age) {
-            return 1;
+          if (selfThis.orderByChoice === 'Distance') {
+            if (user1.distance <= user2.distance) {
+              return -1
+            }
+            if (user1.distance > user2.distance) {
+              return 1
+            }
           }
-        }
-        if (self.orderByChoice === 'Popularity') {
-          if (user1.score < user2.score) {
-            return -1;
+          if (selfThis.orderByChoice === 'Tags') {
+            if (user1.hobbies <= user2.hobbies) {
+              return -1
+            }
+            if (user1.hobbies > user2.hobbies) {
+              return 1
+            }
           }
-          if (user1.score > user2.score) {
-            return 1;
-          }
-        }
-        if (self.orderByChoice === 'Distance') {
-          if (user1.distance < user2.distance) {
-            return -1;
-          }
-          if (user1.distance > user2.distance) {
-            return 1;
-          }
-          return 0;
-        }
-        if (self.orderByChoice === 'Tags') {
-          if (user1.hobbies < user2.hobbies) {
-            return -1;
-          }
-          if (user1.hobbies > user2.hobbies) {
-            return 1;
-          }
-        }
-      })
+        })
     },
     love (target) {
       this.$store.dispatch('interact/sendLove', target)

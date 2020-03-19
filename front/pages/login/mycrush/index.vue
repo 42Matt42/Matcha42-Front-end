@@ -24,6 +24,24 @@
           <v-row
             justify="center"
           >
+            <nuxt-link to="/login/mycrush/notifications">
+              <v-btn
+                color="pink darken-4"
+                dark
+              >
+                Notifications
+                &nbsp;
+                <v-icon>
+                  mdi-message-alert
+                </v-icon>
+              </v-btn>
+            </nuxt-link>
+          </v-row>
+        </v-col>
+        <v-col>
+          <v-row
+            justify="center"
+          >
             <nuxt-link to="/login/mycrush/myviews">
               <v-btn
                 color="indigo accent-2"
