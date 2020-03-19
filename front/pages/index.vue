@@ -9,8 +9,8 @@
         height="550px"
       >
         <v-carousel-item
-          v-for="itemSuggestions in filterSuggestions(loadedSuggestions)"
-          :key="itemSuggestions.id"
+          v-for="(itemSuggestions, filterIndex) in filterSuggestions(loadedSuggestions)"
+          :key="filterIndex"
           reverse-transition="fade-transition"
         >
           <nuxt-link

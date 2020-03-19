@@ -156,8 +156,8 @@
           continuous
         >
           <v-carousel-item
-            v-for="itemAdvancedSearch in filterAdvancedSearch(loadedAdvancedSearch)"
-            :key="itemAdvancedSearch.id"
+            v-for="(itemAdvancedSearch, filterKey) in filterAdvancedSearch(loadedAdvancedSearch)"
+            :key="filterKey"
             reverse-transition="fade-transition"
           >
             <nuxt-link
@@ -362,8 +362,8 @@ export default {
       filterDistance: 20000,
       filterScore: [0, 1000],
       filterTags: '',
-      orderByChoice: 'Auto',
-      orderByList: ['Auto', 'Age', 'Popularity', 'Distance', 'Tags'],
+      orderByChoice: '',
+      orderByList: ['Age', 'Popularity', 'Distance', 'Tags'],
       ageRules: [
         v => !!v || 'Target age required',
         v => (v[1] < 101) || 'Target age too high',
@@ -442,23 +442,16 @@ export default {
       }
     },
     filterAdvancedSearch (itemFilterAdvancedSearch) {
-      self = this
+      const self = this
+
       return itemFilterAdvancedSearch = itemFilterAdvancedSearch.filter(function (itemFilterAdvancedSearch) {
         if (self.filterDistance) {
           return itemFilterAdvancedSearch.distance <= self.filterDistance && itemFilterAdvancedSearch.hobbies.includes(self.filterTags) && itemFilterAdvancedSearch.age >= self.filterAge[0] && itemFilterAdvancedSearch.age <= self.filterAge[1] && itemFilterAdvancedSearch.score >= self.filterScore[0] && itemFilterAdvancedSearch.score <= self.filterScore[1]
         }
       })
       .sort(function compare(user1, user2) {
-        if (self.orderByChoice === 'Auto') {
-          if (user1.matchScore < user2.matchScore) {
-            return -1;
-          }
-          if (user1.matchScore > user2.matchScore) {
-            return 1;
-          }
-        }
         if (self.orderByChoice === 'Age') {
-          if (user1.age < user2.age) {
+          if (user1.age <= user2.age) {
             return -1;
           }
           if (user1.age > user2.age) {
@@ -466,7 +459,7 @@ export default {
           }
         }
         if (self.orderByChoice === 'Popularity') {
-          if (user1.score < user2.score) {
+          if (user1.score <= user2.score) {
             return -1;
           }
           if (user1.score > user2.score) {
@@ -474,7 +467,7 @@ export default {
           }
         }
         if (self.orderByChoice === 'Distance') {
-          if (user1.distance < user2.distance) {
+          if (user1.distance <= user2.distance) {
             return -1;
           }
           if (user1.distance > user2.distance) {
@@ -483,7 +476,7 @@ export default {
           return 0;
         }
         if (self.orderByChoice === 'Tags') {
-          if (user1.hobbies < user2.hobbies) {
+          if (user1.hobbies <= user2.hobbies) {
             return -1;
           }
           if (user1.hobbies > user2.hobbies) {
