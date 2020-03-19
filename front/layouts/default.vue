@@ -396,7 +396,6 @@ export default {
         .catch((error) => {
           console.log('error_GET_notif', error)
           console.log('error_client', error.response.statusText)
-          this.$store.dispatch('interact/setMessage', error.response.statusText)
         })
     },
     closeNotif (id) {
@@ -416,7 +415,6 @@ export default {
           this.$store.dispatch('websocket/setSnackbarStatus', false)
         })
         .catch((error) => {
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     closeServerMessage () {

@@ -163,8 +163,6 @@ export default {
           .catch((error) => {
             console.log('error_login', error)
             console.log('error_client', error.response.data.client)
-            this.$store.dispatch('interact/setMessage', error.response.data.client)
-            console.log('error.response.status_login', error.response.status)
           })
       }
     },

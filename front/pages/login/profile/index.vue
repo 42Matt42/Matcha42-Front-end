@@ -202,7 +202,6 @@ export default {
       .catch((error) => {
         console.log('GET error_async_mypics', error)
         // console.log('GET error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     const userprofile = await axios
       .get(process.env.serverUrl + '/users/user', {
@@ -218,7 +217,6 @@ export default {
       .catch((error) => {
         console.log('error_async_settings', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     const birthdayProfile = await moment(context.store.getters['user/loadedUsers'].birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
     return {

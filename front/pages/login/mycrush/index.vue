@@ -196,7 +196,6 @@ export default {
         .catch((error) => {
           console.log ('error_POST_like', error)
           console.log('error_client', error.response.data.client)
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     }
   }

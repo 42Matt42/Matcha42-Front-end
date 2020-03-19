@@ -172,7 +172,6 @@ export default {
           .catch(function (error) {
             console.log ('error_password', error)
             console.log('error_data_client', error.response.data.client)
-            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
       }
     },
@@ -195,7 +194,6 @@ export default {
   //     .catch((error) => {
   //       console.log('error_async_newpass', error)
   //       console.log('error_client', error.response.data.client)
-  //       context.store.dispatch('interact/setMessage', error.response.data.client)
   //     })
   //   return {
   //     newpass

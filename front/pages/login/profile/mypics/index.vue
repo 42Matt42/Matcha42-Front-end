@@ -318,9 +318,6 @@ export default {
       })
       .catch((error) => {
         console.log('GET error_async_mypics', error)
-        // TO TEST
-        // console.log('GET error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       usermypics

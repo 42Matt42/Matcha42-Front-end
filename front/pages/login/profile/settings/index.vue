@@ -270,7 +270,6 @@ export default {
           .catch((error) => {
             console.log ('error_axios_settings', error)
             console.log('error_client', error.response.data.client)
-            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
         this.$router.push('/settings')
       }
@@ -291,7 +290,6 @@ export default {
       .catch((error) => {
         console.log('error_async_settings', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       usersettings

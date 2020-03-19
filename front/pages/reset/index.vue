@@ -81,7 +81,6 @@ export default {
           .catch((error) => {
             console.log('error', error)
             console.log('error_client', error.response.data.client)
-            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
       }
     }

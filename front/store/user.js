@@ -89,7 +89,6 @@ export const actions = {
       .catch((error) => {
         console.log ('error_register', error.response)
         console.log('error_data_client', error.response.data.client)
-        commit('setMessage', error.response.data.client)
       })
     return {
     }

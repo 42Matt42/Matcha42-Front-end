@@ -74,7 +74,6 @@ export default {
       .catch((error) => {
         console.log('error_GET_like', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       myLikes

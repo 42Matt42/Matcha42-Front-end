@@ -170,7 +170,6 @@ export default {
           .catch(function (error) {
             console.log ('error_password', error)
             console.log('error_data_client', error.response.data.client)
-            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
       }
       //   this.snackbar = true

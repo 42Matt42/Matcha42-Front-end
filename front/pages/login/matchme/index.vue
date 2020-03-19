@@ -437,7 +437,6 @@ export default {
           .catch((error) => {
             console.log('error_GET_advancedSearch', error)
             console.log('error_client', error.response.statusText)
-            this.$store.dispatch('interact/setMessage', error.response.statusText)
           })
       }
     },

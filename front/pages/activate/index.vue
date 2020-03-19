@@ -49,7 +49,6 @@ export default {
       .catch(function(error) {
         /* eslint-disable */
         console.log('error_response', error.response)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
       return {
         activated

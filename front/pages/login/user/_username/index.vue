@@ -283,15 +283,6 @@ export default {
       context.store.dispatch('search/deleteSearchProfile')
       context.redirect('/login/profile')
     }
-  // },
-  // created () {
-  //   socket.on('onlinee', (usersStatus) => {
-  //     // eslint-disable-next-line
-  //     console.log('CREATED_online_username_usersStatus', usersStatus)
-  //     this.statusListener = usersStatus
-  //     console.log('CREATED_online_username_this.statusListener: statusListener', this.statusListener)
-  //     this.$store.dispatch('interact/setMessage', 'usersStatus array updated !')
-  //   })
   },
   methods: {
     love () {
@@ -319,7 +310,6 @@ export default {
         })
         .catch((error) => {
           console.log('error_DISLIKE_client', error.response.data.client)
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     block () {
@@ -364,7 +354,6 @@ export default {
         .catch((error) => {
           console.log ('error_POST_report', error)
           console.log('error_client', error.response.data.client)
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     filterStatus () {
