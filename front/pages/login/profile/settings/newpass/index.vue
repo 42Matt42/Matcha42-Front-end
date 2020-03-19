@@ -139,13 +139,13 @@ export default {
       }
     },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     }
   },
   methods: {
@@ -159,20 +159,20 @@ export default {
             password: this.password
           },
           headers: {
-            Authorization: 'Bearer ' + this.$store.getters.token
+            Authorization: 'Bearer ' + this.$store.getters['user/token']
           }
         })
           .then((response) => {
           /* eslint-disable */
             console.log('response', response)
             console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
+            this.$store.dispatch('interact/setMessage', response.client)
             this.$router.push('/')
           })
           .catch(function (error) {
             console.log ('error_password', error)
             console.log('error_data_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
+            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
       }
     },
@@ -184,18 +184,18 @@ export default {
   //   const newpass = await axios
   //     .get(process.env.serverUrl + '/users/user', {
   //       headers: {
-  //         Authorization: 'Bearer ' + context.app.store.getters.token
+  //         Authorization: 'Bearer ' + context.app.store.getters['user/token']
   //       }
   //     })
   //     .then((response) => {
   //       /* eslint-disable */
   //       console.log('response_async_newpass', response)
-  //       context.store.dispatch('setMessage', response.client)
+  //       context.store.dispatch('interact/setMessage', response.client)
   //     })
   //     .catch((error) => {
   //       console.log('error_async_newpass', error)
   //       console.log('error_client', error.response.data.client)
-  //       context.store.dispatch('setMessage', error.response.data.client)
+  //       context.store.dispatch('interact/setMessage', error.response.data.client)
   //     })
   //   return {
   //     newpass

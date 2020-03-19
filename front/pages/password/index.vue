@@ -107,7 +107,7 @@ export default {
   },
   computed: {
     checker () {
-      return this.$store.getters.checker
+      return this.$store.getters['user/checker']
     },
     samePasswords () {
       if (this.password1 === this.password2 && this.password1.length > 0) {
@@ -117,7 +117,7 @@ export default {
       }
     },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     }
   },
   async asyncData (context) {
@@ -132,20 +132,20 @@ export default {
         /* eslint-disable */
         console.log('response_password', response)
         console.log('context', context)
-        context.store.dispatch('setChecker', false)
+        context.store.dispatch('user/setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
-          context.store.dispatch('setChecker', true)
-          context.store.dispatch('setUsername', context.query.username)
-          context.store.dispatch('setMessage', response.data.client)
+          context.store.dispatch('user/setChecker', true)
+          context.store.dispatch('user/setUsername', context.query.username)
+          context.store.dispatch('interact/setMessage', response.data.client)
         }
       })
       .catch((error) => {
-        context.store.dispatch('setChecker', false)
+        context.store.dispatch('user/setChecker', false)
         /* eslint-disable */
         console.log('error_password', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
       return {
         newpass
@@ -158,19 +158,19 @@ export default {
         this.$axios
           .$post(process.env.serverUrl + '/users/password', {
             password1: this.password2,
-            username: this.$store.getters.username
+            username: this.$store.getters['user/loadedUsers'].username
           })
           .then((response) => {
           /* eslint-disable */
             console.log('response', response)
             console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
+            this.$store.dispatch('interact/setMessage', response.client)
             this.$router.push('/')
           })
           .catch(function (error) {
             console.log ('error_password', error)
             console.log('error_data_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
+            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
       }
       //   this.snackbar = true

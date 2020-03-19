@@ -166,23 +166,23 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     loadedPictures () {
-      return this.$store.getters.loadedPictures
+      return this.$store.getters['user/loadedPictures']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     },
     loadedLocation () {
-      return this.$store.getters.loadedLocation
+      return this.$store.getters['geoloc/loadedLocation']
     }
   },
   // async asyncData (context) {
-  //   const birthday = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DD').format('Do MMMM')
+  //   const birthday = await moment(context.store.getters['user/loadedUsers'].birth_date, 'YYYY-MM-DD').format('Do MMMM')
   //   return {
   //     birthday
   //   }
@@ -191,39 +191,39 @@ export default {
     const usermypics = await axios
       .get(process.env.serverUrl + '/users/photos', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
         console.log('GET response_async_mypics', response)
-        context.store.dispatch('setPictures', response.data.client)
-        context.store.dispatch('setMessage', response.statusText)
+        context.store.dispatch('user/setPictures', response.data.client)
+        context.store.dispatch('interact/setMessage', response.statusText)
       })
       .catch((error) => {
         console.log('GET error_async_mypics', error)
         // TO TEST
         // console.log('GET error_client', error.response.data.client)
-        // context.store.dispatch('setMessage', error.response.data.client)
+        // context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     const userprofile = await axios
       .get(process.env.serverUrl + '/users/user', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
         console.log('response_async_settings', response)
-        context.store.dispatch('setUserData', response.data.userdata)
-        context.store.dispatch('setMessage', response.client)
+        context.store.dispatch('user/setUserData', response.data.userdata)
+        context.store.dispatch('interact/setMessage', response.client)
       })
       .catch((error) => {
         console.log('error_async_settings', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
-    const birthdayProfile = await moment(context.store.getters.loadedUsers.birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
+    const birthdayProfile = await moment(context.store.getters['user/loadedUsers'].birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
     return {
       usermypics,
       userprofile,

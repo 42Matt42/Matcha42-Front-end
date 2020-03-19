@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     }
   },
   methods: {
@@ -74,13 +74,13 @@ export default {
           /* eslint-disable */
             console.log('response', response)
             console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
+            this.$store.dispatch('interact/setMessage', response.client)
             this.$router.push('/')
           })
           .catch((error) => {
             console.log('error', error)
             console.log('error_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
+            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
       }
     }

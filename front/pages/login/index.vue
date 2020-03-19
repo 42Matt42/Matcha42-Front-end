@@ -133,7 +133,7 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     }
   },
   methods: {
@@ -150,15 +150,10 @@ export default {
           .then((response) => {
           /* eslint-disable */
             console.log('response_login', response)
-            this.$store.dispatch('setUserData', response.userdata)
-            this.$store.dispatch('setToken', response.token)
+            this.$store.dispatch('user/setUserData', response.userdata)
+            this.$store.dispatch('user/setToken', response.token)
             console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
-            // BOOM
-            // this.$store.commit('setSocketEmit', yesman.emit('login', this.login.username))
-            // this.$store.commit('setSocketOn', yesman.on)
-            // this.$store.getters.loadedSocketEmit
-            // this.$store.getters.loadedSocketEmit('login', this.login.username)
+            this.$store.dispatch('interact/setMessage', response.client)
             socket.emit('login', this.login.username)
             if (response.userdata.profile_complete === 0)
               this.$router.push('/login/profile/settings')
@@ -168,7 +163,7 @@ export default {
           .catch((error) => {
             console.log('error_login', error)
             console.log('error_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
+            this.$store.dispatch('interact/setMessage', error.response.data.client)
             console.log('error.response.status_login', error.response.status)
           })
       }

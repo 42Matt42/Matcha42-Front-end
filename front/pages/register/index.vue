@@ -260,13 +260,13 @@ export default {
       }
     },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     }
   },
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('registerUser', this.checkRegister)
+        this.$store.dispatch('user/registerUser', this.checkRegister)
         this.$router.push('/')
       }
     },

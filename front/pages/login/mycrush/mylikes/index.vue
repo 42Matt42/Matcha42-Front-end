@@ -51,32 +51,32 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedLikes () {
-      return this.$store.getters.loadedLikes
+      return this.$store.getters['interact/loadedLikes']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     }
   },
   async asyncData (context) {
     const myLikes = await axios
       .get(process.env.serverUrl + '/social/like', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
         console.log('response_GET_like', response)
-        context.store.dispatch('setLikes', response.data.client)
-        context.store.dispatch('setMessage', response.client)
+        context.store.dispatch('interact/setLikes', response.data.client)
+        context.store.dispatch('interact/setMessage', response.client)
       })
       .catch((error) => {
         console.log('error_GET_like', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       myLikes

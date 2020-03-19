@@ -44,31 +44,31 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedViews () {
-      return this.$store.getters.loadedViews
+      return this.$store.getters['interact/loadedViews']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     }
   },
   async asyncData (context) {
     const myViews = await axios
       .get(process.env.serverUrl + '/social/view', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
         console.log('response_GET_view', response)
-        context.store.dispatch('setViews', response.data.client)
+        context.store.dispatch('interact/setViews', response.data.client)
       })
       .catch((error) => {
         console.log('error_GET_view', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       myViews

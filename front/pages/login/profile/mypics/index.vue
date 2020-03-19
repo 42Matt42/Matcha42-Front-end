@@ -306,36 +306,36 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     },
     loadedPictures () {
-      return this.$store.getters.loadedPictures
+      return this.$store.getters['user/loadedPictures']
     }
   },
   async asyncData (context) {
     const usermypics = await axios
       .get(process.env.serverUrl + '/users/photos', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
         console.log('GET response_async_mypics', response)
-        context.store.dispatch('setPictures', response.data.client)
-        context.store.dispatch('setMessage', response.statusText)
+        context.store.dispatch('user/setPictures', response.data.client)
+        context.store.dispatch('interact/setMessage', response.statusText)
       })
       .catch((error) => {
         console.log('GET error_async_mypics', error)
         // TO TEST
         // console.log('GET error_client', error.response.data.client)
-        // context.store.dispatch('setMessage', error.response.data.client)
+        // context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       usermypics
@@ -353,11 +353,8 @@ export default {
       const reader = new FileReader()
       reader.readAsDataURL(File)
       reader.onload = () => {
-        // this.$store.dispatch('setOnePicture', reader.result) //, number)
         renamed = reader.result.split(';base64,')
         this.showPictures[number] = renamed[1]
-        // eslint-disable-next-line
-        // console.log('this.showPictures. + number:', this.$store.getters.showPictures[number])
         // eslint-disable-next-line
         console.log('this.showPictures. + number:', this.showPictures[number])
       }
@@ -396,12 +393,12 @@ export default {
               const feedback = JSON.parse(this.responseText)
               // eslint-disable-next-line
               console.log('parsed this.responseText', feedback)
-              self.$store.dispatch('setMessage', feedback)
+              self.$store.dispatch('interact/setMessage', feedback)
             }
           }
         })
         xhr.open('POST', process.env.serverUrl + '/users/upload')
-        xhr.setRequestHeader('Authorization', 'Bearer ' + this.$store.getters.token)
+        xhr.setRequestHeader('Authorization', 'Bearer ' + this.$store.getters['user/token'])
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
         xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')

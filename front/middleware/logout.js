@@ -1,7 +1,11 @@
 export default function ({ store, redirect }) {
   // If the user is not authenticated
-  if (store.state) {
-    store.dispatch('setLogout')
+  if (store) {
+    store.dispatch('user/setLogoutUser')
+    store.dispatch('websocket/setLogoutWebsocket')
+    store.dispatch('interact/setLogoutInteract')
+    store.dispatch('geoloc/setLogoutGeoloc')
+    store.dispatch('search/setLogoutSearch')
     return redirect('/')
   }
 }

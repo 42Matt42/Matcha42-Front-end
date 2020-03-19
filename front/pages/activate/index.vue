@@ -21,14 +21,14 @@ export default {
   },
   computed: {
     checker () {
-      return this.$store.getters.checker
+      return this.$store.getters['user/checker']
     },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     }
   },
   async asyncData (context) {
-    context.store.dispatch('setChecker', false)
+    context.store.dispatch('user/setChecker', false)
     const activated = await axios
       .get(process.env.serverUrl + '/users/activate', {
         params: {
@@ -39,17 +39,17 @@ export default {
         /* eslint-disable */
         console.log('response', response)
         console.log('context', context)
-        // context.store.dispatch('setChecker', false)
+        // context.store.dispatch('user/setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
-          context.store.dispatch('setChecker', true)
-          context.store.dispatch('setMessage', response.data.client)
+          context.store.dispatch('user/setChecker', true)
+          context.store.dispatch('interact/setMessage', response.data.client)
         }
       })
       .catch(function(error) {
         /* eslint-disable */
         console.log('error_response', error.response)
-        context.store.dispatch('setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
       return {
         activated

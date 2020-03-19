@@ -10,7 +10,7 @@
             color="blue lighten-4"
             class="mr-4"
           >
-            Get GeoLocalisation !
+            Update my GeoLocalisation !
           </v-btn>
         </v-col>
       </v-row>
@@ -92,38 +92,6 @@
       >
         <v-container>
           <v-row>
-            <v-col
-              cols="10"
-            >
-              accuracy:
-              {{ chosenCity.accuracy }}
-              lat:
-              {{ chosenCity.lat }}
-              lng:
-              {{ chosenCity.lng }}
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="10"
-            >
-              <v-text-field
-                v-model="loadedMapPosition.lat"
-                label="Latitude"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              cols="10"
-            >
-              <v-text-field
-                v-model="loadedMapPosition.lng"
-                label="Longitude"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
             <v-col>
               <v-btn
                 @click="sendGeoLoc"
@@ -195,13 +163,13 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedMapPosition () {
-      return this.$store.getters.loadedMapPosition
+      return this.$store.getters['geoloc/loadedMapPosition']
     },
     loadedLocation () {
-      return this.$store.getters.loadedLocation
+      return this.$store.getters['geoloc/loadedLocation']
     }
   },
   methods: {
@@ -226,8 +194,9 @@ export default {
           location.lat = userAcceptsGeoloc.latitude
           location.lng = userAcceptsGeoloc.longitude
           const accuracy = userAcceptsGeoloc.accuracy
-          self.$store.dispatch('setMapPosition', {accuracy, location})
-          self.reverseLocalisation(location.lat, location.lng)
+          self.$store.dispatch('geoloc/setMapPosition', {accuracy, location})
+          self.$store.dispatch('geoloc/setReverseGeoloc')
+          // self.reverseLocalisation(location.lat, location.lng)
         }
         function error(error) {
           console.log(`ERROR(${error.code}): ${error.message}`)
@@ -251,9 +220,9 @@ export default {
         /* eslint-disable */
           console.log('response_axios_googleAPI', response)
           console.log('response_statusText', response.statusText)
-          this.$store.dispatch('setMessage', response.statusText)
-          this.$store.dispatch('setMapPosition', response.data)
-          this.reverseLocalisation (response.data.location.lat, response.data.location.lng)
+          this.$store.dispatch('interact/setMessage', response.statusText)
+          this.$store.dispatch('geoloc/setMapPosition', response.data)
+          this.$store.dispatch('geoloc/setReverseGeoloc')
         })
         .catch((error) => {
           console.log ('error_axios_googleAPIwelcomePage', error)
@@ -265,7 +234,8 @@ export default {
         .then((response) => {
           /* eslint-disable */
           console.log('response_GET_cityfinder', response)
-          this.$store.dispatch('setLocation', response.data)
+          this.$store.dispatch('geoloc/setLocation', response.data)
+          this.sendGeoloc()
         })
         .catch((error) => {
           console.log('error_GET_cityfinder', error)
@@ -287,7 +257,7 @@ export default {
             })
           },
           headers: {
-            'Authorization': 'Bearer ' + this.$store.getters.token
+            'Authorization': 'Bearer ' + this.$store.getters['user/token']
           }
         })
           .then((response) => {
@@ -312,9 +282,10 @@ export default {
     save () {
       this.isEditing = !this.isEditing
       this.hasSaved = true
-      this.$store.dispatch('setMapPosition', { accuracy: this.chosenCity.accuracy, location: { lat: parseFloat(this.chosenCity.lat), lng: parseFloat(this.chosenCity.lng) } })
-      this.$store.dispatch('setLocation', { address: { country: this.chosenCity.country, city: this.chosenCity.city, city_district: 'City center' } })
-    },
+      this.$store.dispatch('geoloc/setMapPosition', { accuracy: this.chosenCity.accuracy, location: { lat: parseFloat(this.chosenCity.lat), lng: parseFloat(this.chosenCity.lng) } })
+      this.$store.dispatch('geoloc/setLocation', { address: { country: this.chosenCity.country, city: this.chosenCity.city, city_district: 'City center' } })
+      this.$store.dispatch('geoloc/sendGeoloc')
+    }
   }
 }
 </script>

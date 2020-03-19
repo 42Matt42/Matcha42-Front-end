@@ -156,8 +156,8 @@
           continuous
         >
           <v-carousel-item
-            v-for="(itemAdvancedSearch,index) in filterAdvancedSearch(loadedAdvancedSearch)"
-            :key="index"
+            v-for="itemAdvancedSearch in filterAdvancedSearch(loadedAdvancedSearch)"
+            :key="itemAdvancedSearch.id"
             reverse-transition="fade-transition"
           >
             <v-card
@@ -387,25 +387,25 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     },
     checker () {
-      return this.$store.getters.checker
+      return this.$store.getters['user/checker']
     },
     loadedAdvancedSearch () {
-      return this.$store.getters.loadedAdvancedSearch
+      return this.$store.getters['search/loadedAdvancedSearch']
     }
   },
   methods: {
     matchme () {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('setChecker', false)
+        this.$store.dispatch('user/setChecker', false)
         axios
           .get(process.env.serverUrl + '/social/search', {
             params: {
@@ -416,20 +416,20 @@ export default {
               gender: this.loadedUsers.interested_in
             },
             headers: {
-              Authorization: 'Bearer ' + this.$store.getters.token
+              Authorization: 'Bearer ' + this.$store.getters['user/token']
             }
           })
           .then((response) => {
             /* eslint-disable */
             console.log('response_GET_advancedSearch', response)
-            this.$store.dispatch('setAdvancedSearch', response.data.client)
-            this.$store.dispatch('setMessage', response.statusText)
-            this.$store.dispatch('setChecker', true)
+            this.$store.dispatch('search/setAdvancedSearch', response.data.client)
+            this.$store.dispatch('interact/setMessage', response.statusText)
+            this.$store.dispatch('user/setChecker', true)
           })
           .catch((error) => {
             console.log('error_GET_advancedSearch', error)
             console.log('error_client', error.response.statusText)
-            this.$store.dispatch('setMessage', error.response.statusText)
+            this.$store.dispatch('interact/setMessage', error.response.statusText)
           })
       }
     },
@@ -487,7 +487,7 @@ export default {
     love (target) {
       // eslint-disable-next-line
       console.log('thisTEST', this)
-      this.store.dispatch('setChecker', false)
+      this.store.dispatch('user/setChecker', false)
       this.$axios({
         method: 'post',
         url: process.env.serverUrl + '/social/like',
@@ -495,20 +495,20 @@ export default {
           username: target
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_like', response)
           console.log('response_client', response.client)
-          this.$store.dispatch('setMessage', response.client)
-          context.store.dispatch('setChecker', true)
+          this.$store.dispatch('interact/setMessage', response.client)
+          context.store.dispatch('user/setChecker', true)
         })
         .catch((error) => {
           console.log ('error_POST_like', error)
           console.log('error_client', error.response.data.client)
-          this.$store.dispatch('setMessage', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     }
   }

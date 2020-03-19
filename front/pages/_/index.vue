@@ -6,11 +6,6 @@
 
 <script>
 export default {
-  middleware: 'redirection',
-  computed: {
-    serverMessage () {
-      return this.$store.getters.serverMessage
-    }
-  }
+  middleware: 'redirection'
 }
 </script>

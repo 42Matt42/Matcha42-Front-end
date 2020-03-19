@@ -116,26 +116,26 @@ export default {
   },
   computed: {
     // checker () {
-    //   return this.$store.getters.checker
+    //   return this.$store.getters['user/checker']
     // },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedSuggestions () {
-      return this.$store.getters.loadedSuggestions
+      return this.$store.getters['search/loadedSuggestions']
     },
     loadedMatchList () {
-      return this.$store.getters.loadedMatchList
+      return this.$store.getters['search/loadedMatchList']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     }
   },
   async asyncData (context) {
     const matchList = await axios
       .get(process.env.serverUrl + '/social/match', {
         headers: {
-          'Authorization': 'Bearer ' + context.app.store.getters.token
+          'Authorization': 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
@@ -144,16 +144,16 @@ export default {
         console.log('response.data.client', response.data.client)
         if (response.data.client.length != 0) {
           console.log('Test_A')
-          context.store.dispatch('setMatchList', response.data.client)
+          context.store.dispatch('search/setMatchList', response.data.client)
         }
         else {
-          context.store.dispatch('setMessage', 'No match so far')
+          context.store.dispatch('interact/setMessage', 'No match so far')
         }
       })
       .catch(function(error) {
         /* eslint-disable */
         console.log('error_asyncGET_matchList', error)
-        context.store.dispatch('setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
       return {
         matchList
@@ -169,19 +169,19 @@ export default {
           username: target
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_like', response)
           console.log('response_client', response.client)
-          this.$store.dispatch('setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', response.client)
         })
         .catch((error) => {
           console.log ('error_POST_like', error)
           console.log('error_client', error.response.data.client)
-          this.$store.dispatch('setMessage', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     }
   }

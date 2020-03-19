@@ -185,30 +185,30 @@ export default {
   },
   computed: {
     checker () {
-      return this.$store.getters.checker
+      return this.$store.getters['user/checker']
     },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     loadedSearchProfile () {
-      return this.$store.getters.loadedSearchProfile
+      return this.$store.getters['search/loadedSearchProfile']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     },
     loadedLikes () {
-      return this.$store.getters.loadedLikes
+      return this.$store.getters['interact/loadedLikes']
     }
   },
   async asyncData (context) {
-    context.store.dispatch('setChecker', false)
-    if (context.params.username !== context.store.getters.loadedUsers.username) {
+    context.store.dispatch('user/setChecker', false)
+    if (context.params.username !== context.store.getters['user/loadedUsers'].username) {
       /* eslint-disable */
       console.log('context', context)
-      // if (context.store.getters.token) {
+      // if (context.store.getters['user/token']) {
       const iView = await axios({
         method: 'post',
         url: process.env.serverUrl + '/social/view',
@@ -216,20 +216,18 @@ export default {
           username: context.route.params.username
         },
         headers: {
-          Authorization: 'Bearer ' + context.store.getters.token
+          Authorization: 'Bearer ' + context.store.getters['user/token']
         }
       })
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_view', response)
           console.log('response_statusText', response.data.client)
-          socket.emit('view', context.store.getters.loadedUsers.username, context.route.params.username)
-          context.store.dispatch('setMessage', response.data.client)
+          socket.emit('view', context.store.getters['user/loadedUsers'].username, context.route.params.username)
         })
         .catch((error) => {
           console.log ('error_POST_view', error)
           console.log('error_client', error.response.data.client)
-          context.store.dispatch('setMessage', error.response.data.client)
         })
       const getXuserInfo = await axios
         .get(process.env.serverUrl + '/users/profile', {
@@ -237,41 +235,38 @@ export default {
             username: context.route.params.username
           },
           headers: {
-            Authorization: 'Bearer ' + context.app.store.getters.token
+            Authorization: 'Bearer ' + context.app.store.getters['user/token']
           }
         })
         .then((response) => {
           /* eslint-disable */
           console.log('response_async_XuserInfo', response)
-          context.store.dispatch('setSearchProfile', response.data.userdata)
-          context.store.dispatch('setMessage', response.statusText)
-          context.store.dispatch('setChecker', true)
+          context.store.dispatch('search/setSearchProfile', response.data.userdata)
+          context.store.dispatch('user/setChecker', true)
         })
         .catch((error) => {
           console.log('error_async_XuserInfo', error)
           console.log('error_client', error.response.statusText)
-          context.store.dispatch('deleteSearchProfile')
+          context.store.dispatch('search/deleteSearchProfile')
           context.redirect('/')
         })
       const myLikes = await axios
         .get(process.env.serverUrl + '/social/like', {
           headers: {
-            Authorization: 'Bearer ' + context.app.store.getters.token
+            Authorization: 'Bearer ' + context.app.store.getters['user/token']
           }
         })
         .then((response) => {
           /* eslint-disable */
           console.log('response_GET_like', response)
-          context.store.dispatch('setLikes', response.data.client)
-          context.store.dispatch('setMessage', response.client)
+          context.store.dispatch('interact/setLikes', response.data.client)
         })
         .catch((error) => {
           console.log('error_GET_like', error)
           console.log('error_client', error.response.data.client)
-          context.store.dispatch('setMessage', error.response.data.client)
         })
-      const birthdaySearchProfile = await moment(context.store.getters.loadedSearchProfile.birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
-      const lastConnectionSearchProfile = await moment(context.store.getters.loadedSearchProfile.last_connection, 'YYYY-MM-DDTHH:mm:ss[Z]').format('L')
+      const birthdaySearchProfile = await moment(context.store.getters['search/loadedSearchProfile'].birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
+      const lastConnectionSearchProfile = await moment(context.store.getters['search/loadedSearchProfile'].last_connection, 'YYYY-MM-DDTHH:mm:ss[Z]').format('L')
       return {
         iView,
         // getXuserInfo,
@@ -281,7 +276,7 @@ export default {
       }
     }
     else {
-      context.store.dispatch('deleteSearchProfile')
+      context.store.dispatch('search/deleteSearchProfile')
       context.redirect('/login/profile')
     }
   // },
@@ -291,7 +286,7 @@ export default {
   //     console.log('CREATED_online_username_usersStatus', usersStatus)
   //     this.statusListener = usersStatus
   //     console.log('CREATED_online_username_this.statusListener: statusListener', this.statusListener)
-  //     this.$store.dispatch('setMessage', 'usersStatus array updated !')
+  //     this.$store.dispatch('interact/setMessage', 'usersStatus array updated !')
   //   })
   },
   methods: {
@@ -303,7 +298,7 @@ export default {
           username: this.target
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
@@ -311,16 +306,16 @@ export default {
           console.log('response_POST_like', response)
           console.log('response_client', response.data.client)
           if (response.data.client.includes('Liked and matched with')) {
-            socket.emit('likeback', this.$store.getters.loadedUsers.username, this.target)
+            socket.emit('likeback', this.$store.getters['user/loadedUsers'].username, this.target)
           }
           else {
-            socket.emit('like', this.$store.getters.loadedUsers.username, this.target)
+            socket.emit('like', this.$store.getters['user/loadedUsers'].username, this.target)
           }
-          this.$store.dispatch('setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', response.client)
         })
         .catch((error) => {
           console.log('error_LIKE_client', error.response.data.client)
-          this.$store.dispatch('setMessage', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     dislike () {
@@ -331,7 +326,7 @@ export default {
           username: this.target
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
@@ -339,13 +334,13 @@ export default {
           console.log('response_DISLIKE', response)
           console.log('response_client', response.client)
           if (response.data.client.includes('Disliked and unmatched')) {
-            socket.emit('dislike', this.$store.getters.loadedUsers.username, this.target)
+            socket.emit('dislike', this.$store.getters['user/loadedUsers'].username, this.target)
           }
-          this.$store.dispatch('setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', response.client)
         })
         .catch((error) => {
           console.log('error_DISLIKE_client', error.response.data.client)
-          this.$store.dispatch('setMessage', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     block () {
@@ -356,19 +351,19 @@ export default {
           username: this.target
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_block', response)
           console.log('response_client', response.client)
-          this.$store.dispatch('setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', response.client)
         })
         .catch((error) => {
           console.log ('error_POST_block', error)
           console.log('error_client', error.response.data.client)
-          this.$store.dispatch('setMessage', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     report () {
@@ -379,27 +374,27 @@ export default {
           username: this.target
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_report', response)
           console.log('response_client', response.client)
-          this.$store.dispatch('setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', response.client)
         })
         .catch((error) => {
           console.log ('error_POST_report', error)
           console.log('error_client', error.response.data.client)
-          this.$store.dispatch('setMessage', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
     filterStatus () {
-      console.log('statusListener_filterStatus', this.$store.getters.loadedStatus)
+      console.log('statusListener_filterStatus', this.$store.getters['websocket/loadedStatus'])
       // return statusListener.filter(function (statusListener) {
       //   return statusListener === target
       console.log('this.target_filterStatus', this.target)
-      return this.$store.getters.loadedStatus[this.target] // !== null
+      return this.$store.getters['websocket/loadedStatus'][this.target] // !== null
     }
   }
 }

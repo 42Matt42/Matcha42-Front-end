@@ -146,16 +146,16 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     loadedChatHistory () {
-      return this.$store.getters.loadedChatHistory
+      return this.$store.getters['interact/loadedChatHistory']
     },
     loadedMatchList () {
-      return this.$store.getters.loadedMatchList
+      return this.$store.getters['search/loadedMatchList']
     }
   },
   created () {
@@ -167,11 +167,11 @@ export default {
       // eslint-disable-next-line
       console.log('CREATED__chat', data)
       this.chatListener.push(data)
-      this.$store.dispatch('setMessage', 'New PM')
+      this.$store.dispatch('interact/setMessage', 'New PM')
     })
   },
   async asyncData (context) {
-    const matchDiscussion = await context.store.getters.loadedMatchList.filter(function (matchData) {
+    const matchDiscussion = await context.store.getters['search/loadedMatchList'].filter(function (matchData) {
       return matchData.username === context.route.params.username
     })
     const conversationHistory = await axios
@@ -180,19 +180,19 @@ export default {
           conversation_id: matchDiscussion[0].conversationId,
         },
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
         console.log('response_GET_ChatHistory', response)
-        context.store.dispatch('setChatHistory', response.data.client)
-        context.store.dispatch('setMessage', response.statusText)
+        context.store.dispatch('interact/setChatHistory', response.data.client)
+        context.store.dispatch('interact/setMessage', response.statusText)
       })
       .catch((error) => {
         console.log('error_GET_ChatHistory', error)
         console.log('error_client', error.response.statusText)
-        context.store.dispatch('setMessage', error.response.statusText)
+        context.store.dispatch('interact/setMessage', error.response.statusText)
       })
     return {
       matchDiscussion,

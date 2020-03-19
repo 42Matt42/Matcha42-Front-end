@@ -214,6 +214,7 @@
 
 <script>
 import axios from 'axios'
+import socket from '~/plugins/socket.io.js'
 import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 
 export default {
@@ -254,25 +255,25 @@ export default {
   },
   computed: {
     // checker () {
-    //   return this.$store.getters.checker
+    //   return this.$store.getters['user/checker']
     // },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedMapPosition () {
-      return this.$store.getters.loadedMapPosition
+      return this.$store.getters['geoloc/loadedMapPosition']
     },
     loadedLocation () {
-      return this.$store.getters.loadedLocation
+      return this.$store.getters['geoloc/loadedLocation']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     },
     loadedSuggestions () {
-      return this.$store.getters.loadedSuggestions
+      return this.$store.getters['search/loadedSuggestions']
     }
   },
   async asyncData (context) {
@@ -297,41 +298,41 @@ export default {
       location.lat = userAcceptsGeoloc.latitude
       location.lng = userAcceptsGeoloc.longitude
       const accuracy = userAcceptsGeoloc.accuracy
-      context.store.dispatch('setMapPosition', { accuracy, location })
-      context.store.dispatch('setReverseGeoloc')
+      context.store.dispatch('geoloc/setMapPosition', { accuracy, location })
+      context.store.dispatch('geoloc/setReverseGeoloc')
     }
     function error (error) {
       // eslint-disable-next-line
       console.log(error.message)
-      context.store.dispatch('setIpGeoloc')
+      context.store.dispatch('geoloc/setIpGeoloc')
     }
 
-    if (context.app.store.getters.token && !context.app.store.getters.loadedLocation.city) {
+    if (context.app.store.getters['user/token'] && !context.app.store.getters['geoloc/loadedLocation'].city) {
       // geolocalisation process
       if ('geolocation' in navigator) {
         await navigator.geolocation.getCurrentPosition(success, error, options)
       }
       //  process
-      if (!context.app.store.getters.loadedSuggestions[0]) {
+      if (!context.app.store.getters['search/loadedSuggestions'][0]) {
         mySuggestions = await axios
           .get(process.env.serverUrl + '/social/potential', {
             params: {
               number: 42
             },
             headers: {
-              Authorization: 'Bearer ' + context.app.store.getters.token
+              Authorization: 'Bearer ' + context.app.store.getters['user/token']
             }
           })
           .then((response) => {
             /* eslint-disable */
             console.log('response_GET_Suggestions', response)
-            context.store.dispatch('setSuggestions', response.data.client)
-            context.store.dispatch('setMessage', response.statusText)
+            context.store.dispatch('search/setSuggestions', response.data.client)
+            context.store.dispatch('interact/setMessage', response.statusText)
           })
           .catch((error) => {
             console.log('error_GET_Suggestions', error)
             console.log('error_client', error.response.statusText)
-            context.store.dispatch('setMessage', error.response.statusText)
+            context.store.dispatch('interact/setMessage', error.response.statusText)
           })
       }
     }
@@ -399,24 +400,24 @@ export default {
           username: target
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
         /* eslint-disable */
-          console.log('response_POST_like', response)
+          console.log('response_post_like', response)
           console.log('response_client', response.data.client)
           if (response.data.client.includes('Liked and matched with')) {
-            socket.emit('likeback', this.$store.getters.loadedUsers.username, this.target)
+            socket.emit('likeback', this.$store.getters['user/loadedUsers'].username, this.target)
           }
           else {
-            socket.emit('like', this.$store.getters.loadedUsers.username, this.target)
+            socket.emit('like', this.$store.getters['user/loadedUsers'].username, this.target)
           }
-          this.$store.dispatch('setMessage', response.data.client)
+          this.$store.dispatch('interact/setMessage', response.data.client)
         })
         .catch((error) => {
-          console.log('error_LIKE_client', error.response.data.client)
-          this.$store.dispatch('setMessage', error.response.data.client)
+          console.log('error_like_client', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     },
   }

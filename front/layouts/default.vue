@@ -151,7 +151,7 @@
           </v-btn>
           <br><br>
           <v-btn
-            @click="$store.dispatch('setSnackbarMessage', 'Hallo!')"
+            @click="$store.dispatch('websocket/setSnackbarMessage', 'Hallo!')"
             color="indigo darken-4"
             class="indigo--text text--lighten-5"
           >
@@ -277,10 +277,8 @@
 
 <script>
 /* eslint-disable */
-import socket from '~/plugins/socket.io.js'
 import axios from 'axios'
-// import socketio from 'socket.io'
-// export const SocketInstance = socketio('http://10.13.6.19:8080')
+import socket from '~/plugins/socket.io.js'
 
 export default {
   props: {
@@ -288,7 +286,6 @@ export default {
     source: String
   },
   data: () => ({
-    statusListener2: '',
     drawer: null,
     searchUsername: '',
     timeoutDuration: 0,
@@ -313,49 +310,38 @@ export default {
     ]
   }),
   computed: {
+    loadedSnackbarMessage () {
+      return this.$store.getters['websocket/loadedSnackbarMessage']
+    },
+    loadedSnackbarStatus () {
+      return this.$store.getters['websocket/loadedSnackbarStatus']
+    },
     loadedNotifications () {
-      return this.$store.getters.loadedNotifications
+      return this.$store.getters['websocket/loadedNotifications']
     },
     loadedStatus () {
-      return this.$store.getters.loadedStatus
+      return this.$store.getters['websocket/loadedStatus']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     },
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedLocation () {
-      return this.$store.getters.loadedLocation
+      return this.$store.getters['geoloc/loadedLocation']
     },
     loadedPictures () {
-      return this.$store.getters.loadedPictures
+      return this.$store.getters['user/loadedPictures']
     },
     // loadedSuggestions () {
-    //   return this.$store.getters.loadedSuggestions
+    //   return this.$store.getters['search/loadedSuggestions']
     // },
     loadedSuggestionsSidebar () {
-      return this.$store.getters.loadedSuggestionsSidebar
-    },
-    loadedSnackbarMessage: {
-      get() {
-        return this.$store.state.loadedSnackbarMessage
-      },
-      set(state) {
-        this.$store.dispatch('setSnackbarMessage', state)
-      }
-      // return this.$store.state.serverMessage
-    },
-    loadedSnackbarStatus: {
-      get() {
-        return this.$store.state.loadedSnackbarStatus
-      },
-      set(state) {
-        this.$store.dispatch('setSnackbarStatus', state)
-      }
+      return this.$store.getters['search/loadedSuggestionsSidebar']
     }
   },
   created () {
@@ -366,14 +352,10 @@ export default {
     socket.on('notification', (data) => {
       // eslint-disable-next-line
       this.chatListener = data
-      this.$store.dispatch('setSnackbarMessage', data)
+      this.$store.dispatch('websocket/setSnackbarMessage', data)
     }),
     socket.on('onlinee', (usersStatus) => {
-      // eslint-disable-next-line
-      this.statusListener2 = usersStatus
-      console.log('bMounted_online: this.statusListener2', this.statusListener2)
-      this.$store.dispatch('setStatus', this.statusListener2)
-      this.$store.dispatch('setMessage', 'usersStatus array updated !')
+      this.$store.dispatch('websocket/setStatus', usersStatus)
     })
   },
   methods: {
@@ -389,19 +371,19 @@ export default {
       axios
         .get(process.env.serverUrl + '/social/notification', {
           headers: {
-            Authorization: 'Bearer ' + this.$store.getters.token
+            Authorization: 'Bearer ' + this.$store.getters['user/token']
           }
         })
         .then((response) => {
           /* eslint-disable */
           console.log('response_GET_notif', response)
-          this.$store.dispatch('setNotifications', response.data.client)
-          this.$store.dispatch('setMessage', response.statusText)
+          this.$store.dispatch('websocket/setNotifications', response.data.client)
+          this.$store.dispatch('interact/setMessage', response.statusText)
         })
         .catch((error) => {
           console.log('error_GET_notif', error)
           console.log('error_client', error.response.statusText)
-          this.$store.dispatch('setMessage', error.response.statusText)
+          this.$store.dispatch('interact/setMessage', error.response.statusText)
         })
     },
     closeNotif (id) {
@@ -412,25 +394,20 @@ export default {
           notificationId: id
         },
         headers: {
-          'Authorization': 'Bearer ' + this.$store.getters.token
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
         }
       })
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_closeNotif', response)
-          this.$store.dispatch('setMessage', response.data.client)
-          this.$store.dispatch('setSnackbarStatus', false)
+          this.$store.dispatch('interact/setMessage', response.data.client)
+          this.$store.dispatch('websocket/setSnackbarStatus', false)
         })
         .catch((error) => {
-          this.$store.dispatch('setMessage', error.response.data.client)
+          this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
     }
   }
-  //   logout () {
-  //     this.$store.dispatch('setLogout', null)
-  //     this.$router.push('/')
-  //   }
-  // }
 }
 </script>
 

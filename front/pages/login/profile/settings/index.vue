@@ -227,13 +227,13 @@ export default {
   },
   computed: {
     serverMessage () {
-      return this.$store.getters.serverMessage
+      return this.$store.getters['interact/serverMessage']
     },
     loadedUsers () {
-      return this.$store.getters.loadedUsers
+      return this.$store.getters['user/loadedUsers']
     },
     token () {
-      return this.$store.getters.token
+      return this.$store.getters['user/token']
     }
   },
   methods: {
@@ -257,20 +257,20 @@ export default {
             tags: this.loadedUsers.tags.toString()
           },
           headers: {
-            'Authorization': 'Bearer ' + this.$store.getters.token
+            'Authorization': 'Bearer ' + this.$store.getters['user/token']
           }
         })
           .then((response) => {
           /* eslint-disable */
             console.log('response_axios_settings', response)
             console.log('response_client', response.client)
-            this.$store.dispatch('setMessage', response.client)
+            this.$store.dispatch('interact/setMessage', response.client)
             this.$router.push('/')
           })
           .catch((error) => {
             console.log ('error_axios_settings', error)
             console.log('error_client', error.response.data.client)
-            this.$store.dispatch('setMessage', error.response.data.client)
+            this.$store.dispatch('interact/setMessage', error.response.data.client)
           })
         this.$router.push('/settings')
       }
@@ -280,19 +280,19 @@ export default {
     const usersettings = await axios
       .get(process.env.serverUrl + '/users/user', {
         headers: {
-          Authorization: 'Bearer ' + context.app.store.getters.token
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
         }
       })
       .then((response) => {
         /* eslint-disable */
         console.log('response_async_settings', response)
-        context.store.dispatch('setUserData', response.data.userdata)
-        context.store.dispatch('setMessage', response.client)
+        context.store.dispatch('user/setUserData', response.data.userdata)
+        context.store.dispatch('interact/setMessage', response.client)
       })
       .catch((error) => {
         console.log('error_async_settings', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       usersettings
