@@ -1,3 +1,6 @@
+import axios from 'axios'
+import socket from '~/plugins/socket.io.js'
+
 export const state = () => ({
   // Interact
   serverMessage: 'default',
@@ -52,6 +55,34 @@ export const actions = {
   },
   setLogoutInteract ({ commit }) {
     commit('setLogoutInteract')
+  },
+  sendLove ({ dispatch, rootGetters }, target) {
+    axios({
+      method: 'post',
+      url: process.env.serverUrl + '/social/like',
+      data: {
+        username: target
+      },
+      headers: {
+        'Authorization': 'Bearer ' + rootGetters['user/token']
+      }
+    })
+      .then((response) => {
+      /* eslint-disable */
+        console.log('response_post_like', response)
+        console.log('response_client', response.data.client)
+        if (response.data.client.includes('Liked and matched with')) {
+          socket.emit('likeback', rootGetters['user/loadedUsers'].username, target)
+        }
+        else {
+          socket.emit('like', rootGetters['user/loadedUsers'].username, target)
+        }
+        dispatch('interact/setMessage', "I like !", { root: true })
+      })
+      .catch((error) => {
+        console.log('error_like_client', error.response.data.client)
+        dispatch('interact/setMessage', error.response.data.client, { root: true })
+      })
   }
 }
 

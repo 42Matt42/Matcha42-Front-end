@@ -72,7 +72,7 @@ export const actions = {
         console.log('error_GET_cityfinder', error)
       })
   },
-  sendGeoloc ({ state, rootGetters }) {
+  sendGeoloc ({ state, dispatch, rootGetters }) {
     axios ({
       method: 'post',
       url: process.env.serverUrl + '/edit/location',
@@ -93,6 +93,7 @@ export const actions = {
       .then((response) => {
       /* eslint-disable */
         console.log('response_axios_loadedMapPosition', response)
+        dispatch('interact/setMessage', "Geolocalisation updated !", { root: true })
       })
       .catch((error) => {
         console.log ('error_axios_loadedMapPosition', error)

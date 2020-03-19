@@ -1,7 +1,5 @@
 <template>
   <div>
-    checker:<br>
-    {{ checker }}
     <div v-if="checker === true">
       <br>
       <br>
@@ -79,7 +77,7 @@
       </v-form>
     </div>
     <div v-else>
-      Link already used
+      Link already used or wrong URL
     </div>
   </div>
 </template>
@@ -88,6 +86,7 @@
 import axios from 'axios'
 
 export default {
+  middleware: 'notAuthenticated',
   data () {
     return {
       valid: true,
@@ -135,9 +134,9 @@ export default {
         context.store.dispatch('user/setChecker', false)
         if (response.status == '200') {
           // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
-          context.store.dispatch('user/setChecker', true)
           context.store.dispatch('user/setUsername', context.query.username)
-          context.store.dispatch('interact/setMessage', response.data.client)
+          context.store.dispatch('user/setChecker', true)
+          context.store.dispatch('interact/setMessage', "Link activated !")
         }
       })
       .catch((error) => {
@@ -145,7 +144,8 @@ export default {
         /* eslint-disable */
         console.log('error_password', error)
         console.log('error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', "Link already activated or wrong URL")
+        context.redirect('/')
       })
       return {
         newpass

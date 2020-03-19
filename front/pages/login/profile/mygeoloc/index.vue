@@ -212,48 +212,6 @@ export default {
           console.log ('error_axios_googleAPIwelcomePage', error)
         })
     },
-    reverseLocalisation (lat, lng) {
-      this.$axios
-        .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + lng + '&lat=' + lat + '&accept-language=en', {})
-        .then((response) => {
-          /* eslint-disable */
-          console.log('response_GET_cityfinder', response)
-          this.$store.dispatch('geoloc/setLocation', response.data)
-          this.sendGeoloc()
-        })
-        .catch((error) => {
-          console.log('error_GET_cityfinder', error)
-        })
-    },
-    sendGeoLoc () {
-      if (this.$refs.form.validate()) {
-        this.$axios ({
-          method: 'post',
-          url: process.env.serverUrl + '/edit/location',
-          data: {
-            location: JSON.stringify({
-              accuracy: this.loadedMapPosition.accuracy,
-              lat: this.loadedMapPosition.lat,
-              lng: this.loadedMapPosition.lng,
-              country: this.loadedLocation.country,
-              city: this.loadedLocation.city,
-              district: this.loadedLocation.district
-            })
-          },
-          headers: {
-            'Authorization': 'Bearer ' + this.$store.getters['user/token']
-          }
-        })
-          .then((response) => {
-          /* eslint-disable */
-            console.log('response_axios_loadedMapPosition', response)
-            this.$router.push('/')
-          })
-          .catch((error) => {
-            console.log ('error_axios_loadedMapPosition', error)
-          })
-      }
-    },
     customFilter (itemCustomFilter, queryText, itemText) {
       const textOne = itemCustomFilter.name.toLowerCase()
       const textTwo = itemCustomFilter.value.country.toLowerCase()

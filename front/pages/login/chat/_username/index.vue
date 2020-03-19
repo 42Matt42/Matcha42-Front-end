@@ -123,6 +123,7 @@ import socket from '~/plugins/socket.io.js'
 
 /* eslint-disable */
 export default {
+  middleware: 'authenticated',
   data () {
     return {
       target: this.$route.params.username,
@@ -159,15 +160,11 @@ export default {
     }
   },
   created () {
-    // eslint-disable-next-line
     // window.onbeforeunload = () => {
     //   socket.emit('disconnect', this.username)
     // }
     socket.on('chat', (data) => {
-      // eslint-disable-next-line
-      console.log('CREATED__chat', data)
       this.chatListener.push(data)
-      this.$store.dispatch('interact/setMessage', 'New PM')
     })
   },
   async asyncData (context) {
@@ -187,7 +184,6 @@ export default {
         /* eslint-disable */
         console.log('response_GET_ChatHistory', response)
         context.store.dispatch('interact/setChatHistory', response.data.client)
-        context.store.dispatch('interact/setMessage', response.statusText)
       })
       .catch((error) => {
         console.log('error_GET_ChatHistory', error)
@@ -203,9 +199,6 @@ export default {
     sendChatMessage () {
       if (this.$refs.form.validate()) {
         socket.emit('chat', this.loadedUsers.username, this.target, this.chatMessage)
-        console.log('Chat message: ', this.chatMessage)
-        console.log('sent by: ', this.loadedUsers.username)
-        console.log('to: ', this.target)
       }
     }
   }

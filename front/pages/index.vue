@@ -214,7 +214,6 @@
 
 <script>
 import axios from 'axios'
-import socket from '~/plugins/socket.io.js'
 import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 
 export default {
@@ -391,32 +390,8 @@ export default {
       })
     },
     love (target) {
-      this.$axios({
-        method: 'post',
-        url: process.env.serverUrl + '/social/like',
-        data: {
-          username: target
-        },
-        headers: {
-          'Authorization': 'Bearer ' + this.$store.getters['user/token']
-        }
-      })
-        .then((response) => {
-        /* eslint-disable */
-          console.log('response_post_like', response)
-          console.log('response_client', response.data.client)
-          if (response.data.client.includes('Liked and matched with')) {
-            socket.emit('likeback', this.$store.getters['user/loadedUsers'].username, this.target)
-          }
-          else {
-            socket.emit('like', this.$store.getters['user/loadedUsers'].username, this.target)
-          }
-        })
-        .catch((error) => {
-          console.log('error_like_client', error.response.data.client)
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
-        })
-    },
+      this.$store.dispatch('interact/sendLove', target)
+    }
   }
 }
 </script>

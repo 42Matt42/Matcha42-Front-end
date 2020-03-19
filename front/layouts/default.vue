@@ -414,7 +414,6 @@ export default {
         .then((response) => {
         /* eslint-disable */
           console.log('response_POST_closeNotif', response)
-          this.$store.dispatch('interact/setMessage', response.data.client)
           this.$store.dispatch('websocket/setSnackbarStatus', false)
         })
         .catch((error) => {

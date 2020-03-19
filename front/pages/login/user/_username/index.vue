@@ -291,32 +291,7 @@ export default {
   },
   methods: {
     love () {
-      this.$axios({
-        method: 'post',
-        url: process.env.serverUrl + '/social/like',
-        data: {
-          username: this.target
-        },
-        headers: {
-          'Authorization': 'Bearer ' + this.$store.getters['user/token']
-        }
-      })
-        .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_like', response)
-          console.log('response_client', response.data.client)
-          if (response.data.client.includes('Liked and matched with')) {
-            socket.emit('likeback', this.$store.getters['user/loadedUsers'].username, this.target)
-          }
-          else {
-            socket.emit('like', this.$store.getters['user/loadedUsers'].username, this.target)
-          }
-          this.$store.dispatch('interact/setMessage', "I like !")
-        })
-        .catch((error) => {
-          console.log('error_LIKE_client', error.response.data.client)
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
-        })
+      this.$store.dispatch('interact/sendLove', this.target)
     },
     dislike () {
       this.$axios({

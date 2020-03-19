@@ -1,4 +1,5 @@
 import axios from 'axios'
+// import createPersistedState from 'vuex-persistedstate'
 import socket from '~/plugins/socket.io.js'
 
 export const state = () => ({
@@ -18,7 +19,7 @@ export const mutations = {
     state.checker = value
   },
   setUserData (state, userinfo) {
-    state.loadedUsers = userinfo
+    state.loadedUsers = Object.assign({}, userinfo)
   },
   setUsername (state, username) {
     state.loadedUsers.username = username

@@ -160,86 +160,90 @@
             :key="itemAdvancedSearch.id"
             reverse-transition="fade-transition"
           >
-            <v-card
-              :hover="true"
-              v-ripple="{ class: `purple--text` }"
-              class="mx-auto"
-              max-width="420"
+            <nuxt-link
+              :to="{ path: `/login/user/${itemAdvancedSearch.username}` }"
             >
-              <v-card-subtitle>
-                <v-row>
-                  <v-col cols="8">
-                    <div>
-                      <div class="headline font-weight-bold purple--text text--accent-4">
-                        {{ itemAdvancedSearch.username }}
+              <v-card
+                :hover="true"
+                v-ripple="{ class: `purple--text` }"
+                class="mx-auto"
+                max-width="420"
+              >
+                <v-card-subtitle>
+                  <v-row>
+                    <v-col cols="8">
+                      <div>
+                        <div class="headline font-weight-bold purple--text text--accent-4">
+                          {{ itemAdvancedSearch.username }}
+                        </div>
+                        <div class="title font-italic purple--text text--accent-3">
+                          {{ myGender[itemAdvancedSearch.gender_id - 1] }} {{ itemAdvancedSearch.age }} y/o
+                        </div>
+                        <div class="title font-italic purple--text text--accent-3">
+                          Interested in {{ genderLF[itemAdvancedSearch.interested_in - 1] }}
+                        </div>
                       </div>
-                      <div class="title font-italic purple--text text--accent-3">
-                        {{ myGender[itemAdvancedSearch.gender_id - 1] }} AGE y/o
+                    </v-col>
+                    <v-col cols="4">
+                      <div>
+                        <v-avatar
+                          class="profile indigo accent-4"
+                          size="96"
+                        >
+                          <v-img
+                            :src="`data:image/*;base64,${itemAdvancedSearch.photo[0]}`"
+                          />
+                        </v-avatar>
                       </div>
-                      <div class="title font-italic purple--text text--accent-3">
-                        Interested in {{ genderLF[itemAdvancedSearch.interested_in - 1] }}
-                      </div>
-                    </div>
-                  </v-col>
-                  <v-col cols="4">
-                    <div>
-                      <v-avatar
-                        class="profile indigo accent-4"
-                        size="96"
-                      >
-                        <v-img
-                          :src="`data:image/*;base64,${itemAdvancedSearch.photo[0]}`"
-                        />
-                      </v-avatar>
-                    </div>
-                  </v-col>
-                </v-row>
+                    </v-col>
+                  </v-row>
 
-                <v-row justify="end">
-                  Score: {{ itemAdvancedSearch.score }}&nbsp;
-                </v-row>
-                <v-card-text class="purple--text text--lighten-5">
-                  <div>&nbsp;</div>
-                  <div>{{ itemAdvancedSearch.name }} {{ itemAdvancedSearch.surname }}</div>
-                  <div>&nbsp;</div>
-                  <div>Tags: {{ itemAdvancedSearch.hobbies.toString() }}</div>
-                </v-card-text>
-                <v-card-text class="purple--text text--lighten-5">
-                  <div
-                    v-if="itemAdvancedSearch.location.country"
+                  <v-row justify="end">
+                    Score: {{ itemAdvancedSearch.score }}&nbsp;
+                  </v-row>
+                  <v-card-text class="purple--text text--lighten-5">
+                    <div>&nbsp;</div>
+                    <div>{{ itemAdvancedSearch.name }} {{ itemAdvancedSearch.surname }}</div>
+                    <div>&nbsp;</div>
+                    <div>Tags: {{ itemAdvancedSearch.hobbies.toString() }}</div>
+                  </v-card-text>
+                  <v-card-text class="purple--text text--lighten-5">
+                    <div
+                      v-if="itemAdvancedSearch.location.country"
+                    >
+                      Country: {{ itemAdvancedSearch.location.country }}
+                    </div>
+                    <div>City: {{ itemAdvancedSearch.location.city }}</div>
+                    <div
+                      v-if="itemAdvancedSearch.location.district"
+                    >
+                      District: {{ itemAdvancedSearch.location.district }}
+                    </div>
+                    <div>
+                      Distance: {{ itemAdvancedSearch.distance }} km
+                    </div>
+                  </v-card-text>
+                </v-card-subtitle>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn
+                    @click="love(itemAdvancedSearch.username)"
+                    fab
+                    color="pink lighten-3"
+                    bottom
+                    left
+                    absolute
+                    x-large
                   >
-                    Country: {{ itemAdvancedSearch.location.country }}
-                  </div>
-                  <div>City: {{ itemAdvancedSearch.location.city }}</div>
-                  <div
-                    v-if="itemAdvancedSearch.location.district"
-                  >
-                    District: {{ itemAdvancedSearch.location.district }}
-                  </div>
-                  <div>
-                    Distance: {{ itemAdvancedSearch.distance }} km
-                  </div>
-                </v-card-text>
-              </v-card-subtitle>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  @click="love(itemAdvancedSearch.username)"
-                  fab
-                  color="pink lighten-3"
-                  bottom
-                  left
-                  absolute
-                  x-large
-                >
-                  <v-icon>mdi-cards-heart</v-icon>
-                </v-btn>
-                <v-btn
-                  color="purple"
-                  text
-                />
-              </v-card-actions>
-            </v-card>
+                    <v-icon>mdi-cards-heart</v-icon>
+                  </v-btn>
+                  <v-btn
+                    color="purple"
+                    text
+                  />
+                </v-card-actions>
+              </v-card>
+            </nuxt-link>
           </v-carousel-item>
         </v-carousel>
         <v-row>
@@ -422,8 +426,13 @@ export default {
           .then((response) => {
             /* eslint-disable */
             console.log('response_GET_advancedSearch', response)
-            this.$store.dispatch('search/setAdvancedSearch', response.data.client)
-            this.$store.dispatch('user/setChecker', true)
+            if (response.data.client.length === 0) {
+              this.$store.dispatch('interact/setMessage', "No result matching your criteria, try to broaden your horizon !")
+            } else {
+              this.$store.dispatch('search/setAdvancedSearch', response.data.client)
+              this.$store.dispatch('user/setChecker', true)
+              this.$store.dispatch('interact/setMessage', "Let's find the One ! ~~")
+            }
           })
           .catch((error) => {
             console.log('error_GET_advancedSearch', error)
@@ -484,31 +493,7 @@ export default {
       })
     },
     love (target) {
-      // eslint-disable-next-line
-      console.log('thisTEST', this)
-      this.store.dispatch('user/setChecker', false)
-      this.$axios({
-        method: 'post',
-        url: process.env.serverUrl + '/social/like',
-        data: {
-          username: target
-        },
-        headers: {
-          'Authorization': 'Bearer ' + this.$store.getters['user/token']
-        }
-      })
-        .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_like', response)
-          console.log('response_client', response.client)
-          this.$store.dispatch('interact/setMessage', response.client)
-          context.store.dispatch('user/setChecker', true)
-        })
-        .catch((error) => {
-          console.log ('error_POST_like', error)
-          console.log('error_client', error.response.data.client)
-          this.$store.dispatch('interact/setMessage', error.response.data.client)
-        })
+      this.$store.dispatch('interact/sendLove', target)
     }
   }
 }

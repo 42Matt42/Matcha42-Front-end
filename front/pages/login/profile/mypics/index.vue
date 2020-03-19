@@ -170,35 +170,19 @@
               </v-col>
             </v-row>
           </v-img>
-          <v-card-subtitle
-            class="headline font-weight-bold purple--text text--accent-4 red lighten-5"
-          >
-            {{ loadedUsers.username }}
+          <v-card-subtitle>
+            <div>
+              <div class="headline font-weight-bold purple--text text--accent-4">
+                {{ loadedUsers.username }}
+              </div>
+              <div class="title font-italic purple--text text--accent-3">
+                {{ myGender[loadedUsers.gender_id - 1] }} {{ loadedUsers.age }} y/o
+              </div>
+              <div class="title font-italic purple--text text--accent-3">
+                Interested in {{ genderLF[loadedUsers.interested_in - 1] }}
+              </div>
+            </div>
           </v-card-subtitle>
-          <v-card-subtitle
-            class="title font-italic purple--text text--accent-3 red lighten-5"
-          >
-            {{ loadedUsers.gender_id }}, {{ loadedUsers.birth_date }}
-          </v-card-subtitle>
-          <v-card-text class="text--primary">
-            <div>&nbsp;</div>
-            <div>Ville/Arrondissement</div>
-            <div>Autre</div>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              color="pink"
-              text
-            >
-              Like
-            </v-btn>
-            <v-btn
-              color="pink"
-              text
-            >
-              Report
-            </v-btn>
-          </v-card-actions>
         </v-card>
         <v-row>
           <v-col cols="12" sm="6" offset-sm="3">
@@ -283,6 +267,8 @@ export default {
   data () {
     return {
       valid: true,
+      myGender: ['Bi', 'Man', 'Woman'],
+      genderLF: ['Men & Women', 'Men', 'Women'],
       mypicsRules: [
         // value => value.size < 10000000 || 'Picture size should be less than 10 MB!'
       ],
@@ -329,13 +315,12 @@ export default {
         /* eslint-disable */
         console.log('GET response_async_mypics', response)
         context.store.dispatch('user/setPictures', response.data.client)
-        context.store.dispatch('interact/setMessage', response.statusText)
       })
       .catch((error) => {
         console.log('GET error_async_mypics', error)
         // TO TEST
         // console.log('GET error_client', error.response.data.client)
-        // context.store.dispatch('interact/setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     return {
       usermypics
@@ -393,7 +378,7 @@ export default {
               const feedback = JSON.parse(this.responseText)
               // eslint-disable-next-line
               console.log('parsed this.responseText', feedback)
-              self.$store.dispatch('interact/setMessage', feedback)
+              self.$store.dispatch('interact/setMessage', "Pictures updated !")
             }
           }
         })
