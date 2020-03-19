@@ -149,14 +149,6 @@
           >
             getNOTIF
           </v-btn>
-          <br><br>
-          <v-btn
-            @click="$store.dispatch('websocket/setSnackbarMessage', 'Hallo!')"
-            color="indigo darken-4"
-            class="indigo--text text--lighten-5"
-          >
-            Notif Test
-          </v-btn>
         </div>
       </v-list>
     </v-navigation-drawer>
@@ -164,7 +156,6 @@
       app
       clipped-left
       color="purple darken-4"
-      height=""
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="purple--text text--lighten-5" />
       <v-row
@@ -269,6 +260,26 @@
             </v-btn>
           </v-snackbar>
         </div>
+        <div class="text-center ma-2">
+          <v-snackbar
+            v-model="serverMessageStatus"
+            :timeout="0"
+            right
+            color="green accent-3"
+          >
+            <div class="font-italic font-weight-medium">
+              {{ serverMessage }}
+            </div>
+            <v-btn
+              @click="closeServerMessage"
+              color="green lighten-5"
+              class="font-italic"
+              text
+            >
+              Close
+            </v-btn>
+          </v-snackbar>
+        </div>
         <nuxt />
       </v-container>
     </v-content>
@@ -330,6 +341,9 @@ export default {
     },
     serverMessage () {
       return this.$store.getters['interact/serverMessage']
+    },
+    serverMessageStatus () {
+      return this.$store.getters['interact/serverMessageStatus']
     },
     loadedLocation () {
       return this.$store.getters['geoloc/loadedLocation']
@@ -406,6 +420,9 @@ export default {
         .catch((error) => {
           this.$store.dispatch('interact/setMessage', error.response.data.client)
         })
+    },
+    closeServerMessage () {
+      this.$store.dispatch('interact/setMessageStatusOff')
     }
   }
 }

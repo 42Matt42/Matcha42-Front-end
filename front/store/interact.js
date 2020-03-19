@@ -1,6 +1,7 @@
 export const state = () => ({
   // Interact
   serverMessage: 'default',
+  serverMessageStatus: false,
   loadedChatHistory: [],
   loadedLikes: [],
   loadedViews: []
@@ -10,6 +11,10 @@ export const mutations = {
   // Interact
   setMessage (state, message) {
     state.serverMessage = message
+    state.serverMessageStatus = true
+  },
+  setMessageStatusOff (state) {
+    state.serverMessageStatus = false
   },
   setChatHistory (state, history) {
     state.loadedChatHistory = history
@@ -33,6 +38,9 @@ export const actions = {
   setMessage ({ commit }, message) {
     commit('setMessage', message)
   },
+  setMessageStatusOff ({ commit }) {
+    commit('setMessageStatusOff')
+  },
   setChatHistory ({ commit }, history) {
     commit('setChatHistory', history)
   },
@@ -51,6 +59,9 @@ export const getters = {
   // Interact
   serverMessage (state) {
     return state.serverMessage
+  },
+  serverMessageStatus (state) {
+    return state.serverMessageStatus
   },
   loadedChatHistory (state) {
     return state.loadedChatHistory

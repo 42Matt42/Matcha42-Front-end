@@ -311,7 +311,7 @@ export default {
           else {
             socket.emit('like', this.$store.getters['user/loadedUsers'].username, this.target)
           }
-          this.$store.dispatch('interact/setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', "I like !")
         })
         .catch((error) => {
           console.log('error_LIKE_client', error.response.data.client)
@@ -332,11 +332,11 @@ export default {
         .then((response) => {
         /* eslint-disable */
           console.log('response_DISLIKE', response)
-          console.log('response_client', response.client)
+          console.log('response_client', response.data.client)
           if (response.data.client.includes('Disliked and unmatched')) {
             socket.emit('dislike', this.$store.getters['user/loadedUsers'].username, this.target)
           }
-          this.$store.dispatch('interact/setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', "Disliked !")
         })
         .catch((error) => {
           console.log('error_DISLIKE_client', error.response.data.client)
@@ -358,7 +358,8 @@ export default {
         /* eslint-disable */
           console.log('response_POST_block', response)
           console.log('response_client', response.client)
-          this.$store.dispatch('interact/setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', "User blocked")
+          redirect('/')
         })
         .catch((error) => {
           console.log ('error_POST_block', error)
@@ -381,7 +382,7 @@ export default {
         /* eslint-disable */
           console.log('response_POST_report', response)
           console.log('response_client', response.client)
-          this.$store.dispatch('interact/setMessage', response.client)
+          this.$store.dispatch('interact/setMessage', "User reported")
         })
         .catch((error) => {
           console.log ('error_POST_report', error)

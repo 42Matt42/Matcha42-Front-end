@@ -198,13 +198,11 @@ export default {
         /* eslint-disable */
         console.log('GET response_async_mypics', response)
         context.store.dispatch('user/setPictures', response.data.client)
-        context.store.dispatch('interact/setMessage', response.statusText)
       })
       .catch((error) => {
         console.log('GET error_async_mypics', error)
-        // TO TEST
         // console.log('GET error_client', error.response.data.client)
-        // context.store.dispatch('interact/setMessage', error.response.data.client)
+        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
     const userprofile = await axios
       .get(process.env.serverUrl + '/users/user', {
@@ -216,7 +214,6 @@ export default {
         /* eslint-disable */
         console.log('response_async_settings', response)
         context.store.dispatch('user/setUserData', response.data.userdata)
-        context.store.dispatch('interact/setMessage', response.client)
       })
       .catch((error) => {
         console.log('error_async_settings', error)

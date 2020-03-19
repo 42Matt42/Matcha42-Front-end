@@ -143,7 +143,6 @@ export default {
         console.log('response_asyncGET_matchList', response)
         console.log('response.data.client', response.data.client)
         if (response.data.client.length != 0) {
-          console.log('Test_A')
           context.store.dispatch('search/setMatchList', response.data.client)
         }
         else {
@@ -153,7 +152,6 @@ export default {
       .catch(function(error) {
         /* eslint-disable */
         console.log('error_asyncGET_matchList', error)
-        context.store.dispatch('interact/setMessage', error.response.data.client)
       })
       return {
         matchList
@@ -176,7 +174,6 @@ export default {
         /* eslint-disable */
           console.log('response_POST_like', response)
           console.log('response_client', response.client)
-          this.$store.dispatch('interact/setMessage', response.client)
         })
         .catch((error) => {
           console.log ('error_POST_like', error)

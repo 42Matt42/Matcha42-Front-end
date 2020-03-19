@@ -327,12 +327,10 @@ export default {
             /* eslint-disable */
             console.log('response_GET_Suggestions', response)
             context.store.dispatch('search/setSuggestions', response.data.client)
-            context.store.dispatch('interact/setMessage', response.statusText)
           })
           .catch((error) => {
             console.log('error_GET_Suggestions', error)
             console.log('error_client', error.response.statusText)
-            context.store.dispatch('interact/setMessage', error.response.statusText)
           })
       }
     }
@@ -413,7 +411,6 @@ export default {
           else {
             socket.emit('like', this.$store.getters['user/loadedUsers'].username, this.target)
           }
-          this.$store.dispatch('interact/setMessage', response.data.client)
         })
         .catch((error) => {
           console.log('error_like_client', error.response.data.client)

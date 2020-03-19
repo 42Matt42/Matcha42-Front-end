@@ -264,7 +264,7 @@ export default {
           /* eslint-disable */
             console.log('response_axios_settings', response)
             console.log('response_client', response.client)
-            this.$store.dispatch('interact/setMessage', response.client)
+            this.$store.dispatch('interact/setMessage', "Personal information updated !")
             this.$router.push('/')
           })
           .catch((error) => {
@@ -287,7 +287,6 @@ export default {
         /* eslint-disable */
         console.log('response_async_settings', response)
         context.store.dispatch('user/setUserData', response.data.userdata)
-        context.store.dispatch('interact/setMessage', response.client)
       })
       .catch((error) => {
         console.log('error_async_settings', error)

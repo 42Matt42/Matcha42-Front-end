@@ -5,13 +5,17 @@
     >
       <v-row>
         <v-col>
-          <v-btn
-            @click="googleAPI"
-            color="blue lighten-4"
-            class="mr-4"
+          <v-row
+            justify="center"
           >
-            Update my GeoLocalisation !
-          </v-btn>
+            <v-btn
+              @click="googleAPI"
+              color="blue lighten-4"
+              class="mr-4"
+            >
+              Update My GeoLocalisation now !
+            </v-btn>
+          </v-row>
         </v-col>
       </v-row>
       <br>
@@ -85,26 +89,6 @@
     </v-container>
     <div>
       <br>
-      <v-form
-        ref="form"
-        v-model="valid"
-        lazy-validation
-      >
-        <v-container>
-          <v-row>
-            <v-col>
-              <v-btn
-                @click="sendGeoLoc"
-                :disabled="!valid"
-                color="purple lighten-4"
-                class="mr-4"
-              >
-                Send my geoLoc to the back-end !
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-form>
       <v-row>
         <v-col>
           <v-row

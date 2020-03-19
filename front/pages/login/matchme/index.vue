@@ -423,7 +423,6 @@ export default {
             /* eslint-disable */
             console.log('response_GET_advancedSearch', response)
             this.$store.dispatch('search/setAdvancedSearch', response.data.client)
-            this.$store.dispatch('interact/setMessage', response.statusText)
             this.$store.dispatch('user/setChecker', true)
           })
           .catch((error) => {

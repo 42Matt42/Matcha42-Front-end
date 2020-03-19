@@ -71,7 +71,6 @@ export default {
         /* eslint-disable */
         console.log('response_GET_like', response)
         context.store.dispatch('interact/setLikes', response.data.client)
-        context.store.dispatch('interact/setMessage', response.client)
       })
       .catch((error) => {
         console.log('error_GET_like', error)
