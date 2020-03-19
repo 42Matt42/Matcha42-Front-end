@@ -9,10 +9,11 @@
       <br>
       <v-form
         ref="form"
-        v-model="valid"
         lazy-validation
       >
-        <v-container>
+        <v-container
+          @keyup.13="sendChatMessage"
+        >
           <v-row>
             <v-col
               cols="10"
@@ -24,6 +25,7 @@
                   label="Type your message"
                   required
                 />
+                <input v-on:keyup.enter="sendChatMessage">
               </div>
             </v-col>
           </v-row>
@@ -32,7 +34,6 @@
             <v-col>
               <v-btn
                 @click="sendChatMessage"
-                :disabled="!valid"
                 color="purple accent-4"
                 class="mr-4 purple--text text--lighten-5"
               >
@@ -134,7 +135,6 @@ export default {
       },
       chatMessage: '',
       chatListener: [],
-      valid: true,
       // chatRules: [
       //   v => !!v || 'Username is required',
       //   // v => v.length >= 3 || 'Pass must be more than 3 characters',
@@ -197,9 +197,11 @@ export default {
   },
   methods: {
     sendChatMessage () {
-      if (this.$refs.form.validate()) {
-        socket.emit('chat', this.loadedUsers.username, this.target, this.chatMessage)
-      }
+      socket.emit('chat', this.loadedUsers.username, this.target, this.chatMessage)
+      console.log('*** --- New chat message --- ***', this.chatMessage)
+      console.log('FROM:', this.loadedUsers.username)
+      console.log('TO:', this.target)
+      this.chatMessage = ''
     }
   }
 }
