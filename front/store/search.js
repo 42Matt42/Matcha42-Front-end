@@ -96,6 +96,7 @@ export const actions = {
         /* eslint-disable */
         console.log('response_GET_Suggestions', response)
         dispatch('setSuggestions', response.data.client)
+        dispatch('interact/setMessage', "Suggestions updated ! Enjoy ~~", { root: true })
       })
       .catch((error) => {
         console.log('error_GET_Suggestions', error)

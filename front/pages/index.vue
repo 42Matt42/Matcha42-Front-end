@@ -276,7 +276,6 @@ export default {
   },
   async asyncData (context) {
     // eslint-disable-next-line
-    console.log('ASYNC Home Page Bro')
     const options = {
       enableHighAccuracy: true,
       timeout: 8000,
@@ -312,8 +311,6 @@ export default {
       }
     }
     if (!context.app.store.getters['search/loadedSuggestions'][0]) {
-      // eslint-disable-next-line
-      console.log('ASYNC Home Page Bro2', context.app.store.dispatch)
       // eslint-disable-next-line
       context.app.store.dispatch('search/getSuggestions')
     }

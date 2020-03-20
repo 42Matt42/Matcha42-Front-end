@@ -11,29 +11,44 @@
     >
       <v-list style="background-color: transparent">
         <v-list-item
-          v-for="(itemNotif, y) in filterNotif(loadedNotifications)"
-          :key="y"
+          v-for="itemNotif in filterNotif(loadedNotifications)"
+          :key="itemNotif.id"
         >
-          <nuxt-link
-            to="/"
-          >
-            <div>
-              <p
-                class="text-xs-right"
+          <div>
+            <p
+              class="text-xs-right"
+            >
+              <v-list-item-title
+                class="purple--text text--lighten-5 text-xs-left"
               >
-                <v-list-item-title
-                  class="purple--text text--lighten-5 text-xs-left"
+                <v-icon
+                  v-if="itemNotif.read === 0"
+                  class="purple--text text--lighten-5"
                 >
-                  <v-icon
-                    class="purple--text text--lighten-5"
-                  >
-                    mdi-heart
+                  mdi-email
+                </v-icon>
+                <v-icon
+                  v-else
+                  class="purple--text text--lighten-5"
+                >
+                  mdi-bookmark-check
+                </v-icon>
+                {{ itemNotif.message }}
+                <v-btn
+                  v-if="itemNotif.read === 0"
+                  @click="readNotif(itemNotif.id)"
+                  color="indigo darken-3"
+                  class="mr-4 purple--text text--lighten-5"
+                >
+                  Mark as read
+                  &nbsp;
+                  <v-icon>
+                    mdi-email-check-outline
                   </v-icon>
-                  {{ itemNotif }} {{ itemNotif }} ({{ itemNotif }})
-                </v-list-item-title>
-              </p>
-            </div>
-          </nuxt-link>
+                </v-btn>
+              </v-list-item-title>
+            </p>
+          </div>
         </v-list-item>
       </v-list>
     </v-container>
@@ -42,7 +57,7 @@
 
 <script>
 import axios from 'axios'
-import moment from 'moment'
+// import moment from 'moment'
 
 export default {
   middleware: 'authenticated',
@@ -56,7 +71,7 @@ export default {
       return this.$store.getters['interact/serverMessage']
     },
     loadedNotifications () {
-      return this.$store.getters['interact/loadedNotifications']
+      return this.$store.getters['websocket/loadedNotifications']
     },
     token () {
       return this.$store.getters['user/token']
@@ -84,11 +99,30 @@ export default {
   },
   methods: {
     filterNotif (notif) {
-      return notif.received.filter(function (notif) {
-        notif.notifAge = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
-        notif.notifDate = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
+      return notif.filter(function (notif) {
+        // notif.notifAge = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
+        // notif.notifDate = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
         return notif
       })
+    },
+    readNotif (notifId) {
+      this.$axios({
+        method: 'post',
+        url: process.env.serverUrl + '/social/notification',
+        data: {
+          notificationId: notifId
+        },
+        headers: {
+          'Authorization': 'Bearer ' + this.$store.getters['user/token']
+        }
+      })
+        .then((response) => {
+        /* eslint-disable */
+          console.log('response_POST_readNotif', response)
+          this.$store.dispatch('websocket/readNotifications', notifId)
+        })
+        .catch((error) => {
+        })
     }
   }
 }

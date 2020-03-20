@@ -16,6 +16,13 @@ export const mutations = {
   setNotifications (state, notif) {
     state.loadedNotifications = notif
   },
+  readNotifications (state, notifId) {
+    for (let i = 0; state.loadedNotifications.length; i++) {
+      if (state.loadedNotifications[i].id === notifId) {
+        state.loadedNotifications[i].read = 1
+      }
+    }
+  },
   setLogoutWebsocket (state) {
     state.loadedSnackbarStatus = false
     state.loadedSnackbarMessage = ''
@@ -37,6 +44,9 @@ export const actions = {
   },
   setNotifications ({ commit }, notif) {
     commit('setNotifications', notif)
+  },
+  readNotifications ({ commit }, notifId) {
+    commit('readNotifications', notifId)
   },
   setLogoutWebsocket ({ commit }) {
     commit('setLogoutWebsocket')
