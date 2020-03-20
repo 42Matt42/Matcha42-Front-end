@@ -143,12 +143,6 @@
             </v-list-item-title>
           </v-list-item>
           <br>
-          <v-btn
-            @click="getNotif"
-            color="green lighten-5"
-          >
-            getNOTIF
-          </v-btn>
         </div>
       </v-list>
     </v-navigation-drawer>
@@ -159,18 +153,23 @@
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="purple--text text--lighten-5" />
       <v-row
-        class="hidden-xs-only"
         align="center"
         justify="space-between"
       >
-        <v-col cols="2">
+        <v-col
+          cols="2"
+          class="hidden-xs-only"
+        >
           <v-row>
             <v-toolbar-title class="mr-12 align-center">
               <span class="title purple--text text--lighten-5 hidden-sm-only">&nbsp;&nbsp;Matcha</span>
             </v-toolbar-title>
           </v-row>
         </v-col>
-        <v-col cols="6">
+        <v-col
+          cols="4"
+          class="hidden-xs-only"
+        >
           <v-row
             justify="end"
           >
@@ -192,9 +191,10 @@
         <v-col
           v-if="loadedPictures[0]"
           cols="2"
+          class="hidden-xs-only"
         >
           <v-row
-            justify="center"
+            justify="end"
             align="end"
             class="fill-height"
           >
@@ -209,9 +209,32 @@
             </v-avatar>
           </v-row>
         </v-col>
+        <v-col>
+          <v-row
+            justify="center"
+            align="center"
+          >
+            <v-badge
+              v-if="loadedAlertNotifications && token"
+              :content="loadedAlertNotifications"
+              overlap
+              color="pink darken-1"
+            >
+              <nuxt-link to="/login/mycrush/notifications">
+                <v-icon
+                  large
+                  color="purple lighten-4"
+                >
+                  mdi-email
+                </v-icon>
+              </nuxt-link>
+            </v-badge>
+          </v-row>
+        </v-col>
         <v-col
           v-if="token"
           cols="2"
+          class="hidden-xs-only"
         >
           <v-row
             class="purple--text text--lighten-4 hidden-sm-only"
@@ -330,6 +353,9 @@ export default {
     loadedNotifications () {
       return this.$store.getters['websocket/loadedNotifications']
     },
+    loadedAlertNotifications () {
+      return this.$store.getters['websocket/loadedAlertNotifications']
+    },
     loadedStatus () {
       return this.$store.getters['websocket/loadedStatus']
     },
@@ -380,23 +406,6 @@ export default {
       return itemFilterLayout.filter(function (itemFilterLayout) {
         return itemFilterLayout.id === sex
       })
-    },
-    getNotif () {
-      axios
-        .get(process.env.serverUrl + '/social/notification', {
-          headers: {
-            Authorization: 'Bearer ' + this.$store.getters['user/token']
-          }
-        })
-        .then((response) => {
-          /* eslint-disable */
-          console.log('response_GET_notif', response)
-          this.$store.dispatch('websocket/setNotifications', response.data.client)
-        })
-        .catch((error) => {
-          console.log('error_GET_notif', error)
-          console.log('error_client', error.response.statusText)
-        })
     },
     closeNotif (id) {
       this.$axios({

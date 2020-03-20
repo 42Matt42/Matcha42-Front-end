@@ -90,8 +90,6 @@ export default {
         context.store.dispatch('websocket/setNotifications', response.data.client)
       })
       .catch((error) => {
-        console.log('error_GET_notif', error)
-        console.log('error_client', error.response.data.client)
       })
     return {
       myNotif

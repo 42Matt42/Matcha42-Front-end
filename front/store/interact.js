@@ -30,6 +30,7 @@ export const mutations = {
   },
   setLogoutInteract (state) {
     state.serverMessage = null
+    state.serverMessageStatus = false
     state.loadedLikes = []
     state.loadedViews = []
     state.loadedChatHistory = []

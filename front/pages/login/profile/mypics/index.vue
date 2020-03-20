@@ -383,8 +383,8 @@ export default {
         xhr.setRequestHeader('Authorization', 'Bearer ' + this.$store.getters['user/token'])
         xhr.setRequestHeader('Accept', '*/*')
         xhr.setRequestHeader('Cache-Control', 'no-cache')
-        xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
-        xhr.setRequestHeader('Connection', 'keep-alive')
+        // xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate')
+        // xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)
       }
       // setTimeout(() => this.$router.push('/login/profile/mypics', 2800)

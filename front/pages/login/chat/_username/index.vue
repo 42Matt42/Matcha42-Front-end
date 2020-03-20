@@ -9,11 +9,10 @@
       <br>
       <v-form
         ref="form"
+        @submit.prevent="sendChatMessage"
         lazy-validation
       >
-        <v-container
-          @keyup.13="sendChatMessage"
-        >
+        <v-container>
           <v-row>
             <v-col
               cols="10"
@@ -21,6 +20,7 @@
               <div>
                 <v-text-field
                   v-model.trim="chatMessage"
+                  @keyup.13="sendChatMessage"
                   counter="42"
                   label="Type your message"
                   required

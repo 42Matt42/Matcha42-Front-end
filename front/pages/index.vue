@@ -213,6 +213,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import BigHeartLogo from '~/components/layout/BigHeartLogo.vue'
 
 export default {
@@ -314,9 +315,19 @@ export default {
       // eslint-disable-next-line
       context.app.store.dispatch('search/getSuggestions')
     }
-    // return {
-    //   mySuggestions
-    // }
+    await axios
+      .get(process.env.serverUrl + '/social/notification', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('response_GET_notif', response)
+        context.store.dispatch('websocket/setNotifications', response.data.client)
+      })
+      .catch((error) => {
+      })
   },
   methods: {
     filterSuggestions (itemFilterSuggestions) {

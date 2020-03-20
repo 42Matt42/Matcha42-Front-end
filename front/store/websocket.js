@@ -3,6 +3,7 @@ export const state = () => ({
   loadedSnackbarStatus: false,
   loadedSnackbarMessage: '',
   loadedNotifications: {},
+  loadedAlertNotifications: 0,
   loadedStatus: {}
 })
 export const mutations = {
@@ -16,6 +17,20 @@ export const mutations = {
   setNotifications (state, notif) {
     state.loadedNotifications = notif
   },
+  countAlertNotifications (state, copyNotif) {
+    /* eslint-disable */
+    console.log('A_', copyNotif)
+    /* eslint-disable */
+    console.log('B_', copyNotif[0])
+    /* eslint-disable */
+    console.log('C_', copyNotif[0].read)
+    state.loadedAlertNotifications = 0
+    for (let i = 0; copyNotif.length; i++) {
+      if (copyNotif[i].read === 0) {
+        state.loadedAlertNotifications += 1
+      }
+    }
+  },
   readNotifications (state, notifId) {
     for (let i = 0; state.loadedNotifications.length; i++) {
       if (state.loadedNotifications[i].id === notifId) {
@@ -27,6 +42,7 @@ export const mutations = {
     state.loadedSnackbarStatus = false
     state.loadedSnackbarMessage = ''
     state.loadedNotifications = {}
+    state.loadedAlertNotifications = 0
     state.loadedStatus = {}
   },
   setStatus (state, status) {
@@ -44,6 +60,7 @@ export const actions = {
   },
   setNotifications ({ commit }, notif) {
     commit('setNotifications', notif)
+    commit('countAlertNotifications', notif)
   },
   readNotifications ({ commit }, notifId) {
     commit('readNotifications', notifId)
@@ -66,6 +83,9 @@ export const getters = {
   },
   loadedNotifications (state) {
     return state.loadedNotifications
+  },
+  loadedAlertNotifications (state) {
+    return state.loadedAlertNotifications
   },
   loadedStatus (state) {
     return state.loadedStatus
