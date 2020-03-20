@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container
-      v-if="loadedUsers.profile_complete === 1 && token"
+      v-if="loadedUsers.profile_complete === 1 && token && loadedSuggestions[0]"
     >
       <v-carousel
         :hide-delimiters="true"
