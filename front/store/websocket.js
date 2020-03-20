@@ -35,6 +35,9 @@ export const mutations = {
     for (let i = 0; state.loadedNotifications.length; i++) {
       if (state.loadedNotifications[i].id === notifId) {
         state.loadedNotifications[i].read = 1
+        if (state.loadedAlertNotifications > 0) {
+          state.loadedAlertNotifications -= 1
+        }
       }
     }
   },

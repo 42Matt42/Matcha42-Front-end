@@ -215,7 +215,7 @@
             align="center"
           >
             <v-badge
-              v-if="loadedAlertNotifications && token"
+              v-if="loadedAlertNotifications > 0 && token"
               :content="loadedAlertNotifications"
               overlap
               color="pink darken-1"
@@ -422,6 +422,7 @@ export default {
         /* eslint-disable */
           console.log('response_POST_closeNotif', response)
           this.$store.dispatch('websocket/setSnackbarStatus', false)
+          this.$store.dispatch('websocket/readNotifications', id)
         })
         .catch((error) => {
         })

@@ -328,6 +328,21 @@ export default {
       })
       .catch((error) => {
       })
+    await axios
+      .get(process.env.serverUrl + '/users/photos', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
+        }
+      })
+      .then((response) => {
+        /* eslint-disable */
+        console.log('GET response_async_mypics', response)
+        context.store.dispatch('user/setPictures', response.data.client)
+      })
+      .catch((error) => {
+        console.log('GET error_async_mypics', error)
+        // console.log('GET error_client', error.response.data.client)
+      })
   },
   methods: {
     filterSuggestions (itemFilterSuggestions) {
