@@ -118,7 +118,11 @@
         <div>{{ loadedUsers.name }} {{ loadedUsers.surname }}</div>
         <div>Anniversary: {{ birthdayProfile }}</div>
         <div>&nbsp;</div>
-        <div>Tags: {{ loadedUsers.tags.toString() }}</div>
+        <div
+          v-if="loadedUsers.tags"
+        >
+          Tags: {{ loadedUsers.tags.toString() }}
+        </div>
         <div>&nbsp;</div>
         <div>Description: {{ loadedUsers.bio }}</div>
       </v-card-text>

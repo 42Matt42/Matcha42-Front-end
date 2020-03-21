@@ -21,19 +21,6 @@
               <v-list-item-title
                 class="purple--text text--lighten-5 text-xs-left"
               >
-                <v-icon
-                  v-if="itemNotif.read === 0"
-                  class="purple--text text--lighten-5"
-                >
-                  mdi-email
-                </v-icon>
-                <v-icon
-                  v-else
-                  class="purple--text text--lighten-5"
-                >
-                  mdi-bookmark-check
-                </v-icon>
-                {{ itemNotif.message }}
                 <v-btn
                   v-if="itemNotif.read === 0"
                   @click="readNotif(itemNotif.id)"
@@ -46,6 +33,19 @@
                     mdi-email-check-outline
                   </v-icon>
                 </v-btn>
+                <v-icon
+                  v-if="itemNotif.read === 0"
+                  class="purple--text text--lighten-5"
+                >
+                  mdi-email
+                </v-icon>
+                <v-icon
+                  v-else
+                  class="purple--text text--lighten-5"
+                >
+                  mdi-bookmark-check
+                </v-icon>
+                {{ itemNotif.message }} {{ itemNotif.timeAge }}
               </v-list-item-title>
             </p>
           </div>
@@ -57,7 +57,7 @@
 
 <script>
 import axios from 'axios'
-// import moment from 'moment'
+import moment from 'moment'
 
 export default {
   middleware: 'authenticated',
@@ -98,8 +98,7 @@ export default {
   methods: {
     filterNotif (notif) {
       return notif.filter(function (notif) {
-        // notif.notifAge = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
-        // notif.notifDate = moment(notif.date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('MMMM Do YYYY, h:mm:ss a')
+        notif.timeAge = moment(notif.time, 'YYYY-MM-DDTHH:mm:ss[Z]').fromNow()
         return notif
       })
     },
