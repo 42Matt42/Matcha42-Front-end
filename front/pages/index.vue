@@ -311,38 +311,40 @@ export default {
         await navigator.geolocation.getCurrentPosition(success, error, options)
       }
     }
-    if (!context.app.store.getters['search/loadedSuggestions'][0]) {
-      // eslint-disable-next-line
-      context.app.store.dispatch('search/getSuggestions')
+    if (context.app.store.getters['user/token'] !== null) {
+      if (!context.app.store.getters['search/loadedSuggestions'][0]) {
+        // eslint-disable-next-line
+        context.app.store.dispatch('search/getSuggestions')
+      }
+      await axios
+        .get(process.env.serverUrl + '/social/notification', {
+          headers: {
+            Authorization: 'Bearer ' + context.app.store.getters['user/token']
+          }
+        })
+        .then((response) => {
+          /* eslint-disable */
+          console.log('response_GET_notif', response)
+          context.store.dispatch('websocket/setNotifications', response.data.client)
+        })
+        .catch((error) => {
+        })
+      await axios
+        .get(process.env.serverUrl + '/users/photos', {
+          headers: {
+            Authorization: 'Bearer ' + context.app.store.getters['user/token']
+          }
+        })
+        .then((response) => {
+          /* eslint-disable */
+          console.log('GET response_async_mypics', response)
+          context.store.dispatch('user/setPictures', response.data.client)
+        })
+        .catch((error) => {
+          console.log('GET error_async_mypics', error)
+          // console.log('GET error_client', error.response.data.client)
+        })
     }
-    await axios
-      .get(process.env.serverUrl + '/social/notification', {
-        headers: {
-          Authorization: 'Bearer ' + context.app.store.getters['user/token']
-        }
-      })
-      .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_notif', response)
-        context.store.dispatch('websocket/setNotifications', response.data.client)
-      })
-      .catch((error) => {
-      })
-    await axios
-      .get(process.env.serverUrl + '/users/photos', {
-        headers: {
-          Authorization: 'Bearer ' + context.app.store.getters['user/token']
-        }
-      })
-      .then((response) => {
-        /* eslint-disable */
-        console.log('GET response_async_mypics', response)
-        context.store.dispatch('user/setPictures', response.data.client)
-      })
-      .catch((error) => {
-        console.log('GET error_async_mypics', error)
-        // console.log('GET error_client', error.response.data.client)
-      })
   },
   methods: {
     filterSuggestions (itemFilterSuggestions) {
