@@ -389,16 +389,14 @@ export default {
     // window.onbeforeunload = () => {
     //   socket.emit('disconnect', this.username)
     // }
-    if (this.$store.getters['user/token']) {
-      socket.on('notification', (data) => {
-        // eslint-disable-next-line
-        this.chatListener = data
-        this.$store.dispatch('websocket/setSnackbarMessage', data)
-      }),
-      socket.on('onlinee', (usersStatus) => {
-        this.$store.dispatch('websocket/setStatus', usersStatus)
-      })
-    }
+    socket.on('notification', (data) => {
+      // eslint-disable-next-line
+      this.chatListener = data
+      this.$store.dispatch('websocket/setSnackbarMessage', data)
+    }),
+    socket.on('onlinee', (usersStatus) => {
+      this.$store.dispatch('websocket/setStatus', usersStatus)
+    })
   },
   methods: {
     keySearchUser (event) {
