@@ -153,18 +153,17 @@ export default {
   },
   methods: {
     validate () {
-      console.log(this.$refs.form.validate())
       if (this.$refs.form.validate()) {
         this.$axios
           .$post(process.env.serverUrl + '/users/password', {
-            password1: this.password2,
+            password2: this.password2,
             username: this.$store.getters['user/loadedUsers'].username
           })
           .then((response) => {
           /* eslint-disable */
             console.log('response', response)
             console.log('response_client', response.client)
-            this.$store.dispatch('interact/setMessage', response.client)
+            this.$store.dispatch('interact/setMessage', 'New password updated !')
             this.$router.push('/')
           })
           .catch(function (error) {

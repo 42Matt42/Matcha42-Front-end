@@ -166,7 +166,7 @@ export default {
           /* eslint-disable */
             console.log('response', response)
             console.log('response_client', response.client)
-            this.$store.dispatch('interact/setMessage', response.client)
+            this.$store.dispatch('interact/setMessage', 'New password updated !')
             this.$router.push('/')
           })
           .catch(function (error) {
