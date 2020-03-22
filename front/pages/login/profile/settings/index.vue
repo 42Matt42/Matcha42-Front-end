@@ -142,17 +142,6 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col
-                cols="3"
-              >
-                <v-text-field
-                  v-model="loadedUsers.notification"
-                  label="Notification"
-                  required
-                />
-              </v-col>
-            </v-row>
-            <v-row>
               <v-col>
                 <v-btn
                   @click="validate"
@@ -236,11 +225,26 @@ export default {
       return this.$store.getters['user/token']
     }
   },
+  async asyncData (context) {
+    const usersettings = await axios
+      .get(process.env.serverUrl + '/users/user', {
+        headers: {
+          Authorization: 'Bearer ' + context.app.store.getters['user/token']
+        }
+      })
+      .then((response) => {
+        context.store.dispatch('user/setUserData', response.data.userdata)
+      })
+      // eslint-disable-next-line
+      .catch((error) => {
+      })
+    return {
+      usersettings
+    }
+  },
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
-        /* eslint-disable */
-        console.log('store', this.$store)
         this.$axios({
           method: 'post',
           url: process.env.serverUrl + '/users/user',
@@ -252,7 +256,6 @@ export default {
             bio: this.loadedUsers.bio,
             birth_date: this.loadedUsers.birth_date,
             gender_id: this.loadedUsers.gender_id,
-            notification: this.loadedUsers.notification,
             interested_in: this.loadedUsers.interested_in,
             tags: this.loadedUsers.tags.toString()
           },
@@ -261,38 +264,14 @@ export default {
           }
         })
           .then((response) => {
-          /* eslint-disable */
-            console.log('response_axios_settings', response)
-            console.log('response_client', response.client)
-            this.$store.dispatch('interact/setMessage', "Personal information updated !")
+            this.$store.dispatch('interact/setMessage', 'Personal information updated !')
             this.$router.push('/')
           })
+          // eslint-disable-next-line
           .catch((error) => {
-            console.log ('error_axios_settings', error)
-            console.log('error_client', error.response.data.client)
           })
         this.$router.push('/settings')
       }
-    }
-  },
-  async asyncData (context) {
-    const usersettings = await axios
-      .get(process.env.serverUrl + '/users/user', {
-        headers: {
-          Authorization: 'Bearer ' + context.app.store.getters['user/token']
-        }
-      })
-      .then((response) => {
-        /* eslint-disable */
-        console.log('response_async_settings', response)
-        context.store.dispatch('user/setUserData', response.data.userdata)
-      })
-      .catch((error) => {
-        console.log('error_async_settings', error)
-        console.log('error_client', error.response.data.client)
-      })
-    return {
-      usersettings
     }
   }
 }

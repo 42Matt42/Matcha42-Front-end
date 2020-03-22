@@ -85,10 +85,9 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_notif', response)
         context.store.dispatch('websocket/setNotifications', response.data.client)
       })
+      // eslint-disable-next-line
       .catch((error) => {
       })
     return {
@@ -114,10 +113,9 @@ export default {
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_readNotif', response)
           this.$store.dispatch('websocket/readNotifications', notifId)
         })
+        // eslint-disable-next-line
         .catch((error) => {
         })
     }

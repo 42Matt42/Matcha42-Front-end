@@ -419,11 +419,10 @@ export default {
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_closeNotif', response)
           this.$store.dispatch('websocket/setSnackbarStatus', false)
           this.$store.dispatch('websocket/readNotifications', id)
         })
+        // eslint-disable-next-line
         .catch((error) => {
         })
     },

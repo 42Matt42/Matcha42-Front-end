@@ -128,28 +128,22 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_password', response)
-        console.log('context', context)
         context.store.dispatch('user/setChecker', false)
-        if (response.status == '200') {
-          // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
+        if (response.status === '200') {
           context.store.dispatch('user/setUsername', context.query.username)
           context.store.dispatch('user/setChecker', true)
-          context.store.dispatch('interact/setMessage', "Link activated !")
+          context.store.dispatch('interact/setMessage', 'Link activated !')
         }
       })
+      // eslint-disable-next-line
       .catch((error) => {
         context.store.dispatch('user/setChecker', false)
-        /* eslint-disable */
-        console.log('error_password', error)
-        console.log('error_client', error.response.data.client)
-        context.store.dispatch('interact/setMessage', "Link already activated or wrong URL")
+        context.store.dispatch('interact/setMessage', 'Link already activated or wrong URL')
         context.redirect('/')
       })
-      return {
-        newpass
-      }
+    return {
+      newpass
+    }
   },
   methods: {
     validate () {
@@ -160,23 +154,17 @@ export default {
             username: this.$store.getters['user/loadedUsers'].username
           })
           .then((response) => {
-          /* eslint-disable */
-            console.log('response', response)
-            console.log('response_client', response.client)
             this.$store.dispatch('interact/setMessage', 'New password updated !')
             this.$router.push('/')
           })
+          // eslint-disable-next-line
           .catch(function (error) {
-            console.log ('error_password', error)
-            console.log('error_data_client', error.response.data.client)
           })
       }
-      //   this.snackbar = true
-      // }
     },
     togglePasswordVisibility () {
-			this.passwordVisible = !this.passwordVisible
-		}
+      this.passwordVisible = !this.passwordVisible
+    }
   }
 }
 </script>

@@ -202,9 +202,6 @@
                     Score: {{ itemAdvancedSearch.score }}&nbsp;
                   </v-row>
                   <v-card-text class="purple--text text--lighten-5">
-                    <div>&nbsp;</div>
-                    <div>{{ itemAdvancedSearch.name }} {{ itemAdvancedSearch.surname }}</div>
-                    <div>&nbsp;</div>
                     <div>Tags: {{ itemAdvancedSearch.hobbies.toString() }}</div>
                   </v-card-text>
                   <v-card-text class="purple--text text--lighten-5">
@@ -424,65 +421,60 @@ export default {
             }
           })
           .then((response) => {
-            /* eslint-disable */
-            console.log('response_GET_advancedSearch', response)
             if (response.data.client.length === 0) {
-              this.$store.dispatch('interact/setMessage', "No result matching your criteria, try to broaden your horizon !")
+              this.$store.dispatch('interact/setMessage', 'No result matching your criteria, try to broaden your horizon !')
             } else {
               this.$store.dispatch('search/setAdvancedSearch', response.data.client)
               this.$store.dispatch('user/setChecker', true)
               this.$store.dispatch('interact/setMessage', "Let's find the One ! ~~")
             }
           })
+          // eslint-disable-next-line
           .catch((error) => {
-            console.log('error_GET_advancedSearch', error)
-            console.log('error_client', error.response.statusText)
           })
       }
     },
     filterAdvancedSearch (itemFilterAdvancedSearch) {
       const self = this
-
-      return itemFilterAdvancedSearch = itemFilterAdvancedSearch.filter(function (itemFilterAdvancedSearch) {
+      return itemFilterAdvancedSearch.filter(function (itemFilterAdvancedSearch) {
         if (self.filterDistance) {
           return itemFilterAdvancedSearch.distance <= self.filterDistance && itemFilterAdvancedSearch.hobbies.includes(self.filterTags) && itemFilterAdvancedSearch.age >= self.filterAge[0] && itemFilterAdvancedSearch.age <= self.filterAge[1] && itemFilterAdvancedSearch.score >= self.filterScore[0] && itemFilterAdvancedSearch.score <= self.filterScore[1]
         }
       })
-      .sort(function compare(user1, user2) {
-        if (self.orderByChoice === 'Age') {
-          if (user1.age <= user2.age) {
-            return -1;
+        .sort(function compare (user1, user2) {
+          if (self.orderByChoice === 'Age') {
+            if (user1.age <= user2.age) {
+              return -1
+            }
+            if (user1.age > user2.age) {
+              return 1
+            }
           }
-          if (user1.age > user2.age) {
-            return 1;
+          if (self.orderByChoice === 'Popularity') {
+            if (user1.score <= user2.score) {
+              return -1
+            }
+            if (user1.score > user2.score) {
+              return 1
+            }
           }
-        }
-        if (self.orderByChoice === 'Popularity') {
-          if (user1.score <= user2.score) {
-            return -1;
+          if (self.orderByChoice === 'Distance') {
+            if (user1.distance <= user2.distance) {
+              return -1
+            }
+            if (user1.distance > user2.distance) {
+              return 1
+            }
           }
-          if (user1.score > user2.score) {
-            return 1;
+          if (self.orderByChoice === 'Tags') {
+            if (user1.hobbies <= user2.hobbies) {
+              return -1
+            }
+            if (user1.hobbies > user2.hobbies) {
+              return 1
+            }
           }
-        }
-        if (self.orderByChoice === 'Distance') {
-          if (user1.distance <= user2.distance) {
-            return -1;
-          }
-          if (user1.distance > user2.distance) {
-            return 1;
-          }
-          return 0;
-        }
-        if (self.orderByChoice === 'Tags') {
-          if (user1.hobbies <= user2.hobbies) {
-            return -1;
-          }
-          if (user1.hobbies > user2.hobbies) {
-            return 1;
-          }
-        }
-      })
+        })
     },
     love (target) {
       this.$store.dispatch('interact/sendLove', target)

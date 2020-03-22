@@ -158,38 +158,31 @@ export default {
   },
   methods: {
     googleAPI () {
-      /* eslint-disable */
       const self = this
-      if ("geolocation" in navigator) {
-        const options = {
-          enableHighAccuracy: true,
-          // amount of time before the error callback is invoked
-          timeout: 5000,
-          // maximum cached position age
-          maximumAge: 60000
-        }
-        function success(position) {
-          const userAcceptsGeoloc = position.coords
-          let location = {}
-          console.log('Position: ', position)
-          console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
-          console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
-          console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
-          location.lat = userAcceptsGeoloc.latitude
-          location.lng = userAcceptsGeoloc.longitude
-          const accuracy = userAcceptsGeoloc.accuracy
-          self.$store.dispatch('geoloc/setMapPosition', {accuracy, location})
-          self.$store.dispatch('geoloc/setReverseGeoloc')
-          // self.reverseLocalisation(location.lat, location.lng)
-        }
-        function error(error) {
-          console.log(`ERROR(${error.code}): ${error.message}`)
-          self.geolocIP()
-        }
-        navigator.geolocation.getCurrentPosition(success, error, options)
+      const options = {
+        enableHighAccuracy: true,
+        // amount of time before the error callback is invoked
+        timeout: 5000,
+        // maximum cached position age
+        maximumAge: 60000
       }
-      else {
-        geolocIP()
+      function success (position) {
+        const userAcceptsGeoloc = position.coords
+        const location = {}
+        location.lat = userAcceptsGeoloc.latitude
+        location.lng = userAcceptsGeoloc.longitude
+        const accuracy = userAcceptsGeoloc.accuracy
+        self.$store.dispatch('geoloc/setMapPosition', { accuracy, location })
+        self.$store.dispatch('geoloc/setReverseGeoloc')
+      }
+      // eslint-disable-next-line
+      function error (error) {
+        self.geolocIP()
+      }
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(success, error, options)
+      } else {
+        self.geolocIP()
       }
     },
     geolocIP () {
@@ -197,19 +190,16 @@ export default {
         method: 'post',
         url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
         data: {
-          considerIp: 'true',
+          considerIp: 'true'
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_axios_googleAPI', response)
-          console.log('response_statusText', response.statusText)
           this.$store.dispatch('interact/setMessage', response.statusText)
           this.$store.dispatch('geoloc/setMapPosition', response.data)
           this.$store.dispatch('geoloc/setReverseGeoloc')
         })
+      // eslint-disable-next-line
         .catch((error) => {
-          console.log ('error_axios_googleAPIwelcomePage', error)
         })
     },
     customFilter (itemCustomFilter, queryText, itemText) {
@@ -217,9 +207,9 @@ export default {
       const textTwo = itemCustomFilter.value.country.toLowerCase()
       const textThree = itemCustomFilter.abbr.toLowerCase()
       const searchText = queryText.toLowerCase()
-      return textOne.indexOf(searchText) > -1 ||
-        textTwo.indexOf(searchText) > -1 ||
-        textThree.indexOf(searchText) > -1
+      return textOne.includes(searchText) > -1 ||
+        textTwo.includes(searchText) > -1 ||
+        textThree.includes(searchText) > -1
     },
     save () {
       this.isEditing = !this.isEditing

@@ -181,13 +181,9 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_ChatHistory', response)
         context.store.dispatch('interact/setChatHistory', response.data.client)
       })
       .catch((error) => {
-        console.log('error_GET_ChatHistory', error)
-        console.log('error_client', error.response.statusText)
       })
     return {
       matchDiscussion,
@@ -197,9 +193,6 @@ export default {
   methods: {
     sendChatMessage () {
       socket.emit('chat', this.loadedUsers.username, this.target, this.chatMessage)
-      console.log('*** --- New chat message --- ***', this.chatMessage)
-      console.log('FROM:', this.loadedUsers.username)
-      console.log('TO:', this.target)
       this.chatMessage = ''
     }
   }

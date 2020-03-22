@@ -199,13 +199,10 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('GET response_async_mypics', response)
         context.store.dispatch('user/setPictures', response.data.client)
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log('GET error_async_mypics', error)
-        // console.log('GET error_client', error.response.data.client)
       })
     const userprofile = await axios
       .get(process.env.serverUrl + '/users/user', {
@@ -214,13 +211,10 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_async_settings', response)
         context.store.dispatch('user/setUserData', response.data.userdata)
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log('error_async_settings', error)
-        console.log('error_client', error.response.data.client)
       })
     const birthdayProfile = await moment(context.store.getters['user/loadedUsers'].birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
     return {
@@ -228,6 +222,6 @@ export default {
       userprofile,
       birthdayProfile
     }
-  },
+  }
 }
 </script>

@@ -61,13 +61,10 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_view', response)
         context.store.dispatch('interact/setViews', response.data.client)
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log('error_GET_view', error)
-        console.log('error_client', error.response.data.client)
       })
     return {
       myViews

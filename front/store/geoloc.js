@@ -40,7 +40,6 @@ export const actions = {
     commit('setLogoutGeoloc')
   },
   setIpGeoloc ({ commit, dispatch }) {
-    // eslint-disable-next-line
     axios({
       method: 'post',
       url: 'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyB2gxSBdA8xQ41FO66wPud8xJa1GIArZgU',
@@ -49,31 +48,26 @@ export const actions = {
       }
     })
       .then((response) => {
-      /* eslint-disable */
-        console.log('response_axios_googleAPI', response)
-        console.log('response_statusText', response.statusText)
         commit('setMapPosition', response.data)
         dispatch('setReverseGeoloc')
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log ('error_axios_googleAPIwelcomePage', error)
-    })
+      })
   },
   setReverseGeoloc ({ state, dispatch }) {
     return axios
       .get('https://nominatim.openstreetmap.org/reverse?format=json&lon=' + state.loadedMapPosition.lng + '&lat=' + state.loadedMapPosition.lat + '&accept-language=en', {})
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_cityfinder', response)
         dispatch('setLocation', response.data)
         dispatch('sendGeoloc')
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log('error_GET_cityfinder', error)
       })
   },
   sendGeoloc ({ state, dispatch, rootGetters }) {
-    axios ({
+    axios({
       method: 'post',
       url: process.env.serverUrl + '/edit/location',
       data: {
@@ -91,12 +85,10 @@ export const actions = {
       }
     })
       .then((response) => {
-      /* eslint-disable */
-        console.log('response_axios_loadedMapPosition', response)
-        dispatch('interact/setMessage', "Geolocalisation updated !", { root: true })
+        dispatch('interact/setMessage', 'Geolocalisation updated !', { root: true })
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log ('error_axios_loadedMapPosition', error)
       })
   }
 }
@@ -106,7 +98,7 @@ export const getters = {
   loadedMapPosition (state) {
     return state.loadedMapPosition
   },
-  loadedLocation(state) {
+  loadedLocation (state) {
     return state.loadedLocation
   }
 }

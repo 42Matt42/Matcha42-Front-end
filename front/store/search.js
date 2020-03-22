@@ -93,13 +93,11 @@ export const actions = {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_Suggestions', response)
         dispatch('setSuggestions', response.data.client)
-        dispatch('interact/setMessage', "Suggestions updated ! Enjoy ~~", { root: true })
+        dispatch('interact/setMessage', 'Suggestions updated ! Enjoy ~~', { root: true })
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log('error_GET_Suggestions', error)
       })
     return {
     }

@@ -36,23 +36,18 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response', response)
-        console.log('context', context)
-        // context.store.dispatch('user/setChecker', false)
-        if (response.status == '200') {
-          // context.redirect(`${process.env.baseUrl}/pass/${context.query.username}`)
+        if (response.status === '200') {
           context.store.dispatch('user/setChecker', true)
           context.store.dispatch('interact/setMessage', response.data.client)
+          context.redirect('/')
         }
       })
-      .catch(function(error) {
-        /* eslint-disable */
-        console.log('error_response', error.response)
+      // eslint-disable-next-line
+      .catch(function (error) {
       })
-      return {
-        activated
-      }
+    return {
+      activated
+    }
   }
 }
 </script>

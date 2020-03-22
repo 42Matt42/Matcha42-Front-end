@@ -139,20 +139,14 @@ export default {
   methods: {
     validate () {
       if (this.$refs.form.validate()) {
-        // const yesman = ionia.connect('http://10.13.12.22:8080')
-        // console.log('YES__MAN__', yesman)
-        console.log('_______socket_______', socket)
         this.$axios
           .$post(process.env.serverUrl + '/users/login', {
             username: this.login.username,
             password: this.login.password
           })
           .then((response) => {
-          /* eslint-disable */
-            console.log('response_login', response)
             this.$store.dispatch('user/setUserData', response.userdata)
             this.$store.dispatch('user/setToken', response.token)
-            console.log('response_client', response.client)
             this.$store.dispatch('interact/setMessage', response.client)
             socket.emit('login', this.login.username)
             if (response.userdata.profile_complete === 0)
@@ -161,8 +155,6 @@ export default {
               this.$router.push('/')
           })
           .catch((error) => {
-            console.log('error_login', error)
-            console.log('error_client', error.response.data.client)
           })
       }
     },

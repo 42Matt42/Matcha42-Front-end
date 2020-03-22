@@ -18,12 +18,6 @@ export const mutations = {
     state.loadedNotifications = notif
   },
   countAlertNotifications (state, copyNotif) {
-    /* eslint-disable */
-    console.log('A_', copyNotif)
-    /* eslint-disable */
-    console.log('B_', copyNotif[0])
-    /* eslint-disable */
-    console.log('C_', copyNotif[0].read)
     state.loadedAlertNotifications = 0
     for (let i = 0; copyNotif.length; i++) {
       if (copyNotif[i].read === 0) {

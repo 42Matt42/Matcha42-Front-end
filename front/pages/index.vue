@@ -282,26 +282,18 @@ export default {
       timeout: 8000,
       maximumAge: 60000
     }
-    // let mySuggestions = []
 
     function success (position) {
       const userAcceptsGeoloc = position.coords
       const location = {}
-      // eslint-disable-next-line
-      // console.log(`Latitude : ${userAcceptsGeoloc.latitude}`)
-      // eslint-disable-next-line
-      // console.log(`Longitude: ${userAcceptsGeoloc.longitude}`)
-      // eslint-disable-next-line
-      // console.log(`Accuracy: ${userAcceptsGeoloc.accuracy} meters`)
       location.lat = userAcceptsGeoloc.latitude
       location.lng = userAcceptsGeoloc.longitude
       const accuracy = userAcceptsGeoloc.accuracy
       context.store.dispatch('geoloc/setMapPosition', { accuracy, location })
       context.store.dispatch('geoloc/setReverseGeoloc')
     }
+    // eslint-disable-next-line
     function error (error) {
-      // eslint-disable-next-line
-      console.log(error.message)
       context.store.dispatch('geoloc/setIpGeoloc')
     }
 
@@ -313,7 +305,6 @@ export default {
     }
     if (context.app.store.getters['user/token'] !== null) {
       if (!context.app.store.getters['search/loadedSuggestions'][0]) {
-        // eslint-disable-next-line
         context.app.store.dispatch('search/getSuggestions')
       }
       await axios
@@ -323,10 +314,9 @@ export default {
           }
         })
         .then((response) => {
-          /* eslint-disable */
-          console.log('response_GET_notif', response)
           context.store.dispatch('websocket/setNotifications', response.data.client)
         })
+        // eslint-disable-next-line
         .catch((error) => {
         })
       await axios
@@ -336,13 +326,10 @@ export default {
           }
         })
         .then((response) => {
-          /* eslint-disable */
-          console.log('GET response_async_mypics', response)
           context.store.dispatch('user/setPictures', response.data.client)
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log('GET error_async_mypics', error)
-          // console.log('GET error_client', error.response.data.client)
         })
     }
   },

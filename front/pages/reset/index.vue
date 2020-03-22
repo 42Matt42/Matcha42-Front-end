@@ -72,15 +72,11 @@ export default {
             email: this.reset.email
           })
           .then((response) => {
-          /* eslint-disable */
-            console.log('response', response)
-            console.log('response_client', response.client)
             this.$store.dispatch('interact/setMessage', response.client)
             this.$router.push('/')
           })
+          // eslint-disable-next-line
           .catch((error) => {
-            console.log('error', error)
-            console.log('error_client', error.response.data.client)
           })
       }
     }

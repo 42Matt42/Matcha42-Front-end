@@ -312,12 +312,10 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('GET response_async_mypics', response)
         context.store.dispatch('user/setPictures', response.data.client)
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log('GET error_async_mypics', error)
       })
     return {
       usermypics
@@ -325,28 +323,20 @@ export default {
   },
   methods: {
     displayImage (File, number) {
-      // console.log('this.refs:', this.$refs)
       if (!File) {
         return
-      }// {this.alert = "No File Chosen"}
-      // eslint-disable-next-line
-      console.log('number:', number)
+      }
       let renamed = ''
       const reader = new FileReader()
       reader.readAsDataURL(File)
       reader.onload = () => {
         renamed = reader.result.split(';base64,')
         this.showPictures[number] = renamed[1]
-        // eslint-disable-next-line
-        console.log('this.showPictures. + number:', this.showPictures[number])
       }
     },
     validate () {
       if (this.$refs.mypicsform.validate()) {
         const data = new FormData()
-        // this.uploadPics.forEach(mypics => {
-        //   data.append('image', mypics)
-        // })
         if (this.uploadPics.mypics1) {
           data.append('images', this.uploadPics.mypics1, 1)
         }
@@ -369,13 +359,8 @@ export default {
         xhr.addEventListener('readystatechange', function () {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
-            // eslint-disable-next-line
-            console.log('this.status', this.status)
-            if (this.status == '200') {
-              const feedback = JSON.parse(this.responseText)
-              // eslint-disable-next-line
-              console.log('parsed this.responseText', feedback)
-              self.$store.dispatch('interact/setMessage', "Pictures updated !")
+            if (this.status === '200') {
+              self.$store.dispatch('interact/setMessage', 'Pictures updated !')
             }
           }
         })
@@ -387,7 +372,6 @@ export default {
         // xhr.setRequestHeader('Connection', 'keep-alive')
         xhr.send(data)
       }
-      // setTimeout(() => this.$router.push('/login/profile/mypics', 2800)
     }
   }
 }

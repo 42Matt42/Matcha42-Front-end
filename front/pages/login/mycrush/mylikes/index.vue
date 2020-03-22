@@ -67,13 +67,10 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_GET_like', response)
         context.store.dispatch('interact/setLikes', response.data.client)
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log('error_GET_like', error)
-        console.log('error_client', error.response.data.client)
       })
     return {
       myLikes

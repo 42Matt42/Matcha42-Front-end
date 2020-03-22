@@ -67,11 +67,10 @@ export const actions = {
         }
       })
       .then((response) => {
-        // eslint-disable-next-line
-        console.log(response)
       })
       // eslint-disable-next-line
-      .catch(e => console.log (e))
+      .catch((error) => {
+      })
   },
   registerUser ({ commit }, user) {
     const createdUser = {
@@ -80,15 +79,11 @@ export const actions = {
     axios
       .post(process.env.serverUrl + '/users/register', createdUser)
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_register', response)
         commit('setMessage', response.data.client)
       //   vuexContext.commit('registerUser', { ...createdUser, id: vuexContext.data.insertId })
       })
-      /* eslint-disable */
+      // eslint-disable-next-line
       .catch((error) => {
-        console.log ('error_register', error.response)
-        console.log('error_data_client', error.response.data.client)
       })
     return {
     }
@@ -104,19 +99,17 @@ export const actions = {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('GET response_store_mypics', response)
         commit('setPictures', response.data.client)
       })
+      // eslint-disable-next-line
       .catch((error) => {
-        // console.log('GET error_store_mypics', error.response)
       })
     return {
     }
   },
   setLogoutUser ({ commit, getters }) {
     socket.emit('logout', getters.loadedUsers.username)
-    commit('setLogoutUser') 
+    commit('setLogoutUser')
   }
 }
 

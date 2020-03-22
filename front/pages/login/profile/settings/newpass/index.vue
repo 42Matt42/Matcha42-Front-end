@@ -108,7 +108,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 
 export default {
   middleware: 'authenticated',
@@ -163,41 +162,17 @@ export default {
           }
         })
           .then((response) => {
-          /* eslint-disable */
-            console.log('response', response)
-            console.log('response_client', response.client)
             this.$store.dispatch('interact/setMessage', 'New password updated !')
             this.$router.push('/')
           })
+          // eslint-disable-next-line
           .catch(function (error) {
-            console.log ('error_password', error)
-            console.log('error_data_client', error.response.data.client)
           })
       }
     },
     togglePasswordVisibility () {
-			this.passwordVisible = !this.passwordVisible
-		}
-  // },
-  // async asyncData (context) {
-  //   const newpass = await axios
-  //     .get(process.env.serverUrl + '/users/user', {
-  //       headers: {
-  //         Authorization: 'Bearer ' + context.app.store.getters['user/token']
-  //       }
-  //     })
-  //     .then((response) => {
-  //       /* eslint-disable */
-  //       console.log('response_async_newpass', response)
-  //       context.store.dispatch('interact/setMessage', response.client)
-  //     })
-  //     .catch((error) => {
-  //       console.log('error_async_newpass', error)
-  //       console.log('error_client', error.response.data.client)
-  //     })
-  //   return {
-  //     newpass
-  //   }
+      this.passwordVisible = !this.passwordVisible
+    }
   }
 }
 </script>

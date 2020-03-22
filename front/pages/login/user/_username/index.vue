@@ -210,10 +210,7 @@ export default {
 
     context.store.dispatch('user/setChecker', false)
     if (context.params.username !== context.store.getters['user/loadedUsers'].username) {
-      /* eslint-disable */
-      console.log('context', context)
-      // if (context.store.getters['user/token']) {
-      const iView = await axios({
+      await axios({
         method: 'post',
         url: process.env.serverUrl + '/social/view',
         data: {
@@ -224,16 +221,12 @@ export default {
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_view', response)
-          console.log('response_statusText', response.data.client)
           socket.emit('view', context.store.getters['user/loadedUsers'].username, context.route.params.username)
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log ('error_POST_view', error)
-          console.log('error_client', error.response.data.client)
         })
-      const getXuserInfo = await axios
+      await axios
         .get(process.env.serverUrl + '/users/profile', {
           params: {
             username: context.route.params.username
@@ -243,43 +236,33 @@ export default {
           }
         })
         .then((response) => {
-          /* eslint-disable */
-          console.log('response_async_XuserInfo', response)
           context.store.dispatch('search/setSearchProfile', response.data.userdata)
           context.store.dispatch('user/setChecker', true)
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log('error_async_XuserInfo', error)
-          console.log('error_client', error.response.statusText)
           context.store.dispatch('search/deleteSearchProfile')
           context.redirect('/')
         })
-      const myLikes = await axios
+      await axios
         .get(process.env.serverUrl + '/social/like', {
           headers: {
             Authorization: 'Bearer ' + context.app.store.getters['user/token']
           }
         })
         .then((response) => {
-          /* eslint-disable */
-          console.log('response_GET_like', response)
           context.store.dispatch('interact/setLikes', response.data.client)
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log('error_GET_like', error)
-          console.log('error_client', error.response.data.client)
         })
       birthdaySearchProfile = await moment(context.store.getters['search/loadedSearchProfile'].birth_date, 'YYYY-MM-DDTHH:mm:ss[Z]').format('Do MMMM')
       const lastConnectionSearchProfile = await moment(context.store.getters['search/loadedSearchProfile'].last_connection, 'YYYY-MM-DDTHH:mm:ss[Z]').format('L')
       return {
-        iView,
-        // getXuserInfo,
-        // myLikes,
         birthdaySearchProfile,
         lastConnectionSearchProfile
       }
-    }
-    else {
+    } else {
       context.store.dispatch('search/deleteSearchProfile')
       context.redirect('/login/profile')
     }
@@ -300,16 +283,13 @@ export default {
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_DISLIKE', response)
-          console.log('response_client', response.data.client)
           if (response.data.client.includes('Disliked and unmatched')) {
             socket.emit('dislike', this.$store.getters['user/loadedUsers'].username, this.target)
           }
-          this.$store.dispatch('interact/setMessage', "Disliked !")
+          this.$store.dispatch('interact/setMessage', 'Disliked !')
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log('error_DISLIKE_client', error.response.data.client)
         })
     },
     block () {
@@ -324,14 +304,12 @@ export default {
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_block', response)
           this.$store.dispatch('search/deleteSuggestions', {})
-          this.$store.dispatch('interact/setMessage', "User blocked")
+          this.$store.dispatch('interact/setMessage', 'User blocked')
           this.$store.dispatch('search/getSuggestions')
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log ('error_POST_block', error)
         })
     },
     report () {
@@ -346,22 +324,14 @@ export default {
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_report', response)
-          console.log('response_client', response.client)
-          this.$store.dispatch('interact/setMessage', "User reported")
+          this.$store.dispatch('interact/setMessage', 'User reported')
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log ('error_POST_report', error)
-          console.log('error_client', error.response.data.client)
         })
     },
     filterStatus () {
-      console.log('statusListener_filterStatus', this.$store.getters['websocket/loadedStatus'])
-      // return statusListener.filter(function (statusListener) {
-      //   return statusListener === target
-      console.log('this.target_filterStatus', this.target)
-      return this.$store.getters['websocket/loadedStatus'][this.target] // !== null
+      return this.$store.getters['websocket/loadedStatus'][this.target]
     }
   }
 }

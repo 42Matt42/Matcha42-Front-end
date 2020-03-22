@@ -157,23 +157,18 @@ export default {
         }
       })
       .then((response) => {
-        /* eslint-disable */
-        console.log('response_asyncGET_matchList', response)
-        console.log('response.data.client', response.data.client)
-        if (response.data.client.length != 0) {
+        if (response.data.client.length !== 0) {
           context.store.dispatch('search/setMatchList', response.data.client)
-        }
-        else {
+        } else {
           context.store.dispatch('interact/setMessage', 'No match so far')
         }
       })
-      .catch(function(error) {
-        /* eslint-disable */
-        console.log('error_asyncGET_matchList', error)
+      // eslint-disable-next-line
+      .catch((error) => {
       })
-      return {
-        matchList
-      }
+    return {
+      matchList
+    }
   },
   methods: {
     love (target) {
@@ -189,13 +184,9 @@ export default {
         }
       })
         .then((response) => {
-        /* eslint-disable */
-          console.log('response_POST_like', response)
-          console.log('response_client', response.client)
         })
+        // eslint-disable-next-line
         .catch((error) => {
-          console.log ('error_POST_like', error)
-          console.log('error_client', error.response.data.client)
         })
     }
   }
