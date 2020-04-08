@@ -359,7 +359,7 @@ export default {
         xhr.addEventListener('readystatechange', function () {
           // 4 means the request is DONE, operation completed
           if (this.readyState === 4) {
-            if (this.status === '200') {
+            if (response.status === 200 || response.status === '200') {
               self.$store.dispatch('interact/setMessage', 'Pictures updated !')
             }
           }

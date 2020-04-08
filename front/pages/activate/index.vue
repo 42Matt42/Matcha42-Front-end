@@ -36,7 +36,7 @@ export default {
         }
       })
       .then((response) => {
-        if (response.status === '200') {
+        if (response.status === 200 || response.status === '200') {
           context.store.dispatch('user/setChecker', true)
           context.store.dispatch('interact/setMessage', response.data.client)
           context.redirect('/')

@@ -129,7 +129,7 @@ export default {
       })
       .then((response) => {
         context.store.dispatch('user/setChecker', false)
-        if (response.status === '200') {
+        if (response.status === 200 || response.status === '200') {
           context.store.dispatch('user/setUsername', context.query.username)
           context.store.dispatch('user/setChecker', true)
           context.store.dispatch('interact/setMessage', 'Link activated !')

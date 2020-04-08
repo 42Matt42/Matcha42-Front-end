@@ -7,7 +7,7 @@ export default function ({ store, redirect }) {
     store.dispatch('geoloc/setLogoutGeoloc')
     store.dispatch('search/setLogoutSearch')
     store.dispatch('interact/setMessageStatusOff')
-    // store.dispatch('user/setMessage', 'Disconnected !')
+    store.dispatch('interact/setMessage', 'Disconnected !')
     return redirect('/')
   }
 }
